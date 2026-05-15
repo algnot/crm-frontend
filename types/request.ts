@@ -23,7 +23,8 @@ export interface PartnerAppConfig {
   ui: {
     background_color: string;
     button_color: string;
-    font_family: string;
+    primary_color: string;
+    secondary_color: string;
     text_color: string;
     button_text_color: string;
     success_color: string;
@@ -63,23 +64,45 @@ export const initPartnerAppConfig = (): PartnerAppConfig => ({
   },
 
   ui: {
-    background_color: "#FFF8E7",
-    button_color: "#FF8A00",
-    font_family: "Geist, sans-serif",
-    text_color: "#1F2937",
-    button_text_color: "#FFFFFF",
-    success_color: "#22C55E",
-    error_color: "#EF4444",
-
+    background_color: "",
+    button_color: "",
+    text_color: "",
+    primary_color: "",
+    secondary_color: "",
+    button_text_color: "",
+    success_color: "",
+    error_color: "",
     welcome_title: "ยินดีต้อนรับ",
-    welcome_message: "พร้อมสั่งของอร่อยกันหรือยัง 🥕",
-
-    contact_email: "support@bunzo.dev",
-    contact_phone: "099-999-9999",
-
+    welcome_message: "",
+    contact_email: "",
+    contact_phone: "",
     crm_required_phone: true,
     crm_required_email: false,
-
     ui_custom_fields: [],
   },
 });
+
+export interface User {
+  id: number;
+  display_name: string;
+  picture_url: string;
+  line_user_id: string;
+  email: string;
+  phone: string;
+  force_verify_phone: boolean;
+  force_verify_email: boolean;
+}
+
+export interface SubmitPhoneRequest {
+  userId: string;
+  phone: string;
+}
+
+export interface SubmitPhoneResponse {
+  ref: string;
+}
+
+export interface VerifyPhoneRequest {
+  ref: string;
+  otp: string;
+}

@@ -2,6 +2,7 @@
 import Card from "@/components/card";
 import MenuCard from "@/components/menu-card";
 import { useApp } from "@/components/providers/app-provider";
+import Link from "next/link";
 import { Award, Carrot, User } from "tabler-icons-react";
 
 export default function Home() {
@@ -11,11 +12,11 @@ export default function Home() {
     <div className="h-dvh flex flex-col overflow-hidden">
       <div className="p-5 shrink-0">
         <div className="flex justify-between items-center bg-white p-2 px-5 rounded-md shadow-md">
-          <div className="flex gap-4">
+          <Link href={`/${clientConfig.slug}/member`} className="flex gap-4">
             {!!userProfile?.pictureUrl ? (
               <div
                 className="bg-white rounded-full w-fit h-fit item-center border-2"
-                style={{ borderColor: clientConfig.ui.button_color }}
+                style={{ borderColor: clientConfig.ui.primary_color }}
               >
                 <img
                   src={userProfile?.pictureUrl}
@@ -30,13 +31,13 @@ export default function Home() {
             <div className="text-3xl md:text-4xl">
               <div
                 className="text-secondary text-[18px]"
-                style={{ color: clientConfig.ui.button_color }}
+                style={{ color: clientConfig.ui.primary_color }}
               >
                 {clientConfig.ui.welcome_title || "ยินดีต้อนรับ"}
               </div>
               <div className="text-2xl">{userProfile?.displayName}</div>
             </div>
-          </div>
+          </Link>
           <div className="">
             {!!clientConfig.logo_url && (
               <img src={clientConfig.logo_url} className="h-20 w-20" />
@@ -57,6 +58,10 @@ export default function Home() {
               </>
             }
             className="bg-primary shadow-md"
+            style={{
+              backgroundColor: clientConfig.ui.primary_color,
+              color: clientConfig.ui.button_text_color,
+            }}
           />
           <Card
             title={
@@ -70,7 +75,7 @@ export default function Home() {
               </>
             }
             style={{
-              backgroundColor: clientConfig.ui.button_color,
+              backgroundColor: clientConfig.ui.secondary_color,
               color: clientConfig.ui.button_text_color,
             }}
             className="shadow-sm"

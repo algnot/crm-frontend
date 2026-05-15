@@ -18,28 +18,42 @@ const navbars = [
   },
   {
     icon: User,
-    href: "/user",
+    href: "/member",
     title: "ผู้ใช้",
   },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { clientConfig } = useApp();
+  const { clientConfig, appUserProfile } = useApp();
+
+  const getHref = (href: string) =>
+    href === "/" ? `/${clientConfig.slug}` : `/${clientConfig.slug}${href}`;
+
+  if (
+    typeof appUserProfile === "undefined" ||
+    appUserProfile?.force_verify_phone ||
+    appUserProfile?.force_verify_email
+  ) {
+    return;
+  }
 
   return (
     <>
       <div style={{ height: 70 }}></div>
-      <div className="navbar flex justify-around items-center px-5">
+      <div className="navbar flex justify-around items-center px-5 shadow-md">
         {navbars.map((navbar, index) => {
-          const isActive = pathname === navbar.href;
+          const targetPath = getHref(navbar.href);
+          const isActive = pathname === targetPath;
           const Icon = navbar.icon;
+
           if (isActive) {
             return (
               <div
                 className={
-                  "flex flex-col justify-center items-center gap-0.5 isActive text-secondary"
+                  "flex flex-col justify-center items-center gap-0.5 isActive"
                 }
+                style={{ color: clientConfig.ui.primary_color }}
                 key={index}
               >
                 <Icon size={24} />
@@ -50,7 +64,7 @@ export default function Navbar() {
 
           return (
             <Link
-              href={`${clientConfig.slug}/${navbar.href}`}
+              href={targetPath}
               className="flex flex-col justify-center items-center gap-0.5 text-gray-500"
               key={index}
             >

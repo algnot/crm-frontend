@@ -16,7 +16,14 @@ export default function RootLayout({
   const clientId = Array.isArray(params.clientId)
     ? params.clientId[0]
     : params.clientId;
-  const { backendClient, setClientConfig, setUserProfile } = useApp();
+  const {
+    backendClient,
+    clientConfig,
+    appUserProfile,
+    setClientConfig,
+    setUserProfile,
+    setAppUserProfile,
+  } = useApp();
 
   useEffect(() => {
     if (!clientId) return;
@@ -34,17 +41,68 @@ export default function RootLayout({
         response?.line?.liff_id ?? "",
       );
       setUserProfile(liffProfile);
+
+      if (liffProfile) {
+        const appProfile = await backendClient.getOrCreateUser(
+          clientId,
+          liffProfile,
+        );
+        if (isErrorResponse(appProfile)) {
+          window.location.href = "/";
+          return;
+        }
+
+        if (
+          appProfile.force_verify_phone &&
+          window.location.pathname !== `/${clientId}/verify-phone`
+        ) {
+          window.location.href = `/${clientId}/verify-phone`;
+          return;
+        }
+
+        if (
+          appProfile.force_verify_email &&
+          window.location.pathname !== `/${clientId}/verify-email` &&
+          window.location.pathname !== `/${clientId}/verify-phone`
+        ) {
+          window.location.href = `/${clientId}/verify-email`;
+          return;
+        }
+
+        setAppUserProfile(appProfile);
+      }
     };
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (!clientConfig.logo_url) return;
+
+    document.title = `${clientConfig.name} CRM`;
+
+    let favicon = document.querySelector(
+      "link[rel='icon']",
+    ) as HTMLLinkElement | null;
+
+    if (!favicon) {
+      favicon = document.createElement("link");
+      favicon.rel = "icon";
+      document.head.appendChild(favicon);
+    }
+
+    favicon.href = clientConfig.logo_url;
+  }, [clientConfig.logo_url]);
 
   if (isWaiting) {
     return;
   }
 
   return (
-    <div lang="en">
+    <div
+      className="min-h-screen"
+      style={{ backgroundColor: clientConfig.ui.background_color }}
+    >
       <div className="container">{children}</div>
       <Navbar />
     </div>

@@ -1,4 +1,12 @@
-import { ErrorResponse, PartnerAppConfig } from "@/types/request";
+import {
+  ErrorResponse,
+  PartnerAppConfig,
+  SubmitPhoneRequest,
+  SubmitPhoneResponse,
+  User,
+  VerifyPhoneRequest,
+} from "@/types/request";
+import { Profile } from "@liff/get-profile";
 import axios, { AxiosInstance } from "axios";
 
 const handlerError = (error: unknown): ErrorResponse => {
@@ -51,6 +59,60 @@ export class BackendClient {
     try {
       this.setLoading(true);
       const response = await this.client.get(`/partner/${clientId}`);
+      this.setLoading(false);
+      return response.data;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
+
+  async getOrCreateUser(
+    clientId: string,
+    profile: Profile,
+  ): Promise<ErrorResponse | User> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.post(
+        `/partner/${clientId}/user`,
+        profile,
+      );
+      this.setLoading(false);
+      return response.data;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
+
+  async submitPhone(
+    clientId: string,
+    payload: SubmitPhoneRequest,
+  ): Promise<ErrorResponse | SubmitPhoneResponse> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.post(
+        `/partner/${clientId}/submit-phone`,
+        payload,
+      );
+      this.setLoading(false);
+      return response.data;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
+
+  async verifyPhone(
+    clientId: string,
+    payload: VerifyPhoneRequest,
+  ): Promise<ErrorResponse | void> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.post(
+        `/partner/${clientId}/verify-phone`,
+        payload,
+      );
       this.setLoading(false);
       return response.data;
     } catch (e) {
