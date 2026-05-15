@@ -14,7 +14,7 @@ const navbars = [
   {
     icon: Ticket,
     href: "/coupon",
-    title: "คูปอง",
+    title: "ประวัติคะแนน",
   },
   {
     icon: User,

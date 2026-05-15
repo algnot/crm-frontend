@@ -1,51 +1,36 @@
-import { JSX } from "react";
-import { Carrot, Star } from "tabler-icons-react";
+import { GetUserPointHistoryRespont } from "@/types/request";
 import { useApp } from "./providers/app-provider";
 
-interface Promotion {
-  icon: JSX.Element;
-  name: string;
-}
-
 interface MenuCardProp {
-  name: string;
-  rating: number;
-  distance: string;
-  promotions: Promotion[];
+  pointHistory: GetUserPointHistoryRespont;
 }
 
-export default function MenuCard({
-  name,
-  rating,
-  distance,
-  promotions,
-}: MenuCardProp) {
+export default function MenuCard({ pointHistory }: MenuCardProp) {
   const { clientConfig } = useApp();
 
   return (
-    <div className="flex gap-3 p-3 mb-2 bg-white rounded-xl cursor-pointer">
+    <div className="flex gap-3 p-3 mb-2 bg-white rounded-xl shadow-md">
       <div className="bg-white w-fit rounded-xl">
-        <img src={clientConfig.logo_url} className="h-22 w-22 rounded-xl" />
+        <img src={clientConfig.logo_url} className="h-14 w-14 rounded-xl" />
       </div>
-      <div className="flex flex-col justify-between">
-        <div className="text-2xl">{name}</div>
-        <div className="flex gap-1">
-          <div className="text-md bg-primary text-white w-fit flex items-center justify-center gap-1 rounded-sm px-1">
-            <Star size={14} /> {rating}
-          </div>
-          | {distance}
-        </div>
-        {promotions.map((promotion, index) => {
-          return (
-            <div
-              key={index}
-              className="text-sm mt-1 flex gap-1 items-center bg-gray-200 px-2 rounded-2xl"
-            >
-              {promotion.icon} {promotion.name}
+      <div className="flex flex-col">
+        <div className="text-xl">{pointHistory.name}</div>
+        <div>
+          {pointHistory.type === "earn" && (
+            <div style={{ color: clientConfig.ui.success_color }}>
+              ได้รับ {pointHistory.value.toLocaleString()}{" "}
+              {pointHistory.currency.name}
             </div>
-          );
-        })}
+          )}
+          {pointHistory.type !== "earn" && (
+            <div style={{ color: clientConfig.ui.error_color }}>
+              ใช้ {pointHistory.value.toLocaleString()}{" "}
+              {pointHistory.currency.name}
+            </div>
+          )}
+        </div>
       </div>
+      <div className="text-gray-500 ml-auto">{pointHistory.given_date}</div>
     </div>
   );
 }
