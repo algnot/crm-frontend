@@ -19,7 +19,6 @@ export default function RootLayout({
   const {
     backendClient,
     clientConfig,
-    appUserProfile,
     setClientConfig,
     setUserProfile,
     setAppUserProfile,

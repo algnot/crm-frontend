@@ -8,6 +8,9 @@ import {
   SubmitEmailRequest,
   SubmitEmailResponse,
   VerifyEmailRequest,
+  GetUserPointRespont,
+  GetUserPointHistoryRespont,
+  Redeem,
 } from "@/types/request";
 import { Profile } from "@liff/get-profile";
 import axios, { AxiosInstance } from "axios";
@@ -154,6 +157,78 @@ export class BackendClient {
       );
       this.setLoading(false);
       return response.data;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
+
+  async getUserPoint(
+    clientId: string,
+    userId: string,
+  ): Promise<ErrorResponse | GetUserPointRespont[]> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.get(
+        `/partner/${clientId}/user/${userId}/point`,
+      );
+      this.setLoading(false);
+      return response.data.points;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
+
+  async getUserPointHistory(
+    clientId: string,
+    userId: string,
+  ): Promise<ErrorResponse | GetUserPointHistoryRespont[]> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.get(
+        `/partner/${clientId}/user/${userId}/point-history`,
+      );
+      this.setLoading(false);
+      return response.data.point_history;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
+
+  async getRedeemDetail(
+    clientId: string,
+    code: string,
+  ): Promise<ErrorResponse | Redeem> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.get(
+        `/partner/${clientId}/redeem/${code}`,
+      );
+      this.setLoading(false);
+      return response.data.redeem;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
+
+  async redeemCode(
+    clientId: string,
+    code: string,
+    userId: string,
+  ): Promise<ErrorResponse | GetUserPointHistoryRespont> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.post(
+        `/partner/${clientId}/redeem/${code}`,
+        {
+          line_user_id: userId,
+        },
+      );
+      this.setLoading(false);
+      return response.data.point;
     } catch (e) {
       this.setLoading(false);
       return handlerError(e);

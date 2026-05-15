@@ -1,9 +1,9 @@
 import { CSSProperties, JSX } from "react";
 
 interface CardProp {
-  className: string;
   title: JSX.Element;
   value: JSX.Element;
+  className?: string;
   style?: CSSProperties;
 }
 

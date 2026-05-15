@@ -87,6 +87,8 @@ export interface User {
   display_name: string;
   picture_url: string;
   line_user_id: string;
+  birth_date: string;
+  gender: string;
   email: string;
   phone: string;
   force_verify_phone: boolean;
@@ -119,4 +121,41 @@ export interface SubmitEmailResponse {
 export interface VerifyEmailRequest {
   ref: string;
   otp: string;
+}
+
+export interface Currency {
+  id: number;
+  name: string;
+  is_default: boolean;
+}
+
+export interface GetUserPointRespont {
+  currency: Currency;
+  earn: number;
+  transfer: number;
+  burn: number;
+  balance: number;
+}
+
+export interface GetUserPointHistoryRespont {
+  id: number;
+  name: string;
+  value: number;
+  type: "earn" | "burn" | "tranfer";
+  given_date: string;
+  expiration_date: string;
+  currency: Currency;
+}
+
+export interface Redeem {
+  code: string;
+  name: string;
+  value: number;
+  type: "earn" | "burn" | "tranfer";
+  limit_per_user: number;
+  limit_per_qr: number;
+  redeemed_count: number;
+  expiration_date: number;
+  active: boolean;
+  currency: Currency;
 }
