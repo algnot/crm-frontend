@@ -5,6 +5,9 @@ import {
   SubmitPhoneResponse,
   User,
   VerifyPhoneRequest,
+  SubmitEmailRequest,
+  SubmitEmailResponse,
+  VerifyEmailRequest,
 } from "@/types/request";
 import { Profile } from "@liff/get-profile";
 import axios, { AxiosInstance } from "axios";
@@ -111,6 +114,42 @@ export class BackendClient {
       this.setLoading(true);
       const response = await this.client.post(
         `/partner/${clientId}/verify-phone`,
+        payload,
+      );
+      this.setLoading(false);
+      return response.data;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
+
+  async submitEmail(
+    clientId: string,
+    payload: SubmitEmailRequest,
+  ): Promise<ErrorResponse | SubmitEmailResponse> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.post(
+        `/partner/${clientId}/submit-email`,
+        payload,
+      );
+      this.setLoading(false);
+      return response.data;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
+
+  async verifyEmail(
+    clientId: string,
+    payload: VerifyEmailRequest,
+  ): Promise<ErrorResponse | void> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.post(
+        `/partner/${clientId}/verify-email`,
         payload,
       );
       this.setLoading(false);

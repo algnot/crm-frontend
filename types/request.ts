@@ -106,3 +106,17 @@ export interface VerifyPhoneRequest {
   ref: string;
   otp: string;
 }
+
+export interface SubmitEmailRequest {
+  userId: string;
+  email: string;
+}
+
+export interface SubmitEmailResponse {
+  ref: string;
+}
+
+export interface VerifyEmailRequest {
+  ref: string;
+  otp: string;
+}

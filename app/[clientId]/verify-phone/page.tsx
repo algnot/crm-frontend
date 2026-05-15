@@ -29,6 +29,13 @@ export default function Page() {
   }, [countdown]);
 
   const sendOtp = async () => {
+    const cleanedPhone = phone.replace(/\D/g, "");
+
+    if (!/^0\d{9}$/.test(cleanedPhone)) {
+      alert("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง");
+      return;
+    }
+
     setStep("otp");
     if (!userProfile?.userId) {
       return;
@@ -60,7 +67,7 @@ export default function Page() {
       return;
     }
 
-    window.location.href = `/${clientConfig.slug}`
+    window.location.href = `/${clientConfig.slug}`;
   };
 
   const handleOtpChange = (value: string, index: number) => {
@@ -107,7 +114,7 @@ export default function Page() {
               color: clientConfig.ui.secondary_color,
             }}
           >
-            กรุณาระบุเบอร์โทรศัพท์ของคุณ
+            กรุณาระบุเบอร์โทรศัพท์ของคุณเพื่อใช้รับข่าวสารใหม่ ๆ
           </div>
 
           <div className="flex w-full bg-white p-4 rounded-md shadow">
