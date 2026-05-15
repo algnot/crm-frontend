@@ -93,7 +93,7 @@ export default function Home() {
     );
 
     if (isErrorResponse(points)) {
-      window.location.href = "/";
+      window.location.href = `/${clientConfig.slug}`;
       return;
     }
 

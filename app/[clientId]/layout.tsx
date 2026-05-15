@@ -47,7 +47,7 @@ export default function RootLayout({
           liffProfile,
         );
         if (isErrorResponse(appProfile)) {
-          window.location.href = "/";
+          window.location.href = `/${clientConfig.slug}`;
           return;
         }
 
