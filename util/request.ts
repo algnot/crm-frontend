@@ -12,6 +12,7 @@ import {
   GetUserPointHistoryRespont,
   Redeem,
   Coupon,
+  UserCoupon,
 } from "@/types/request";
 import { Profile } from "@liff/get-profile";
 import axios, { AxiosInstance } from "axios";
@@ -277,6 +278,23 @@ export class BackendClient {
         {
           line_user_id: userId,
         },
+      );
+      this.setLoading(false);
+      return response.data.coupon;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
+
+  async getUserCoupon(
+    clientId: string,
+    userId: string,
+  ): Promise<ErrorResponse | UserCoupon[]> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.get(
+        `/partner/${clientId}/user/${userId}/coupon`,
       );
       this.setLoading(false);
       return response.data.coupon;

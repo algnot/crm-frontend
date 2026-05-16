@@ -28,7 +28,7 @@ export default function Page() {
         className="text-2xl my-5"
         style={{ color: clientConfig.ui.primary_color }}
       >
-        คูปองทั้งหมด
+        สิทธิพิเศษทั้งหมด
       </div>
 
       <div className="flex flex-col gap-4">

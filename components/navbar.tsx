@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { User, Award, Ticket } from "tabler-icons-react";
 import { useApp } from "./providers/app-provider";
+import { IconSparkles } from "@tabler/icons-react";
 
 const navbars = [
   {
@@ -12,9 +13,14 @@ const navbars = [
     title: "สะสมคะแนน",
   },
   {
-    icon: Ticket,
+    icon: IconSparkles,
     href: "/coupon",
-    title: "คูปอง",
+    title: "สิทธิพิเศษ",
+  },
+  {
+    icon: Ticket,
+    href: "/coupon/my",
+    title: "คูปองของฉัน",
   },
   {
     icon: User,

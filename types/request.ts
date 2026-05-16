@@ -186,6 +186,12 @@ export interface UserCoupon {
   is_used: boolean;
   used_date: string;
   currency: Currency;
+  coupon: {
+    id: number;
+    name: string;
+    term_and_condition: string;
+    image_url: string;
+  };
   point: {
     id: number;
     value: string;

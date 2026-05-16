@@ -116,7 +116,6 @@ export default function Home() {
           </div>
         </div>
       )}
-      <div className="p-20"></div>
     </div>
   );
 }
