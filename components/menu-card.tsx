@@ -10,20 +10,17 @@ export default function MenuCard({ pointHistory }: MenuCardProp) {
 
   return (
     <div className="flex gap-3 p-3 mb-2 bg-white rounded-xl shadow-md">
-      <div className="bg-white w-fit rounded-xl">
-        <img src={clientConfig.logo_url} className="h-14 w-14 rounded-xl" />
-      </div>
       <div className="flex flex-col">
         <div className="text-xl">{pointHistory.name}</div>
         <div>
           {pointHistory.type === "earn" && (
-            <div style={{ color: clientConfig.ui.success_color }}>
+            <div style={{ color: clientConfig.ui.text_success_color }}>
               ได้รับ {pointHistory.value.toLocaleString()}{" "}
               {pointHistory.currency.name}
             </div>
           )}
           {pointHistory.type !== "earn" && (
-            <div style={{ color: clientConfig.ui.error_color }}>
+            <div style={{ color: clientConfig.ui.text_error_color }}>
               ใช้ {pointHistory.value.toLocaleString()}{" "}
               {pointHistory.currency.name}
             </div>

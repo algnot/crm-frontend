@@ -22,19 +22,20 @@ export interface PartnerAppConfig {
 
   ui: {
     background_color: string;
-    button_color: string;
+    background_white_color: string;
     primary_color: string;
     secondary_color: string;
+
     text_color: string;
+    text_white_color: string;
+    text_gray_color: string;
+    text_success_color: string;
+    text_error_color: string;
+
+    button_color: string;
     button_text_color: string;
-    success_color: string;
-    error_color: string;
 
     welcome_title: string;
-    welcome_message: string;
-
-    contact_email: string;
-    contact_phone: string;
 
     crm_required_phone: boolean;
     crm_required_email: boolean;
@@ -44,11 +45,8 @@ export interface PartnerAppConfig {
 }
 
 export interface UiCustomField {
-  id?: number;
-  name?: string;
-  type?: string;
-  required?: boolean;
-  value?: string | number | boolean | null;
+  key: string;
+  value: string;
 }
 
 export const initPartnerAppConfig = (): PartnerAppConfig => ({
@@ -65,19 +63,24 @@ export const initPartnerAppConfig = (): PartnerAppConfig => ({
 
   ui: {
     background_color: "",
-    button_color: "",
-    text_color: "",
+    background_white_color: "",
     primary_color: "",
     secondary_color: "",
+
+    text_color: "",
+    text_white_color: "",
+    text_gray_color: "",
+    text_success_color: "",
+    text_error_color: "",
+
+    button_color: "",
     button_text_color: "",
-    success_color: "",
-    error_color: "",
+
     welcome_title: "ยินดีต้อนรับ",
-    welcome_message: "",
-    contact_email: "",
-    contact_phone: "",
+
     crm_required_phone: true,
     crm_required_email: false,
+
     ui_custom_fields: [],
   },
 });

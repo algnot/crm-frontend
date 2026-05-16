@@ -1,36 +1,20 @@
 "use client";
-import Button from "@/components/button";
-import Card from "@/components/card";
-import { useApp } from "@/components/providers/app-provider";
-import { GetUserPointRespont, isErrorResponse } from "@/types/request";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { Award, Camera, User, X } from "tabler-icons-react";
-import { Html5Qrcode } from "html5-qrcode";
 import { useRouter, useSearchParams } from "next/navigation";
+import Profile from "@/components/profile";
+import { GetUserPointHistoryRespont, isErrorResponse } from "@/types/request";
+import { useApp } from "@/components/providers/app-provider";
+import MenuCard from "@/components/menu-card";
+import { Award } from "tabler-icons-react";
 
 export default function Home() {
-  const { userProfile, clientConfig, backendClient } = useApp();
-
   const router = useRouter();
+  const { userProfile, clientConfig, backendClient } = useApp();
   const searchParams = useSearchParams();
+  const [pointHistories, setpointHistories] = useState<
+    GetUserPointHistoryRespont[]
+  >([]);
 
-  const [showScanner, setShowScanner] = useState(false);
-  const qrRef = useRef<Html5Qrcode | null>(null);
-
-  const [mainPoint, setMainPoint] = useState<GetUserPointRespont>({
-    currency: {
-      id: 0,
-      name: "Point",
-      is_default: true,
-    },
-    balance: 0,
-    burn: 0,
-    earn: 0,
-    transfer: 0,
-  });
-
-  // redirect จาก query param
   useEffect(() => {
     const redeemCode = searchParams.get("redeem_code");
     const partner = searchParams.get("partner");
@@ -42,185 +26,96 @@ export default function Home() {
   }, [searchParams, router]);
 
   useEffect(() => {
-    fetchData();
-  }, [clientConfig.slug, userProfile?.userId]);
+    fechData();
+  }, [userProfile?.userId]);
 
-  useEffect(() => {
-    if (!showScanner) return;
+  const fechData = async () => {
+    if (!userProfile?.userId) return;
 
-    const scanner = new Html5Qrcode("qr-reader");
-    qrRef.current = scanner;
-
-    scanner
-      .start(
-        { facingMode: "environment" },
-        {
-          fps: 10,
-          qrbox: {
-            width: 220,
-            height: 220,
-          },
-        },
-        (decodedText) => {
-          handleQRCode(decodedText);
-        },
-        () => {},
-      )
-      .catch(console.error);
-
-    return () => {
-      stopScanner();
-    };
-  }, [showScanner]);
-
-  const stopScanner = async () => {
-    try {
-      if (qrRef.current?.isScanning) {
-        await qrRef.current.stop();
-        await qrRef.current.clear();
-      }
-    } catch {}
-
-    setShowScanner(false);
-  };
-
-  const fetchData = async () => {
-    if (!clientConfig.slug || !userProfile?.userId) return;
-
-    const points = await backendClient.getUserPoint(
+    const pointHistories = await backendClient.getUserPointHistory(
       clientConfig.slug,
       userProfile.userId,
     );
 
-    if (isErrorResponse(points)) {
+    if (isErrorResponse(pointHistories)) {
       window.location.href = `/${clientConfig.slug}`;
       return;
     }
 
-    const mainPoint = points.find((point) => point.currency.is_default);
-
-    if (mainPoint) setMainPoint(mainPoint);
+    setpointHistories(pointHistories);
   };
 
-  const handleQRCode = async (qrText: string) => {
-    try {
-      console.log("QR:", qrText);
-      await stopScanner();
+  const haveAds =
+    clientConfig.ui.ui_custom_fields.filter(
+      (custom_field) => custom_field.key == "ads",
+    ).length > 0;
 
-      const isUrl = /^https?:\/\/.+/i.test(qrText);
+  const adsImage = clientConfig.ui.ui_custom_fields.find(
+    (custom_field) => custom_field.key == "ads",
+  );
 
-      if (isUrl) {
-        window.location.href = qrText;
-        return;
-      }
-
-      alert(`QR Code:\n${qrText}`);
-      await fetchData();
-    } catch (err) {
-      console.error(err);
-      alert("เกิดข้อผิดพลาด");
-    }
-  };
+  const adsAction = clientConfig.ui.ui_custom_fields.find(
+    (custom_field) => custom_field.key == "ads_action",
+  );
 
   return (
-    <div className="h-dvh flex flex-col overflow-hidden">
-      <div className="p-5 shrink-0">
-        {/* HEADER */}
-        <div className="flex justify-between items-center bg-white p-2 px-5 rounded-md shadow-md">
-          <Link href={`/${clientConfig.slug}/member`} className="flex gap-4">
-            {!!userProfile?.pictureUrl ? (
-              <img
-                src={userProfile.pictureUrl}
-                className="h-13 w-13 rounded-full border-2"
-              />
-            ) : (
-              <img src={clientConfig.logo_url} className="h-10 w-10" />
-            )}
+    <div className="h-dvh flex flex-col p-5">
+      <Profile />
 
-            <div>
-              <div
-                className="text-[18px]"
-                style={{
-                  color: clientConfig.ui.primary_color,
-                }}
-              >
-                {clientConfig.ui.welcome_title || "ยินดีต้อนรับ"}
-              </div>
-
-              <div className="text-2xl">{userProfile?.displayName}</div>
-            </div>
-          </Link>
-
-          {!!clientConfig.logo_url && (
-            <img src={clientConfig.logo_url} className="h-20 w-20" />
-          )}
-        </div>
-
-        {/* CARD */}
-        <div className="flex mt-4 gap-3">
-          <Card
-            title={
-              <>
-                <Award /> {mainPoint.currency.name}
-              </>
+      {haveAds && (
+        <img
+          src={(adsImage?.value || "") as string}
+          alt="ads"
+          className="cursor-pointer rounded-md mt-5 shadow-md"
+          onClick={() => {
+            if (adsAction) {
+              window.location.href = adsAction.value;
             }
-            value={
-              <div className="text-xl">
-                {mainPoint.balance.toLocaleString()}
-              </div>
-            }
+          }}
+        />
+      )}
+
+      <div
+        className="text-2xl my-5 font-semibold"
+        style={{ color: clientConfig.ui.primary_color }}
+      >
+        ประวัติการได้รับคะแนน
+      </div>
+
+      {pointHistories.length > 0 &&
+        pointHistories.map((pointHistory, index) => (
+          <MenuCard key={index} pointHistory={pointHistory} />
+        ))}
+
+      {pointHistories.length === 0 && (
+        <div className="py-8 flex flex-col items-center text-center gap-4">
+          <div
+            className="w-16 h-16 rounded-full flex items-center justify-center"
             style={{
-              backgroundColor: clientConfig.ui.primary_color,
-              color: clientConfig.ui.button_text_color,
+              backgroundColor: `${clientConfig.ui.text_gray_color}`,
+              opacity: 0.7,
             }}
-          />
-
-          <Card
-            title={
-              <>
-                <User /> ระดับสมาชิก
-              </>
-            }
-            value={<div>new member</div>}
-            style={{
-              backgroundColor: clientConfig.ui.secondary_color,
-              color: clientConfig.ui.button_text_color,
-            }}
-            className=""
-          />
-        </div>
-
-        <div className="bg-white mt-4 shadow-md rounded-md p-5">
-          <div className="text-center text-2xl">
-            สะสมคะแนนผ่านการสแกน QR Code
+          >
+            <Award size={30} color={clientConfig.ui.text_white_color} />
           </div>
 
-          {/* SCANNER */}
-          {showScanner && (
-            <div className="mt-4 bg-black rounded-xl overflow-hidden relative">
-              <button
-                onClick={stopScanner}
-                className="absolute top-4 right-4 z-20 bg-white rounded-full p-2"
-              >
-                <X />
-              </button>
-
-              <div className="relative h-[320px]">
-                <div id="qr-reader" className="h-full" />
-              </div>
+          <div>
+            <div
+              className="text-lg font-semibold"
+              style={{ color: clientConfig.ui.text_color }}
+            >
+              ยังไม่มีประวัติการได้รับคะแนน
             </div>
-          )}
 
-          {!showScanner && (
-            <Button
-              icon={<Camera />}
-              className="mt-4"
-              text="สแกน QR Code"
-              onClick={() => setShowScanner(true)}
-            />
-          )}
+            <div
+              className="text-sm text-gray-500 mt-1"
+              style={{ color: clientConfig.ui.text_gray_color }}
+            >
+              เมื่อคุณได้รับคะแนน รายการจะแสดงที่นี่
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

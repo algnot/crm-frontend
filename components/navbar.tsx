@@ -2,19 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, User, GardenCart, Carrot, Ticket } from "tabler-icons-react";
+import { User, Award, Ticket } from "tabler-icons-react";
 import { useApp } from "./providers/app-provider";
 
 const navbars = [
   {
-    icon: Home,
+    icon: Award,
     href: "/",
-    title: "หน้าหลัก",
+    title: "สะสมคะแนน",
   },
   {
     icon: Ticket,
     href: "/coupon",
-    title: "ประวัติคะแนน",
+    title: "คูปอง",
   },
   {
     icon: User,
@@ -41,7 +41,12 @@ export default function Navbar() {
   return (
     <>
       <div style={{ height: 70 }}></div>
-      <div className="navbar flex justify-around items-center px-5 shadow-md">
+      <div
+        className="navbar flex justify-around items-center px-5 shadow-md"
+        style={{
+          background: clientConfig.ui.background_white_color,
+        }}
+      >
         {navbars.map((navbar, index) => {
           const targetPath = getHref(navbar.href);
           const isActive = pathname === targetPath;
@@ -65,7 +70,8 @@ export default function Navbar() {
           return (
             <Link
               href={targetPath}
-              className="flex flex-col justify-center items-center gap-0.5 text-gray-500"
+              className="flex flex-col justify-center items-center gap-0.5"
+              style={{ color: clientConfig.ui.text_gray_color }}
               key={index}
             >
               <Icon size={24} />

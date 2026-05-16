@@ -12,7 +12,6 @@ export default function Home() {
       url.searchParams.delete("liff.state");
 
       const query = url.searchParams.toString();
-
       const redirectUrl = query ? `${liffState}?${query}` : liffState;
 
       window.location.replace(redirectUrl);
