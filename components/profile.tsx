@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useApp } from "./providers/app-provider";
 import Link from "next/link";
 import { Award, Scan, X } from "tabler-icons-react";
@@ -7,8 +8,7 @@ import { Html5Qrcode } from "html5-qrcode";
 import { GetUserPointRespont, isErrorResponse } from "@/types/request";
 
 export default function Profile() {
-  const { userProfile, clientConfig, backendClient, setUserPoint } =
-    useApp();
+  const { userProfile, clientConfig, backendClient, setUserPoint } = useApp();
   const [showScanner, setShowScanner] = useState(false);
   const qrRef = useRef<Html5Qrcode | null>(null);
 
@@ -30,6 +30,9 @@ export default function Profile() {
 
   useEffect(() => {
     if (!showScanner) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
     const scanner = new Html5Qrcode("qr-reader");
     qrRef.current = scanner;
@@ -56,6 +59,7 @@ export default function Profile() {
       .catch(console.error);
 
     return () => {
+      document.body.style.overflow = previousOverflow;
       stopScanner();
     };
   }, [showScanner]);
@@ -112,7 +116,10 @@ export default function Profile() {
   return (
     <div className="shrink-0">
       {/* HEADER */}
-      <div className="flex justify-between items-center bg-white p-2 px-5 rounded-t-md shadow-md">
+      <div
+        className="flex justify-between items-center p-2 px-5 rounded-t-md shadow-md"
+        style={{ backgroundColor: clientConfig.ui.background_white_color }}
+      >
         <Link href={`/${clientConfig.slug}/member`} className="flex gap-4">
           {!!userProfile?.pictureUrl ? (
             <img
@@ -164,8 +171,9 @@ export default function Profile() {
         </div>
       </div>
 
-      {showScanner && (
-        <div className="fixed z-100 top-0 right-0 min-w-screen min-h-screen max-w-screen max-h-screen bg-black overflow-hidden">
+      {showScanner &&
+        createPortal(
+          <div className="qr-scanner-overlay fixed inset-0 z-100 h-dvh w-full bg-black overflow-hidden">
           <button
             onClick={stopScanner}
             className="absolute top-4 right-4 z-20 rounded-full p-2 cursor-pointer"
@@ -177,12 +185,11 @@ export default function Profile() {
             <X />
           </button>
 
-          <div className="fixed inset-0 w-screen h-screen">
-            <div id="qr-reader" className="w-full h-full" />
-          </div>
-          <div className="fixed bottom-8 w-screen flex justify-center">
+          <div id="qr-reader" className="absolute inset-0" />
+
+          <div className="absolute bottom-8 inset-x-0 z-20 flex justify-center px-4">
             <div
-              className="text-2xl text-center px-5"
+              className="text-2xl text-center px-5 py-2 rounded-md"
               style={{
                 background: clientConfig.ui.secondary_color,
                 color: clientConfig.ui.text_white_color,
@@ -192,8 +199,9 @@ export default function Profile() {
               กรุณาวาง QR Code ให้อยู่ในกรอบ
             </div>
           </div>
-        </div>
-      )}
+        </div>,
+          document.body,
+        )}
     </div>
   );
 }
