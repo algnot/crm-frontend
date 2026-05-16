@@ -162,3 +162,15 @@ export interface Redeem {
   active: boolean;
   currency: Currency;
 }
+
+export interface Coupon {
+  id: number;
+  name: string;
+  image_url: string;
+  value: number;
+  start_time: string;
+  end_time: string;
+  code_expiry_interval: number;
+  redeemed_count: number;
+  currency: Currency;
+}

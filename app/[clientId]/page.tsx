@@ -76,7 +76,7 @@ export default function Home() {
       )}
 
       <div
-        className="text-2xl my-5 font-semibold"
+        className="text-2xl my-5"
         style={{ color: clientConfig.ui.primary_color }}
       >
         ประวัติการได้รับคะแนน
