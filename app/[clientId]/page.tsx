@@ -38,7 +38,7 @@ export default function Home() {
     );
 
     if (isErrorResponse(pointHistories)) {
-      window.location.href = `/${clientConfig.slug}`;
+      setpointHistories([]);
       return;
     }
 

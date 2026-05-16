@@ -61,8 +61,9 @@ export default function Profile() {
           {
             fps: 10,
             qrbox: (viewfinderWidth, viewfinderHeight) => {
-              const size =
-                Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * 0.7);
+              const size = Math.floor(
+                Math.min(viewfinderWidth, viewfinderHeight) * 0.7,
+              );
 
               return { width: size, height: size };
             },
@@ -100,7 +101,7 @@ export default function Profile() {
     );
 
     if (isErrorResponse(points)) {
-      window.location.href = `/${clientConfig.slug}`;
+      setUserPoint([]);
       return;
     }
     setUserPoint(points);
@@ -190,35 +191,36 @@ export default function Profile() {
       {showScanner &&
         createPortal(
           <div className="qr-scanner-overlay fixed inset-0 z-100 h-dvh w-full bg-black overflow-hidden">
-          <button
-            onClick={stopScanner}
-            className="absolute top-4 right-4 z-20 rounded-full p-2 cursor-pointer"
-            style={{
-              background: clientConfig.ui.primary_color,
-              color: clientConfig.ui.text_white_color,
-            }}
-          >
-            <X />
-          </button>
-
-          <div
-            id="qr-reader"
-            className="absolute inset-0 w-full h-full min-h-0"
-          />
-
-          <div className="absolute bottom-8 inset-x-0 z-20 flex justify-center px-4">
-            <div
-              className="text-2xl text-center px-5 py-2 rounded-md"
+            <button
+              onClick={stopScanner}
+              className="absolute top-4 right-4 z-20 rounded-full p-2 cursor-pointer"
               style={{
-                background: clientConfig.ui.secondary_color,
+                background: clientConfig.ui.primary_color,
                 color: clientConfig.ui.text_white_color,
               }}
             >
-              สแกน QR Code ท้ายใบเสร็จเพื่อสะสม {mainPoint.currency.name} <br />
-              กรุณาวาง QR Code ให้อยู่ในกรอบ
+              <X />
+            </button>
+
+            <div
+              id="qr-reader"
+              className="absolute inset-0 w-full h-full min-h-0"
+            />
+
+            <div className="absolute bottom-8 inset-x-0 z-20 flex justify-center px-4">
+              <div
+                className="text-2xl text-center px-5 py-2 rounded-md"
+                style={{
+                  background: clientConfig.ui.secondary_color,
+                  color: clientConfig.ui.text_white_color,
+                }}
+              >
+                สแกน QR Code ท้ายใบเสร็จเพื่อสะสม {mainPoint.currency.name}{" "}
+                <br />
+                กรุณาวาง QR Code ให้อยู่ในกรอบ
+              </div>
             </div>
-          </div>
-        </div>,
+          </div>,
           document.body,
         )}
     </div>
