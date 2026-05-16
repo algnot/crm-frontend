@@ -66,7 +66,7 @@ export default function Home() {
         <img
           src={(adsImage?.value || "") as string}
           alt="ads"
-          className="cursor-pointer rounded-md mt-5 shadow-md"
+          className="cursor-pointer rounded-md mt-5 shadow-md w-full h-auto"
           onClick={() => {
             if (adsAction) {
               window.location.href = adsAction.value;
