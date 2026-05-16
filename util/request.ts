@@ -264,4 +264,25 @@ export class BackendClient {
       return handlerError(e);
     }
   }
+
+  async redeemCoupon(
+    clientId: string,
+    couponId: number,
+    userId: string,
+  ): Promise<ErrorResponse | Coupon> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.post(
+        `/partner/${clientId}/coupon/${couponId}/redeem`,
+        {
+          line_user_id: userId,
+        },
+      );
+      this.setLoading(false);
+      return response.data.coupon;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
 }

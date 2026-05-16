@@ -59,6 +59,25 @@ export default function Page() {
     );
   }, [userPoint, coupon]);
 
+  const redeemCoupon = async () => {
+    if (!coupon || !clientConfig || !userProfile) return;
+
+    const res = await backendClient.redeemCoupon(
+      clientConfig.slug,
+      coupon.id,
+      userProfile?.userId,
+    );
+
+    if (isErrorResponse(res)) {
+      alert(res.message);
+      window.location.href = `/${clientConfig.slug}`;
+      return;
+    }
+
+    alert("redeem coupon done :)");
+    window.location.href = `/${clientConfig.slug}`;
+  };
+
   return (
     <div
       className="min-h-screen"
@@ -163,7 +182,7 @@ export default function Page() {
             {coupon?.currency.name.toLocaleUpperCase()} ของคุณไม่พอ
           </div>
         ) : (
-          <Button text="และคูปอง" onClick={() => {}} />
+          <Button text="และคูปอง" onClick={redeemCoupon} />
         )}
       </div>
     </div>

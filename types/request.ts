@@ -175,3 +175,20 @@ export interface Coupon {
   term_and_condition: string;
   currency: Currency;
 }
+
+export interface UserCoupon {
+  id: number;
+  name: string;
+  code: string;
+  value: string;
+  acquired_date: string;
+  expiration_date: string;
+  is_used: boolean;
+  used_date: string;
+  currency: Currency;
+  point: {
+    id: number;
+    value: string;
+    type: "earn" | "burn" | "tranfer";
+  };
+}
