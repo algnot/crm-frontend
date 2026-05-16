@@ -28,43 +28,7 @@ export default function Profile() {
     fetchData();
   }, [clientConfig.slug, userProfile?.userId]);
 
-  useEffect(() => {
-    if (!showScanner) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const scanner = new Html5Qrcode("qr-reader");
-    qrRef.current = scanner;
-
-    scanner
-      .start(
-        { facingMode: "environment" },
-        {
-          fps: 10,
-          qrbox: (viewfinderWidth, viewfinderHeight) => {
-            const size = Math.min(viewfinderWidth, viewfinderHeight) * 0.65;
-
-            return {
-              width: size,
-              height: size,
-            };
-          },
-        },
-        (decodedText) => {
-          handleQRCode(decodedText);
-        },
-        () => {},
-      )
-      .catch(console.error);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      stopScanner();
-    };
-  }, [showScanner]);
-
-  const stopScanner = async () => {
+  const releaseScanner = async () => {
     try {
       if (qrRef.current?.isScanning) {
         await qrRef.current.stop();
@@ -72,6 +36,58 @@ export default function Profile() {
       }
     } catch {}
 
+    qrRef.current = null;
+  };
+
+  useEffect(() => {
+    if (!showScanner) return;
+
+    let cancelled = false;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const startScanner = async () => {
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      });
+      if (cancelled) return;
+
+      const scanner = new Html5Qrcode("qr-reader");
+      qrRef.current = scanner;
+
+      try {
+        await scanner.start(
+          { facingMode: "environment" },
+          {
+            fps: 10,
+            qrbox: (viewfinderWidth, viewfinderHeight) => {
+              const size =
+                Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * 0.7);
+
+              return { width: size, height: size };
+            },
+          },
+          (decodedText) => {
+            if (!cancelled) handleQRCode(decodedText);
+          },
+          () => {},
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    startScanner();
+
+    return () => {
+      cancelled = true;
+      document.body.style.overflow = previousOverflow;
+      releaseScanner();
+    };
+  }, [showScanner]);
+
+  const stopScanner = async () => {
+    await releaseScanner();
     setShowScanner(false);
   };
 
@@ -185,7 +201,10 @@ export default function Profile() {
             <X />
           </button>
 
-          <div id="qr-reader" className="absolute inset-0" />
+          <div
+            id="qr-reader"
+            className="absolute inset-0 w-full h-full min-h-0"
+          />
 
           <div className="absolute bottom-8 inset-x-0 z-20 flex justify-center px-4">
             <div
