@@ -77,22 +77,34 @@ export default function RootLayout({
   }, []);
 
   useEffect(() => {
-    if (!clientConfig.logo_url) return;
+    if (!clientConfig.name) return;
 
+    const { background_color } = clientConfig.ui;
     document.title = `${clientConfig.name} CRM`;
+    document.body.style.backgroundColor = background_color;
 
-    let favicon = document.querySelector(
-      "link[rel='icon']",
-    ) as HTMLLinkElement | null;
+    if (clientConfig.logo_url) {
+      let favicon = document.querySelector(
+        "link[rel='icon']",
+      ) as HTMLLinkElement | null;
 
-    if (!favicon) {
-      favicon = document.createElement("link");
-      favicon.rel = "icon";
-      document.head.appendChild(favicon);
+      if (!favicon) {
+        favicon = document.createElement("link");
+        favicon.rel = "icon";
+        document.head.appendChild(favicon);
+      }
+
+      favicon.href = clientConfig.logo_url;
     }
 
-    favicon.href = clientConfig.logo_url;
-  }, [clientConfig.logo_url]);
+    return () => {
+      document.body.style.backgroundColor = "";
+    };
+  }, [
+    clientConfig.name,
+    clientConfig.logo_url,
+    clientConfig.ui.background_color,
+  ]);
 
   if (isWaiting || !clientConfig || !userProfile) {
     return;
@@ -100,15 +112,10 @@ export default function RootLayout({
 
   return (
     <div
-      className="min-h-screen"
+      className="min-h-dvh"
       style={{ backgroundColor: clientConfig.ui.background_color }}
     >
-      <div
-        className="container min-h-screen overflow-scroll"
-        style={{ backgroundColor: clientConfig.ui.background_color }}
-      >
-        {children}
-      </div>
+      {children}
       <Navbar />
     </div>
   );
