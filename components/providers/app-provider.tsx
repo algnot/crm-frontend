@@ -3,7 +3,12 @@ import type { Profile } from "@liff/get-profile";
 import { createContext, ReactNode, useContext, useState } from "react";
 import { useFullLoadingContext } from "./full-loading-provider";
 import { BackendClient } from "@/util/request";
-import { initPartnerAppConfig, PartnerAppConfig, User } from "@/types/request";
+import {
+  GetUserPointRespont,
+  initPartnerAppConfig,
+  PartnerAppConfig,
+  User,
+} from "@/types/request";
 
 interface AppContextType {
   userProfile: Profile | undefined;
@@ -14,6 +19,8 @@ interface AppContextType {
   setClientConfig: (value: PartnerAppConfig) => void;
   appUserProfile: User | undefined;
   setAppUserProfile: (value: User | undefined) => void;
+  userPoint: GetUserPointRespont[];
+  setUserPoint: (value: GetUserPointRespont[]) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -26,6 +33,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
   const setFullLoading = useFullLoadingContext();
   const backendClient = new BackendClient(setFullLoading);
+  const [userPoint, setUserPoint] = useState<GetUserPointRespont[]>([]);
 
   const value: AppContextType = {
     userProfile,
@@ -36,6 +44,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setUserProfile,
     appUserProfile,
     setAppUserProfile,
+    userPoint,
+    setUserPoint,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

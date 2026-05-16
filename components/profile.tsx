@@ -7,7 +7,8 @@ import { Html5Qrcode } from "html5-qrcode";
 import { GetUserPointRespont, isErrorResponse } from "@/types/request";
 
 export default function Profile() {
-  const { userProfile, clientConfig, backendClient } = useApp();
+  const { userProfile, clientConfig, backendClient, setUserPoint } =
+    useApp();
   const [showScanner, setShowScanner] = useState(false);
   const qrRef = useRef<Html5Qrcode | null>(null);
 
@@ -82,9 +83,9 @@ export default function Profile() {
       window.location.href = `/${clientConfig.slug}`;
       return;
     }
+    setUserPoint(points);
 
     const mainPoint = points.find((point) => point.currency.is_default);
-
     if (mainPoint) setMainPoint(mainPoint);
   };
 

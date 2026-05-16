@@ -3,10 +3,9 @@ import Profile from "@/components/profile";
 import { useApp } from "@/components/providers/app-provider";
 import { Coupon, isErrorResponse } from "@/types/request";
 import { useEffect, useState } from "react";
-import { Award } from "tabler-icons-react";
 
 export default function Page() {
-  const { backendClient, clientConfig } = useApp();
+  const { backendClient, clientConfig, userProfile, userPoint } = useApp();
   const [coupons, setCoupons] = useState<Coupon[]>([]);
 
   useEffect(() => {
@@ -32,43 +31,52 @@ export default function Page() {
         คูปองทั้งหมด
       </div>
 
-      {coupons.map((coupon, index) => {
-        return (
-          <div
-            className="flex gap-4 rounded-md overflow-hidden cursor-pointer shadow-md"
-            key={index}
-            style={{
-              backgroundColor: clientConfig.ui.background_white_color,
-              color: clientConfig.ui.text_color,
-            }}
-          >
-            <img
-              src={coupon.image_url}
-              alt="ads"
-              className="w-30 h-30 object-contain"
-            />
+      <div className="flex flex-col gap-4">
+        {coupons.map((coupon, index) => {
+          const currentPoint =
+            userPoint.find((point) => point.currency.id === coupon.currency.id)
+              ?.balance || 0;
+          const canUse = currentPoint >= coupon.value;
 
-            <div className="py-2 flex flex-col flex-1">
-              <div
-                className="text-2xl line-clamp-1"
-                style={{ color: clientConfig.ui.primary_color }}
-              >
-                {coupon.name}
+          return (
+            <div
+              className="flex gap-4 rounded-md overflow-hidden cursor-pointer shadow-md"
+              key={index}
+              style={{
+                backgroundColor: clientConfig.ui.background_white_color,
+                color: clientConfig.ui.text_color,
+                opacity: canUse ? 1 : 0.7,
+              }}
+            >
+              <img
+                src={coupon.image_url || clientConfig.logo_url}
+                alt="ads"
+                className="w-30 h-30 object-contain"
+              />
+
+              <div className="py-2 flex flex-col flex-1">
+                <div
+                  className="text-2xl line-clamp-1"
+                  style={{ color: clientConfig.ui.primary_color }}
+                >
+                  {coupon.name}
+                </div>
+
+                <div
+                  className="flex gap-1"
+                  style={{ color: clientConfig.ui.text_gray_color }}
+                >
+                  ใช้ {coupon.value.toLocaleString()}{" "}
+                  {coupon.currency.name.toLocaleUpperCase()}{" "}
+                  {!canUse && "(คะแนนไม่พอ)"}
+                </div>
+
+                <div className="mt-auto">แลกได้ถึง {coupon.end_time}</div>
               </div>
-
-              <div
-                className="flex gap-1"
-                style={{ color: clientConfig.ui.text_gray_color }}
-              >
-                ใช้ {coupon.value.toLocaleString()}{" "}
-                {coupon.currency.name.toLocaleUpperCase()}
-              </div>
-
-              <div className="mt-auto">แลกได้ถึง {coupon.end_time}</div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }
