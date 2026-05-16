@@ -103,7 +103,12 @@ export default function RootLayout({
       className="min-h-screen"
       style={{ backgroundColor: clientConfig.ui.background_color }}
     >
-      <div className="container">{children}</div>
+      <div
+        className="container"
+        style={{ backgroundColor: clientConfig.ui.background_color }}
+      >
+        {children}
+      </div>
       <Navbar />
     </div>
   );
