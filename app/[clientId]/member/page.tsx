@@ -34,11 +34,11 @@ export default function Page() {
 
         <div className="text-md mt-6 flex justify-between">
           <div className="font-medium">อีเมล</div>
-          <div className="text-gray-500">{appUserProfile?.email}</div>
+          <div className="text-gray-500">{appUserProfile?.email || "-"}</div>
         </div>
         <div className="text-md mt-1 flex justify-between">
           <div className="font-medium">หมายเลขโทรศัพท์</div>
-          <div className="text-gray-500">{appUserProfile?.phone}</div>
+          <div className="text-gray-500">{appUserProfile?.phone || "-"}</div>
         </div>
         <div className="text-md mt-1 flex justify-between">
           <div className="font-medium">วันเกิด</div>

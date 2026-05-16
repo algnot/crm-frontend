@@ -21,6 +21,8 @@ interface AppContextType {
   setAppUserProfile: (value: User | undefined) => void;
   userPoint: GetUserPointRespont[];
   setUserPoint: (value: GetUserPointRespont[]) => void;
+  isShowNavbar: boolean;
+  setIsShowNavbar: (value: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -34,6 +36,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const setFullLoading = useFullLoadingContext();
   const backendClient = new BackendClient(setFullLoading);
   const [userPoint, setUserPoint] = useState<GetUserPointRespont[]>([]);
+  const [isShowNavbar, setIsShowNavbar] = useState<boolean>(true);
 
   const value: AppContextType = {
     userProfile,
@@ -46,6 +49,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setAppUserProfile,
     userPoint,
     setUserPoint,
+    isShowNavbar,
+    setIsShowNavbar,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

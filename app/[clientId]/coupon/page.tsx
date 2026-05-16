@@ -5,7 +5,7 @@ import { Coupon, isErrorResponse } from "@/types/request";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-  const { backendClient, clientConfig, userProfile, userPoint } = useApp();
+  const { backendClient, clientConfig, userPoint } = useApp();
   const [coupons, setCoupons] = useState<Coupon[]>([]);
 
   useEffect(() => {
@@ -42,6 +42,9 @@ export default function Page() {
             <div
               className="flex gap-4 rounded-md overflow-hidden cursor-pointer shadow-md"
               key={index}
+              onClick={() => {
+                window.location.href = `/${clientConfig.slug}/coupon/${coupon.id}`;
+              }}
               style={{
                 backgroundColor: clientConfig.ui.background_white_color,
                 color: clientConfig.ui.text_color,

@@ -239,7 +239,24 @@ export class BackendClient {
   async listCoupon(clientId: string): Promise<ErrorResponse | Coupon[]> {
     try {
       this.setLoading(true);
-      const response = await this.client.get(`/partner/loga/coupon`);
+      const response = await this.client.get(`/partner/${clientId}/coupon`);
+      this.setLoading(false);
+      return response.data.coupon;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
+
+  async getCouponDetailById(
+    clientId: string,
+    id: string,
+  ): Promise<ErrorResponse | Coupon> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.get(
+        `/partner/${clientId}/coupon/${id}`,
+      );
       this.setLoading(false);
       return response.data.coupon;
     } catch (e) {

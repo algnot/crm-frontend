@@ -25,7 +25,7 @@ const navbars = [
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { clientConfig, appUserProfile } = useApp();
+  const { clientConfig, appUserProfile, isShowNavbar } = useApp();
 
   const getHref = (href: string) =>
     href === "/" ? `/${clientConfig.slug}` : `/${clientConfig.slug}${href}`;
@@ -35,6 +35,10 @@ export default function Navbar() {
     appUserProfile?.force_verify_phone ||
     appUserProfile?.force_verify_email
   ) {
+    return;
+  }
+
+  if (!isShowNavbar) {
     return;
   }
 

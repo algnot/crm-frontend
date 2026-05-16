@@ -172,5 +172,6 @@ export interface Coupon {
   end_time: string;
   code_expiry_interval: number;
   redeemed_count: number;
+  term_and_condition: string;
   currency: Currency;
 }

@@ -19,6 +19,7 @@ export default function RootLayout({
   const {
     backendClient,
     clientConfig,
+    userProfile,
     setClientConfig,
     setUserProfile,
     setAppUserProfile,
@@ -93,7 +94,7 @@ export default function RootLayout({
     favicon.href = clientConfig.logo_url;
   }, [clientConfig.logo_url]);
 
-  if (isWaiting) {
+  if (isWaiting || !clientConfig || !userProfile) {
     return;
   }
 
