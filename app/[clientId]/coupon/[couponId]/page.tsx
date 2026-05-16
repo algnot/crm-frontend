@@ -147,15 +147,18 @@ export default function Page() {
       </div>
 
       <div
-        className="fixed bottom-0 left-0 z-30 w-full p-4 shadow-md"
+        className="fixed bottom-0 left-0 z-30 w-full p-4 shadow-lg"
         style={{
           backgroundColor: clientConfig.ui.background_white_color,
         }}
       >
         {currentPoint < (coupon?.value || 0) ? (
           <div
-            className="text-center text-xl"
-            style={{ color: clientConfig.ui.text_gray_color }}
+            className="text-center text-xl rounded-md p-2"
+            style={{
+              color: clientConfig.ui.background_white_color,
+              backgroundColor: clientConfig.ui.secondary_color,
+            }}
           >
             {coupon?.currency.name.toLocaleUpperCase()} ของคุณไม่พอ
           </div>
