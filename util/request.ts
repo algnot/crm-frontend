@@ -270,7 +270,7 @@ export class BackendClient {
     clientId: string,
     couponId: number,
     userId: string,
-  ): Promise<ErrorResponse | Coupon> {
+  ): Promise<ErrorResponse | UserCoupon> {
     try {
       this.setLoading(true);
       const response = await this.client.post(

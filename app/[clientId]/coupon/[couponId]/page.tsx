@@ -75,7 +75,7 @@ export default function Page() {
     }
 
     alert("redeem coupon done :)");
-    window.location.href = `/${clientConfig.slug}`;
+    window.location.href = `/${clientConfig.slug}/coupon/my/${res.id}`;
   };
 
   return (
