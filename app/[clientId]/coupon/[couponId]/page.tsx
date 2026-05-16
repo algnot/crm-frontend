@@ -182,7 +182,7 @@ export default function Page() {
             {coupon?.currency.name.toLocaleUpperCase()} ของคุณไม่พอ
           </div>
         ) : (
-          <Button text="และคูปอง" onClick={redeemCoupon} />
+          <Button text="แลกคูปอง" onClick={redeemCoupon} />
         )}
       </div>
     </div>

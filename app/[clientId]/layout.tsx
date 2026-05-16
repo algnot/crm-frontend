@@ -104,7 +104,7 @@ export default function RootLayout({
       style={{ backgroundColor: clientConfig.ui.background_color }}
     >
       <div
-        className="container"
+        className="container min-h-screen overflow-scroll"
         style={{ backgroundColor: clientConfig.ui.background_color }}
       >
         {children}
