@@ -191,7 +191,7 @@ export default function Input({
         <label className="block" style={{ color: clientConfig.ui.text_color }}>
           {label}{" "}
           {required && (
-            <span style={{ color: clientConfig.ui.error_color }}>*</span>
+            <span style={{ color: clientConfig.ui.text_error_color }}>*</span>
           )}
         </label>
       )}
