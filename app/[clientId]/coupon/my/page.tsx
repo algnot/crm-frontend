@@ -70,7 +70,7 @@ export default function page() {
           style={{
             backgroundColor:
               selectedTab === "available"
-                ? clientConfig.ui.primary_color
+                ? clientConfig.ui.secondary_color
                 : clientConfig.ui.background_white_color,
             color:
               selectedTab === "available"
@@ -87,7 +87,7 @@ export default function page() {
           style={{
             backgroundColor:
               selectedTab === "used"
-                ? clientConfig.ui.primary_color
+                ? clientConfig.ui.secondary_color
                 : clientConfig.ui.background_white_color,
             color:
               selectedTab === "used"
@@ -104,7 +104,7 @@ export default function page() {
           style={{
             backgroundColor:
               selectedTab === "expired"
-                ? clientConfig.ui.primary_color
+                ? clientConfig.ui.secondary_color
                 : clientConfig.ui.background_white_color,
             color:
               selectedTab === "expired"
