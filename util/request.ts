@@ -303,4 +303,40 @@ export class BackendClient {
       return handlerError(e);
     }
   }
+
+  async getUserCouponById(
+    clientId: string,
+    userId: string,
+    couponId: string,
+  ): Promise<ErrorResponse | UserCoupon> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.get(
+        `/partner/${clientId}/user/${userId}/coupon/${couponId}`,
+      );
+      this.setLoading(false);
+      return response.data.coupon;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
+
+  async onUseCoupon(
+    clientId: string,
+    userId: string,
+    couponCode: string,
+  ): Promise<ErrorResponse | UserCoupon> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.post(
+        `/partner/${clientId}/user/${userId}/coupon/${couponCode}/use`,
+      );
+      this.setLoading(false);
+      return response.data.coupon;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
 }
