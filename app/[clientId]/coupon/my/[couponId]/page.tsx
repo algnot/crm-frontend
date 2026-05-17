@@ -187,7 +187,7 @@ export default function Page() {
                   เหลือเวลาใช้งาน
                 </div>
                 <div
-                  className="mt-1 text-4xl font-mono font-bold tracking-wider"
+                  className="mt-1 text-2xl font-mono font-bold tracking-wider"
                   style={{
                     color:
                       remainingSeconds > 0
