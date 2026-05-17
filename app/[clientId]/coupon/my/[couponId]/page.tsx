@@ -9,6 +9,26 @@ import { ArrowLeft } from "tabler-icons-react";
 import QRCode from "react-qr-code";
 import Barcode from "react-barcode";
 
+function parseUtcExpiration(dateStr: string): Date {
+  return new Date(dateStr.replace(" ", "T") + "Z");
+}
+
+function formatCountdown(totalSeconds: number): string {
+  const seconds = Math.max(0, totalSeconds);
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  return [hours, minutes, secs]
+    .map((value) => String(value).padStart(2, "0"))
+    .join(":");
+}
+
+function getRemainingSeconds(expirationDate: string): number {
+  const expiration = parseUtcExpiration(expirationDate);
+  return Math.floor((expiration.getTime() - Date.now()) / 1000);
+}
+
 export default function Page() {
   const params = useParams();
   const router = useRouter();
@@ -22,6 +42,7 @@ export default function Page() {
 
   const [coupon, setCoupon] = useState<UserCoupon>();
   const [codeType, setCodeType] = useState<"qr" | "bar">("qr");
+  const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
 
   useEffect(() => {
     setIsShowNavbar(false);
@@ -32,6 +53,22 @@ export default function Page() {
       setIsShowNavbar(true);
     };
   }, [userProfile, couponId]);
+
+  useEffect(() => {
+    if (!coupon?.expiration_date || coupon.is_used) {
+      setRemainingSeconds(null);
+      return;
+    }
+
+    const updateRemaining = () => {
+      setRemainingSeconds(getRemainingSeconds(coupon.expiration_date));
+    };
+
+    updateRemaining();
+    const interval = setInterval(updateRemaining, 1000);
+
+    return () => clearInterval(interval);
+  }, [coupon?.expiration_date, coupon?.is_used]);
 
   const fetchData = async () => {
     if (!userProfile || !couponId) {
@@ -127,12 +164,45 @@ export default function Page() {
           ใช้ได้ถึง {coupon?.expiration_date}
         </div>
 
+        {coupon?.is_used && (
+          <div
+            className="mt-1"
+            style={{
+              color: clientConfig.ui.text_gray_color,
+            }}
+          >
+            ใช้เมื่อ {coupon.used_date}
+          </div>
+        )}
+
         {/* QR / Barcode */}
         {coupon?.code && !coupon.is_used && (
           <div className="mt-8 flex flex-col items-center">
+            {remainingSeconds !== null && (
+              <div className="mb-5 text-center">
+                <div
+                  className="text-lg"
+                  style={{ color: clientConfig.ui.text_gray_color }}
+                >
+                  เหลือเวลาใช้งาน
+                </div>
+                <div
+                  className="mt-1 text-4xl font-mono font-bold tracking-wider"
+                  style={{
+                    color:
+                      remainingSeconds > 0
+                        ? clientConfig.ui.primary_color
+                        : clientConfig.ui.text_error_color,
+                  }}
+                >
+                  {formatCountdown(remainingSeconds)}
+                </div>
+              </div>
+            )}
+
             {/* Toggle */}
             <div
-              className="flex rounded-full overflow-hidden mb-5"
+              className="flex rounded-full overflow-hidden my-5"
               style={{
                 backgroundColor: clientConfig.ui.background_color,
               }}
