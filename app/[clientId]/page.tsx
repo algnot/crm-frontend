@@ -1,11 +1,16 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Profile from "@/components/profile";
 import { GetUserPointHistoryRespont, isErrorResponse } from "@/types/request";
 import { useApp } from "@/components/providers/app-provider";
 import MenuCard from "@/components/menu-card";
-import { Award } from "tabler-icons-react";
+import { Award, Link } from "tabler-icons-react";
+import Banner from "@/public/banner.jpg";
+import { IconBell, IconQrcode } from "@tabler/icons-react";
+import Profile from "@/components/profile";
+import Header from "@/components/Header";
+import PointCard from "@/components/PointCard";
+import TeirCard from "@/components/TeirCard";
 
 export default function Home() {
   const router = useRouter();
@@ -59,8 +64,12 @@ export default function Home() {
   );
 
   return (
-    <div className="h-dvh flex flex-col p-5">
-      <Profile />
+    <div className="h-dvh">
+      <Header />
+
+      <PointCard />
+
+      <TeirCard />
 
       {haveAds && (
         <img

@@ -2,30 +2,41 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { User, Award, Ticket } from "tabler-icons-react";
+import { Ticket } from "tabler-icons-react";
 import { useApp } from "./providers/app-provider";
-import { IconSparkles } from "@tabler/icons-react";
+import {
+  IconClock,
+  IconScan,
+  IconSettings,
+  IconShoppingBag,
+} from "@tabler/icons-react";
 
 const navbars = [
   {
-    icon: Award,
+    icon: IconShoppingBag,
     href: "/",
-    title: "สะสมคะแนน",
-  },
-  {
-    icon: IconSparkles,
-    href: "/coupon",
-    title: "สิทธิพิเศษ",
+    title: "หน้าหลัก",
   },
   {
     icon: Ticket,
     href: "/coupon/my",
-    title: "คูปองของฉัน",
+    title: "คูปอง",
   },
   {
-    icon: User,
+    icon: IconScan,
+    href: "/scan",
+    title: "สแกน QR",
+    isCenter: true,
+  },
+  {
+    icon: IconClock,
+    href: "/coupon",
+    title: "ประวัติ",
+  },
+  {
+    icon: IconSettings,
     href: "/member",
-    title: "ผู้ใช้",
+    title: "ตั้งค่า",
   },
 ];
 
@@ -50,11 +61,11 @@ export default function Navbar() {
 
   return (
     <>
-      <div style={{ height: 70 }}></div>
+      <div style={{ height: 110 }}></div>
       <div
-        className="navbar flex justify-around items-center px-5 shadow-md"
+        className="navbar grid grid-cols-[1fr_1fr_72px_1fr_1fr] justify-around items-center pt-2 px-3.5 pb-7.5 shadow-md bg-[linear-gradient(180deg,transparent,var(--bg)_30%)]"
         style={{
-          background: clientConfig.ui.background_white_color,
+          background: "linear-gradient(180deg, transparent, #0a0a0a 30%)",
         }}
       >
         {navbars.map((navbar, index) => {
@@ -62,11 +73,28 @@ export default function Navbar() {
           const isActive = pathname === targetPath;
           const Icon = navbar.icon;
 
+          if (navbar.isCenter) {
+            return (
+              <div key={index} className="flex justify-center items-center">
+                <div
+                  className="w-15 h-15 rounded-full flex items-center justify-center text-white -translate-y-1"
+                  style={{
+                    background: "linear-gradient(135deg, #D946EF, #4C1D95)",
+                    boxShadow:
+                      "0 6px 24px -4px color-mix(in oklch, #E879F9 70%, transparent), 0 0 0 6px #0a0a0a",
+                  }}
+                >
+                  <Icon size={26} />
+                </div>
+              </div>
+            );
+          }
+
           if (isActive) {
             return (
               <div
                 className={
-                  "flex flex-col justify-center items-center gap-0.5 isActive"
+                  "flex flex-col justify-center items-center gap-1 isActive pt-2 px-1 pb-1"
                 }
                 style={{ color: clientConfig.ui.primary_color }}
                 key={index}
@@ -80,7 +108,7 @@ export default function Navbar() {
           return (
             <Link
               href={targetPath}
-              className="flex flex-col justify-center items-center gap-0.5"
+              className="flex flex-col justify-center items-center gap-1 pt-2 px-1 pb-1"
               style={{ color: clientConfig.ui.text_gray_color }}
               key={index}
             >
