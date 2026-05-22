@@ -30,9 +30,14 @@ const navbars = [
   },
   {
     icon: IconClock,
-    href: "/coupon",
+    href: "/history",
     title: "ประวัติ",
   },
+  // {
+  //   icon: IconClock,
+  //   href: "/coupon",
+  //   title: "ประวัติ",
+  // },
   {
     icon: IconSettings,
     href: "/member",

@@ -1,5 +1,4 @@
 "use client";
-import Profile from "@/components/profile";
 import { useApp } from "@/components/providers/app-provider";
 import { isErrorResponse, UserCoupon } from "@/types/request";
 import { useEffect, useState } from "react";
