@@ -131,9 +131,8 @@ export default function PointCard() {
     <section
       className="relative mx-4.5 mb-5.5 rounded-[22px] pt-5.5 px-5.5 pb-5 overflow-hidden"
       style={{
-        background: "linear-gradient(135deg, #D946EF, #4C1D95)",
-        boxShadow:
-          "0 10px 40px -10px color-mix(in oklch, #4C1D95 60%, transparent), inset 0 1px 0 rgba(255,255,255,0.18)",
+        background: `linear-gradient(135deg, ${clientConfig.ui.primary_color}, ${clientConfig.ui.secondary_color})`,
+        boxShadow: `10px 10px 40px -10px color-mix(in oklch, ${clientConfig.ui.secondary_color} 60%, transparent), inset 0 1px 0 rgba(255,255,255,0.18)`,
       }}
     >
       <div

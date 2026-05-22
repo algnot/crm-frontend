@@ -1,10 +1,31 @@
 import React from "react";
+import ProgressBar from "./ProgressBar";
+import { useApp } from "./providers/app-provider";
 
 export default function TeirCard() {
+  const { clientConfig } = useApp();
+
   return (
-    <section className="mx-4.5 mb-5.5 rounded-[18px] pt-4 px-4.5 pb-3.5 bg-[#141414] border-[0.5px] border-[rgba(255,255,255,0.08)]">
-      <p>ความคืบหน้า · Gold → Platinum</p>
-      <p>1,250 / 3,000</p>
+    <section
+      className="mx-4.5 mb-5.5 rounded-[18px] pt-4 px-4.5 pb-3.5 border-[0.5px] border-[rgba(255,255,255,0.08)] text-white"
+      style={{
+        background: clientConfig.ui.ui_custom_fields.find(
+          (field) => field.key === "surface_color",
+        )?.value,
+        color: clientConfig.ui.text_color,
+      }}
+    >
+      <div className="flex justify-between mb-2.5">
+        <p>ความคืบหน้า · Gold → Platinum</p>
+        <p className="text-xl">1,250 / 3,000</p>
+      </div>
+      <ProgressBar
+        value={1250}
+        max={3000}
+        barClassName="bg-red-600"
+        showValue={false}
+      />
+      <p className="mt-2.5">อีก 1,750 แต้มก็จะเป็น Platinum แล้ว ✦</p>
     </section>
   );
 }

@@ -3,14 +3,10 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { GetUserPointHistoryRespont, isErrorResponse } from "@/types/request";
 import { useApp } from "@/components/providers/app-provider";
-import MenuCard from "@/components/menu-card";
-import { Award, Link } from "tabler-icons-react";
-import Banner from "@/public/banner.jpg";
-import { IconBell, IconQrcode } from "@tabler/icons-react";
-import Profile from "@/components/profile";
 import Header from "@/components/Header";
 import PointCard from "@/components/PointCard";
 import TeirCard from "@/components/TeirCard";
+import News from "@/components/News";
 
 export default function Home() {
   const router = useRouter();
@@ -50,18 +46,18 @@ export default function Home() {
     setpointHistories(pointHistories);
   };
 
-  const haveAds =
-    clientConfig.ui.ui_custom_fields.filter(
-      (custom_field) => custom_field.key == "ads",
-    ).length > 0;
+  // const haveAds =
+  //   clientConfig.ui.ui_custom_fields.filter(
+  //     (custom_field) => custom_field.key == "ads",
+  //   ).length > 0;
 
-  const adsImage = clientConfig.ui.ui_custom_fields.find(
-    (custom_field) => custom_field.key == "ads",
-  );
+  // const adsImage = clientConfig.ui.ui_custom_fields.find(
+  //   (custom_field) => custom_field.key == "ads",
+  // );
 
-  const adsAction = clientConfig.ui.ui_custom_fields.find(
-    (custom_field) => custom_field.key == "ads_action",
-  );
+  // const adsAction = clientConfig.ui.ui_custom_fields.find(
+  //   (custom_field) => custom_field.key == "ads_action",
+  // );
 
   return (
     <div className="h-dvh">
@@ -71,7 +67,9 @@ export default function Home() {
 
       <TeirCard />
 
-      {haveAds && (
+      <News />
+
+      {/* {haveAds && (
         <img
           src={(adsImage?.value || "") as string}
           alt="ads"
@@ -82,9 +80,9 @@ export default function Home() {
             }
           }}
         />
-      )}
+      )} */}
 
-      <div
+      {/* <div
         className="text-2xl my-5"
         style={{ color: clientConfig.ui.primary_color }}
       >
@@ -126,7 +124,7 @@ export default function Home() {
         </div>
       )}
 
-      <div className="p-10"></div>
+      <div className="p-10"></div> */}
     </div>
   );
 }

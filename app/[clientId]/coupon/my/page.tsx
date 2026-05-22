@@ -54,11 +54,11 @@ export default function page() {
 
   return (
     <div className="px-5 pt-4">
-      <Profile />
+      {/* <Profile /> */}
 
       <div
-        className="text-2xl mt-5 mb-2"
-        style={{ color: clientConfig.ui.primary_color }}
+        className="text-3xl leading-none font-medium mt-5 mb-2"
+        style={{ color: clientConfig.ui.text_color }}
       >
         คูปองของฉัน
       </div>
@@ -71,7 +71,9 @@ export default function page() {
             backgroundColor:
               selectedTab === "available"
                 ? clientConfig.ui.secondary_color
-                : clientConfig.ui.background_white_color,
+                : clientConfig.ui.ui_custom_fields.find(
+                    (field) => field.key === "surface_color",
+                  )?.value,
             color:
               selectedTab === "available"
                 ? clientConfig.ui.text_white_color
@@ -88,7 +90,9 @@ export default function page() {
             backgroundColor:
               selectedTab === "used"
                 ? clientConfig.ui.secondary_color
-                : clientConfig.ui.background_white_color,
+                : clientConfig.ui.ui_custom_fields.find(
+                    (field) => field.key === "surface_color",
+                  )?.value,
             color:
               selectedTab === "used"
                 ? clientConfig.ui.text_white_color
@@ -105,7 +109,9 @@ export default function page() {
             backgroundColor:
               selectedTab === "expired"
                 ? clientConfig.ui.secondary_color
-                : clientConfig.ui.background_white_color,
+                : clientConfig.ui.ui_custom_fields.find(
+                    (field) => field.key === "surface_color",
+                  )?.value,
             color:
               selectedTab === "expired"
                 ? clientConfig.ui.text_white_color

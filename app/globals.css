@@ -64,6 +64,15 @@ video {
   height: 100% !important;
 }
 
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .qr-scanner-overlay #qr-reader {
   border: none !important;
 }

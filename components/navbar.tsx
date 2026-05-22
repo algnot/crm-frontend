@@ -65,7 +65,7 @@ export default function Navbar() {
       <div
         className="navbar grid grid-cols-[1fr_1fr_72px_1fr_1fr] justify-around items-center pt-2 px-3.5 pb-7.5 shadow-md bg-[linear-gradient(180deg,transparent,var(--bg)_30%)]"
         style={{
-          background: "linear-gradient(180deg, transparent, #0a0a0a 30%)",
+          background: `linear-gradient(180deg, transparent, ${clientConfig.ui.background_color} 30%)`,
         }}
       >
         {navbars.map((navbar, index) => {
@@ -79,9 +79,8 @@ export default function Navbar() {
                 <div
                   className="w-15 h-15 rounded-full flex items-center justify-center text-white -translate-y-1"
                   style={{
-                    background: "linear-gradient(135deg, #D946EF, #4C1D95)",
-                    boxShadow:
-                      "0 6px 24px -4px color-mix(in oklch, #E879F9 70%, transparent), 0 0 0 6px #0a0a0a",
+                    background: `linear-gradient(135deg, ${clientConfig.ui.primary_color}, ${clientConfig.ui.secondary_color})`,
+                    boxShadow: `0 6px 24px -4px color-mix(in oklch, ${clientConfig.ui.primary_color} 70%, transparent), 0 0 0 6px ${clientConfig.ui.background_color}`,
                   }}
                 >
                   <Icon size={26} />

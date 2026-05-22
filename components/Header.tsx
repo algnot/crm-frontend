@@ -17,26 +17,28 @@ export default function Header() {
         <div
           className="absolute inset-0"
           style={{
-            background:
-              "linear-gradient(180deg,rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 30%, #0a0a0a 92%, #0a0a0a 100%)",
+            background: `linear-gradient(180deg,rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 30%, ${clientConfig.ui.background_color} 100%, #0a0a0a 100%)`,
           }}
         ></div>
       </div>
       <header className="relative z-2 pt-16 px-4.5 pb-4.5 flex items-center justify-between">
-        {!!clientConfig.logo_url && (
-          <img
-            src={clientConfig.logo_url}
-            alt="logo"
-            className="h-9.5 w-9.5 rounded-xl bg-black"
-            style={{
-              boxShadow:
-                "0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 18px -4px color-mix(in oklch, #E879F9 60%, transparent)",
-            }}
-          />
-        )}
+        <div>
+          {!!clientConfig.logo_url && (
+            <img
+              src={clientConfig.logo_url}
+              alt="logo"
+              className="h-9.5 w-auto rounded-xl bg-white"
+              style={{
+                boxShadow: `0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 18px -4px color-mix(in oklch, ${clientConfig.ui.primary_color} 60%, transparent)`,
+              }}
+            />
+          )}
+        </div>
         <button
           className="w-9.5 h-9.5 rounded-xl flex items-center justify-center border border-[rgba(255,255,255,0.08)]"
-          style={{ background: clientConfig.ui.background_color }}
+          style={{
+            background: clientConfig.ui.primary_color,
+          }}
         >
           <IconBell className="text-white w-5 h-5" />
         </button>
@@ -45,7 +47,10 @@ export default function Header() {
         {!!userProfile?.pictureUrl ? (
           <img
             src={userProfile.pictureUrl}
-            className="h-12.5 w-12.5 rounded-full border border-[#E879F9]"
+            className="h-12.5 w-12.5 rounded-full"
+            style={{
+              border: `1px solid ${clientConfig.ui.primary_color}`,
+            }}
           />
         ) : (
           <img src={clientConfig.logo_url} className="h-12.5 w-12.5" />
@@ -54,7 +59,7 @@ export default function Header() {
           <div
             className="text-lg mb-1 font-semibold tracking-[-0.17px]"
             style={{
-              color: clientConfig.ui.text_white_color,
+              color: clientConfig.ui.text_color,
             }}
           >
             {clientConfig.ui.welcome_title || "ยินดีต้อนรับ"}
@@ -72,9 +77,8 @@ export default function Header() {
         <button
           className="w-11 h-11 rounded-xl flex items-center justify-center border border-[rgba(255,255,255,0.08)]"
           style={{
-            background: "linear-gradient(135deg, #D946EF, #4C1D95)",
-            boxShadow:
-              "0 6px 20px -4px color-mix(in oklch, #D946EF 70%, transparent)",
+            background: `linear-gradient(135deg, ${clientConfig.ui.primary_color}, ${clientConfig.ui.secondary_color})`,
+            boxShadow: `0 6px 20px -4px color-mix(in oklch, ${clientConfig.ui.primary_color} 70%, transparent)`,
           }}
         >
           <IconQrcode className="text-white w-5.5 h-5.5" />
