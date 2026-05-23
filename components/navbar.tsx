@@ -3,13 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Ticket } from "tabler-icons-react";
-import { useApp } from "./providers/app-provider";
 import {
   IconClock,
   IconScan,
   IconSettings,
   IconShoppingBag,
 } from "@tabler/icons-react";
+import { closeScanner, openScanner } from "@/util/qr-scanner";
+import { useRouter } from "next/navigation";
+import { useApp } from "./providers/app-provider";
 
 const navbars = [
   {
@@ -33,11 +35,6 @@ const navbars = [
     href: "/history",
     title: "ประวัติ",
   },
-  // {
-  //   icon: IconClock,
-  //   href: "/coupon",
-  //   title: "ประวัติ",
-  // },
   {
     icon: IconSettings,
     href: "/member",
@@ -47,6 +44,8 @@ const navbars = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const router = useRouter();
+
   const { clientConfig, appUserProfile, isShowNavbar } = useApp();
 
   const getHref = (href: string) =>
@@ -64,6 +63,23 @@ export default function Navbar() {
     return;
   }
 
+  const handleQRCode = async (qrText: string) => {
+    try {
+      closeScanner();
+
+      const isUrl = /^https?:\/\/.+/i.test(qrText);
+
+      if (isUrl) {
+        router.push(qrText);
+        return;
+      }
+
+      alert(`QR Code:\n${qrText}`);
+    } catch (err) {
+      console.error(err);
+      alert("เกิดข้อผิดพลาด");
+    }
+  };
   return (
     <>
       <div style={{ height: 110 }}></div>
@@ -87,6 +103,14 @@ export default function Navbar() {
                     background: `linear-gradient(135deg, ${clientConfig.ui.primary_color}, ${clientConfig.ui.secondary_color})`,
                     boxShadow: `0 6px 24px -4px color-mix(in oklch, ${clientConfig.ui.primary_color} 70%, transparent), 0 0 0 6px ${clientConfig.ui.background_color}`,
                   }}
+                  onClick={() =>
+                    openScanner({
+                      onResult: handleQRCode,
+                      primaryColor: clientConfig.ui.primary_color,
+                      secondaryColor: clientConfig.ui.secondary_color,
+                      textWhiteColor: clientConfig.ui.text_white_color,
+                    })
+                  }
                 >
                   <Icon size={26} />
                 </div>

@@ -1,6 +1,6 @@
 "use client";
 import type { Profile } from "@liff/get-profile";
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState, useMemo } from "react";
 import { useFullLoadingContext } from "./full-loading-provider";
 import { BackendClient } from "@/util/request";
 import {
@@ -34,24 +34,43 @@ export function AppProvider({ children }: { children: ReactNode }) {
     initPartnerAppConfig(),
   );
   const setFullLoading = useFullLoadingContext();
-  const backendClient = new BackendClient(setFullLoading);
+  const backendClient = useMemo(
+    () => new BackendClient(setFullLoading),
+    [setFullLoading],
+  );
   const [userPoint, setUserPoint] = useState<GetUserPointRespont[]>([]);
   const [isShowNavbar, setIsShowNavbar] = useState<boolean>(true);
 
-  const value: AppContextType = {
-    userProfile,
-    setFullLoading,
-    backendClient,
-    clientConfig,
-    setClientConfig,
-    setUserProfile,
-    appUserProfile,
-    setAppUserProfile,
-    userPoint,
-    setUserPoint,
-    isShowNavbar,
-    setIsShowNavbar,
-  };
+  const value: AppContextType = useMemo(
+    () => ({
+      userProfile,
+      setUserProfile,
+      setFullLoading,
+      backendClient,
+      clientConfig,
+      setClientConfig,
+      appUserProfile,
+      setAppUserProfile,
+      userPoint,
+      setUserPoint,
+      isShowNavbar,
+      setIsShowNavbar,
+    }),
+    [
+      userProfile,
+      setUserProfile,
+      setFullLoading,
+      backendClient,
+      clientConfig,
+      setClientConfig,
+      appUserProfile,
+      setAppUserProfile,
+      userPoint,
+      setUserPoint,
+      isShowNavbar,
+      setIsShowNavbar,
+    ],
+  );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

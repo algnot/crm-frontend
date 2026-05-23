@@ -1,16 +1,13 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useState, useCallback } from "react";
 import { useApp } from "./providers/app-provider";
 import Link from "next/link";
-import { Award, Scan, X } from "tabler-icons-react";
-import { Html5Qrcode } from "html5-qrcode";
+import { Award, Scan } from "tabler-icons-react";
+import { openScanner, closeScanner } from "@/util/qr-scanner";
 import { GetUserPointRespont, isErrorResponse } from "@/types/request";
 
 export default function Profile() {
   const { userProfile, clientConfig, backendClient, setUserPoint } = useApp();
-  const [showScanner, setShowScanner] = useState(false);
-  const qrRef = useRef<Html5Qrcode | null>(null);
 
   const [mainPoint, setMainPoint] = useState<GetUserPointRespont>({
     currency: {
@@ -24,75 +21,7 @@ export default function Profile() {
     transfer: 0,
   });
 
-  useEffect(() => {
-    fetchData();
-  }, [clientConfig.slug, userProfile?.userId]);
-
-  const releaseScanner = async () => {
-    try {
-      if (qrRef.current?.isScanning) {
-        await qrRef.current.stop();
-        qrRef.current.clear();
-      }
-    } catch {}
-
-    qrRef.current = null;
-  };
-
-  useEffect(() => {
-    if (!showScanner) return;
-
-    let cancelled = false;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const startScanner = async () => {
-      await new Promise<void>((resolve) => {
-        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-      });
-      if (cancelled) return;
-
-      const scanner = new Html5Qrcode("qr-reader");
-      qrRef.current = scanner;
-
-      try {
-        await scanner.start(
-          { facingMode: "environment" },
-          {
-            fps: 10,
-            qrbox: (viewfinderWidth, viewfinderHeight) => {
-              const size = Math.floor(
-                Math.min(viewfinderWidth, viewfinderHeight) * 0.7,
-              );
-
-              return { width: size, height: size };
-            },
-          },
-          (decodedText) => {
-            if (!cancelled) handleQRCode(decodedText);
-          },
-          () => {},
-        );
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    startScanner();
-
-    return () => {
-      cancelled = true;
-      document.body.style.overflow = previousOverflow;
-      releaseScanner();
-    };
-  }, [showScanner]);
-
-  const stopScanner = async () => {
-    await releaseScanner();
-    setShowScanner(false);
-  };
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!clientConfig.slug || !userProfile?.userId) return;
 
     const points = await backendClient.getUserPoint(
@@ -108,12 +37,16 @@ export default function Profile() {
 
     const mainPoint = points.find((point) => point.currency.is_default);
     if (mainPoint) setMainPoint(mainPoint);
-  };
+  }, [clientConfig.slug, userProfile?.userId, backendClient, setUserPoint]);
+
+  useEffect(() => {
+    Promise.resolve().then(fetchData);
+  }, [fetchData]);
 
   const handleQRCode = async (qrText: string) => {
     try {
       console.log("QR:", qrText);
-      await stopScanner();
+      closeScanner();
 
       const isUrl = /^https?:\/\/.+/i.test(qrText);
 
@@ -183,46 +116,23 @@ export default function Profile() {
             </span>
           </span>
         </div>
-        <div className="cursor-pointer" onClick={() => setShowScanner(true)}>
+        <div
+          className="cursor-pointer"
+          onClick={() =>
+            openScanner({
+              onResult: handleQRCode,
+              onClose: async () => {
+                await fetchData();
+              },
+              primaryColor: clientConfig.ui.primary_color,
+              secondaryColor: clientConfig.ui.secondary_color,
+              textWhiteColor: clientConfig.ui.text_white_color,
+            })
+          }
+        >
           <Scan />
         </div>
       </div>
-
-      {showScanner &&
-        createPortal(
-          <div className="qr-scanner-overlay fixed inset-0 z-100 h-dvh w-full bg-black overflow-hidden">
-            <button
-              onClick={stopScanner}
-              className="absolute top-4 right-4 z-20 rounded-full p-2 cursor-pointer"
-              style={{
-                background: clientConfig.ui.primary_color,
-                color: clientConfig.ui.text_white_color,
-              }}
-            >
-              <X />
-            </button>
-
-            <div
-              id="qr-reader"
-              className="absolute inset-0 w-full h-full min-h-0"
-            />
-
-            <div className="absolute bottom-8 inset-x-0 z-20 flex justify-center px-4">
-              <div
-                className="text-2xl text-center px-5 py-2 rounded-md"
-                style={{
-                  background: clientConfig.ui.secondary_color,
-                  color: clientConfig.ui.text_white_color,
-                }}
-              >
-                สแกน QR Code ท้ายใบเสร็จเพื่อสะสม {mainPoint.currency.name}{" "}
-                <br />
-                กรุณาวาง QR Code ให้อยู่ในกรอบ
-              </div>
-            </div>
-          </div>,
-          document.body,
-        )}
     </div>
   );
 }
