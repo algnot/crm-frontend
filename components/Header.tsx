@@ -71,7 +71,7 @@ export default function Header() {
               color: clientConfig.ui.text_gray_color,
             }}
           >
-            xxx-xxx-1234 {/* TODO: get phone number */}
+            {userProfile?.userId}
           </div>
         </div>
         <button
