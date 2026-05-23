@@ -1,5 +1,4 @@
 "use client";
-import Button from "@/components/button";
 import { useApp } from "@/components/providers/app-provider";
 import { IconLogout } from "@tabler/icons-react";
 

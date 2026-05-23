@@ -33,10 +33,74 @@ export default function History() {
   return (
     <div>
       <div
-        className="text-2xl my-5"
-        style={{ color: clientConfig.ui.primary_color }}
+        className="text-3xl leading-none font-medium mt-5 mb-2"
+        style={{ color: clientConfig.ui.text_color }}
       >
         ประวัติการได้รับคะแนน
+      </div>
+
+      <div
+        className="rounded-[18px] border-[0.5px] border-[rgba(255,255,255,0.08)] p-4.5 mb-4.5 grid grid-cols-3"
+        style={{
+          background: clientConfig.ui.ui_custom_fields.find(
+            (field) => field.key === "surface_color",
+          )?.value,
+        }}
+      >
+        <div className="flex flex-col items-center justify-between border-r-[0.5px] border-[rgba(255,255,255,0.08)]">
+          <p
+            className=""
+            style={{
+              color: clientConfig.ui.text_gray_color,
+            }}
+          >
+            รับ
+          </p>
+          <p
+            className="text-3xl font-medium"
+            style={{
+              color: clientConfig.ui.text_success_color,
+            }}
+          >
+            +xxx
+          </p>
+        </div>
+        <div className="flex flex-col items-center justify-between border-r-[0.5px] border-[rgba(255,255,255,0.08)]">
+          <p
+            className=""
+            style={{
+              color: clientConfig.ui.text_gray_color,
+            }}
+          >
+            ใช้
+          </p>
+          <p
+            className="text-3xl font-medium"
+            style={{
+              color: clientConfig.ui.text_error_color,
+            }}
+          >
+            -xxx
+          </p>
+        </div>
+        <div className="flex flex-col items-center justify-between">
+          <p
+            className=""
+            style={{
+              color: clientConfig.ui.text_gray_color,
+            }}
+          >
+            คงเหลือ
+          </p>
+          <div
+            className="text-3xl font-medium"
+            style={{
+              color: clientConfig.ui.text_gray_color,
+            }}
+          >
+            {"-"}
+          </div>
+        </div>
       </div>
 
       {pointHistories.length > 0 &&
