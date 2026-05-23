@@ -1,6 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useApp } from "./providers/app-provider";
-import { GetUserPointHistoryRespont, isErrorResponse } from "@/types/request";
+import {
+  GetUserPointHistoryRespont,
+  GetUserPointRespont,
+  isErrorResponse,
+} from "@/types/request";
 import MenuCard from "./menu-card";
 import { Award } from "tabler-icons-react";
 
@@ -9,6 +13,38 @@ export default function History() {
   const [pointHistories, setpointHistories] = useState<
     GetUserPointHistoryRespont[]
   >([]);
+
+  const [mainPoint, setMainPoint] = useState<GetUserPointRespont>({
+    currency: {
+      id: 0,
+      name: "Point",
+      is_default: true,
+    },
+    balance: 0,
+    burn: 0,
+    earn: 0,
+    transfer: 0,
+  });
+
+  const fetchData = async () => {
+    if (!clientConfig.slug || !userProfile?.userId) return;
+
+    const points = await backendClient.getUserPoint(
+      clientConfig.slug,
+      userProfile.userId,
+    );
+
+    if (isErrorResponse(points)) {
+      return;
+    }
+
+    const mainPoint = points.find((point) => point.currency.is_default);
+    if (mainPoint) setMainPoint(mainPoint);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [clientConfig.slug, userProfile?.userId]);
 
   useEffect(() => {
     const run = async () => {
@@ -62,7 +98,7 @@ export default function History() {
               color: clientConfig.ui.text_success_color,
             }}
           >
-            +xxx
+            +{mainPoint.earn.toLocaleString()}
           </p>
         </div>
         <div className="flex flex-col items-center justify-between border-r-[0.5px] border-[rgba(255,255,255,0.08)]">
@@ -80,7 +116,7 @@ export default function History() {
               color: clientConfig.ui.text_error_color,
             }}
           >
-            -xxx
+            -{mainPoint.burn.toLocaleString()}
           </p>
         </div>
         <div className="flex flex-col items-center justify-between">
@@ -95,10 +131,10 @@ export default function History() {
           <div
             className="text-3xl font-medium"
             style={{
-              color: clientConfig.ui.text_gray_color,
+              color: clientConfig.ui.text_color,
             }}
           >
-            {"-"}
+            {mainPoint.balance.toLocaleString()}
           </div>
         </div>
       </div>
