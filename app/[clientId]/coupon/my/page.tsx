@@ -1,7 +1,8 @@
 "use client";
 import ChipButton from "@/components/chip-button";
+import CouponCard from "@/components/coupon-card";
 import { useApp } from "@/components/providers/app-provider";
-import { isErrorResponse, UserCoupon } from "@/types/request";
+import { CouponType, isErrorResponse, UserCoupon } from "@/types/request";
 import { useEffect, useState } from "react";
 import { Ticket } from "tabler-icons-react";
 
@@ -116,48 +117,20 @@ export default function page() {
           );
 
           const canUse = !coupon.is_used && expiration > new Date();
+          const cp: CouponType = {
+            id: coupon.id,
+            name: coupon.name,
+            image_url: coupon.coupon.image_url,
+            value: Number(coupon.value),
+            start_time: coupon.acquired_date,
+            end_time: coupon.expiration_date,
+            code_expiry_interval: 10,
+            redeemed_count: 0,
+            term_and_condition: coupon.coupon.term_and_condition,
+            currency: coupon.currency,
+          };
 
-          return (
-            <div
-              key={index}
-              className="flex gap-4 rounded-md overflow-hidden cursor-pointer shadow-md"
-              onClick={() => {
-                window.location.href = `/${clientConfig.slug}/coupon/my/${coupon.id}`;
-              }}
-              style={{
-                backgroundColor: clientConfig.ui.background_white_color,
-                color: clientConfig.ui.text_color,
-                opacity: canUse ? 1 : 0.7,
-              }}
-            >
-              <img
-                src={coupon.coupon.image_url || clientConfig.logo_url}
-                alt=""
-                className="w-30 h-30 object-contain"
-              />
-
-              <div className="py-2 flex flex-col flex-1">
-                <div
-                  className="text-2xl line-clamp-1"
-                  style={{
-                    color: clientConfig.ui.primary_color,
-                  }}
-                >
-                  {coupon.name}
-                </div>
-
-                <div
-                  style={{
-                    color: clientConfig.ui.text_gray_color,
-                  }}
-                >
-                  ใช้ {coupon.value.toLocaleString()} {coupon.currency.name}
-                </div>
-
-                <div className="mt-auto">หมดอายุ {coupon.expiration_date}</div>
-              </div>
-            </div>
-          );
+          return <CouponCard key={index} coupon={cp} canUse={canUse} />;
         })}
       </div>
     </div>
