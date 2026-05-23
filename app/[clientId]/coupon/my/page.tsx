@@ -1,4 +1,5 @@
 "use client";
+import ChipButton from "@/components/ChipButton";
 import { useApp } from "@/components/providers/app-provider";
 import { isErrorResponse, UserCoupon } from "@/types/request";
 import { useEffect, useState } from "react";
@@ -63,62 +64,21 @@ export default function page() {
       </div>
 
       <div className="flex gap-2">
-        <div
-          onClick={() => setSelectedTab("available")}
-          className="px-4 py-1 rounded-xl cursor-pointer"
-          style={{
-            backgroundColor:
-              selectedTab === "available"
-                ? clientConfig.ui.secondary_color
-                : clientConfig.ui.ui_custom_fields.find(
-                    (field) => field.key === "surface_color",
-                  )?.value,
-            color:
-              selectedTab === "available"
-                ? clientConfig.ui.text_white_color
-                : clientConfig.ui.text_color,
-          }}
-        >
-          ใช้ได้ ({canUseCoupon.length})
-        </div>
-
-        <div
-          onClick={() => setSelectedTab("used")}
-          className="px-4 py-1 rounded-xl cursor-pointer"
-          style={{
-            backgroundColor:
-              selectedTab === "used"
-                ? clientConfig.ui.secondary_color
-                : clientConfig.ui.ui_custom_fields.find(
-                    (field) => field.key === "surface_color",
-                  )?.value,
-            color:
-              selectedTab === "used"
-                ? clientConfig.ui.text_white_color
-                : clientConfig.ui.text_color,
-          }}
-        >
-          ใช้แล้ว ({usedCoupon.length})
-        </div>
-
-        <div
-          onClick={() => setSelectedTab("expired")}
-          className="px-4 py-1 rounded-xl cursor-pointer"
-          style={{
-            backgroundColor:
-              selectedTab === "expired"
-                ? clientConfig.ui.secondary_color
-                : clientConfig.ui.ui_custom_fields.find(
-                    (field) => field.key === "surface_color",
-                  )?.value,
-            color:
-              selectedTab === "expired"
-                ? clientConfig.ui.text_white_color
-                : clientConfig.ui.text_color,
-          }}
-        >
-          หมดอายุ ({expiredCoupon.length})
-        </div>
+        <ChipButton
+          label={`ใช้ได้ (${canUseCoupon.length})`}
+          selected={selectedTab === "available"}
+          onSelect={() => setSelectedTab("available")}
+        />
+        <ChipButton
+          label={`ใช้แล้ว (${usedCoupon.length})`}
+          selected={selectedTab === "used"}
+          onSelect={() => setSelectedTab("used")}
+        />
+        <ChipButton
+          label={`หมดอายุ (${expiredCoupon.length})`}
+          selected={selectedTab === "expired"}
+          onSelect={() => setSelectedTab("expired")}
+        />
       </div>
 
       {displayCoupons.length === 0 && (
