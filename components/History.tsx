@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useApp } from "./providers/app-provider";
 import {
   GetUserPointHistoryRespont,
@@ -6,10 +6,16 @@ import {
   isErrorResponse,
 } from "@/types/request";
 import MenuCard from "./menu-card";
+import ChipButton from "./ChipButton";
 import { Award } from "tabler-icons-react";
 
 export default function History() {
   const { clientConfig, userProfile, backendClient } = useApp();
+
+  const [selectedTab, setSelectedTab] = useState<
+    "all" | "earn" | "burn" | "tranfer" | "expire"
+  >("all");
+
   const [pointHistories, setpointHistories] = useState<
     GetUserPointHistoryRespont[]
   >([]);
@@ -26,46 +32,61 @@ export default function History() {
     transfer: 0,
   });
 
-  const fetchData = async () => {
-    if (!clientConfig.slug || !userProfile?.userId) return;
-
-    const points = await backendClient.getUserPoint(
-      clientConfig.slug,
-      userProfile.userId,
-    );
-
-    if (isErrorResponse(points)) {
-      return;
-    }
-
-    const mainPoint = points.find((point) => point.currency.is_default);
-    if (mainPoint) setMainPoint(mainPoint);
-  };
-
   useEffect(() => {
-    fetchData();
-  }, [clientConfig.slug, userProfile?.userId]);
+    const loadPoints = async () => {
+      if (!clientConfig.slug || !userProfile?.userId) return;
 
-  useEffect(() => {
-    const run = async () => {
-      if (!userProfile?.userId) return;
-
-      const pointHistories = await backendClient.getUserPointHistory(
+      const points = await backendClient.getUserPoint(
         clientConfig.slug,
         userProfile.userId,
       );
 
-      if (isErrorResponse(pointHistories)) {
+      if (isErrorResponse(points)) return;
+
+      const main = points.find((p) => p.currency.is_default);
+      if (main) setMainPoint(main);
+    };
+
+    Promise.resolve().then(loadPoints);
+  }, [backendClient, clientConfig.slug, userProfile]);
+
+  useEffect(() => {
+    const loadHistories = async () => {
+      if (!clientConfig.slug || !userProfile?.userId) return;
+
+      const histories = await backendClient.getUserPointHistory(
+        clientConfig.slug,
+        userProfile.userId,
+      );
+
+      if (isErrorResponse(histories)) {
         setpointHistories([]);
         return;
       }
 
-      setpointHistories(pointHistories);
+      setpointHistories(histories);
     };
 
-    // call async function without causing synchronous state updates inside effect
-    Promise.resolve().then(run);
+    Promise.resolve().then(loadHistories);
   }, [backendClient, clientConfig.slug, userProfile]);
+
+  const now = new Date();
+
+  const isExpired = (expirationDate?: string) => {
+    if (!expirationDate) return false;
+
+    const date = new Date(expirationDate.replace(" ", "T") + "Z");
+
+    return !Number.isNaN(date.getTime()) && date < now;
+  };
+
+  const displayHistories =
+    selectedTab === "all"
+      ? pointHistories
+      : selectedTab === "expire"
+        ? pointHistories.filter((ph) => isExpired(ph.expiration_date))
+        : pointHistories.filter((ph) => ph.type === selectedTab);
+
   return (
     <div>
       <div
@@ -139,12 +160,40 @@ export default function History() {
         </div>
       </div>
 
-      {pointHistories.length > 0 &&
-        pointHistories.map((pointHistory, index) => (
+      <div className="flex gap-2 mb-4.5">
+        <ChipButton
+          label="ทั้งหมด"
+          selected={selectedTab === "all"}
+          onSelect={() => setSelectedTab("all")}
+        />
+        <ChipButton
+          label="ได้มา"
+          selected={selectedTab === "earn"}
+          onSelect={() => setSelectedTab("earn")}
+        />
+        <ChipButton
+          label="ใช้ไป"
+          selected={selectedTab === "burn"}
+          onSelect={() => setSelectedTab("burn")}
+        />
+        <ChipButton
+          label="โอน"
+          selected={selectedTab === "tranfer"}
+          onSelect={() => setSelectedTab("tranfer")}
+        />
+        <ChipButton
+          label="หมดอายุ"
+          selected={selectedTab === "expire"}
+          onSelect={() => setSelectedTab("expire")}
+        />
+      </div>
+
+      {displayHistories.length > 0 &&
+        displayHistories.map((pointHistory, index) => (
           <MenuCard key={index} pointHistory={pointHistory} />
         ))}
 
-      {pointHistories.length === 0 && (
+      {displayHistories.length === 0 && (
         <div className="py-8 flex flex-col items-center text-center gap-4">
           <div
             className="w-16 h-16 rounded-full flex items-center justify-center"

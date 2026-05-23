@@ -54,8 +54,6 @@ export default function page() {
 
   return (
     <div className="px-5 pt-4">
-      {/* <Profile /> */}
-
       <div
         className="text-3xl leading-none font-medium mt-5 mb-2"
         style={{ color: clientConfig.ui.text_color }}

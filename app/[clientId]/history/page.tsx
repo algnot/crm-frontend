@@ -3,7 +3,7 @@ import History from "@/components/History";
 
 export default function page() {
   return (
-    <section>
+    <section className="px-5 pt-4">
       <History />
     </section>
   );

@@ -17,7 +17,7 @@ export default function Header() {
         <div
           className="absolute inset-0"
           style={{
-            background: `linear-gradient(180deg,rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 30%, ${clientConfig.ui.background_color} 100%, #0a0a0a 100%)`,
+            background: `linear-gradient(180deg,rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 30%, ${clientConfig.ui.background_color} 100%)`,
           }}
         ></div>
       </div>
