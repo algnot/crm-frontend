@@ -80,18 +80,18 @@ export default function Page() {
 
   return (
     <div
-      className="min-h-screen"
+      className="min-h-screen relative p-4.5"
       style={{
-        backgroundColor: clientConfig.ui.text_gray_color,
+        backgroundColor: clientConfig.ui.background_color,
         color: clientConfig.ui.text_color,
       }}
     >
       {/* Back Button */}
       <button
         onClick={() => router.back()}
-        className="fixed top-5 left-5 z-50 rounded-full p-2 shadow-md cursor-pointer"
+        className="absolute top-8 left-8 rounded-full p-2 shadow-md cursor-pointer"
         style={{
-          backgroundColor: clientConfig.ui.background_white_color,
+          backgroundColor: clientConfig.ui.primary_color,
         }}
       >
         <ArrowLeft size={22} color={clientConfig.ui.text_color} />
@@ -101,23 +101,18 @@ export default function Page() {
       <img
         src={coupon?.image_url || clientConfig.logo_url}
         alt="coupon"
-        className="w-full aspect-square object-cover"
+        className="w-full object-cover rounded-2xl h-[180px]"
         style={{
           backgroundColor: clientConfig.ui.background_white_color,
         }}
       />
 
       {/* Content */}
-      <div
-        className="-mt-8 relative z-10 rounded-t-3xl p-5 shadow-md pb-20"
-        style={{
-          backgroundColor: clientConfig.ui.background_white_color,
-        }}
-      >
+      <div className="mt-5 rounded-t-3xl shadow-md">
         <div
           className="text-2xl font-bold"
           style={{
-            color: clientConfig.ui.primary_color,
+            color: clientConfig.ui.text_color,
           }}
         >
           {coupon?.name}
@@ -165,12 +160,7 @@ export default function Page() {
         </div>
       </div>
 
-      <div
-        className="fixed bottom-0 left-0 z-30 w-full p-4 shadow-lg"
-        style={{
-          backgroundColor: clientConfig.ui.background_white_color,
-        }}
-      >
+      <div className="fixed bottom-0 left-0 z-30 w-full p-4 shadow-lg">
         {currentPoint < (coupon?.value || 0) ? (
           <div
             className="text-center text-xl rounded-md p-2"
