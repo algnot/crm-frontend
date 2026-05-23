@@ -163,7 +163,7 @@ export interface Redeem {
   currency: Currency;
 }
 
-export interface Coupon {
+export interface CouponType {
   id: number;
   name: string;
   image_url: string;

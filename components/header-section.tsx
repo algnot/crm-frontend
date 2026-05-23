@@ -3,7 +3,7 @@ import Banner from "@/public/banner.jpg";
 import { useApp } from "./providers/app-provider";
 import { IconBell, IconQrcode } from "@tabler/icons-react";
 
-export default function Header() {
+export default function HeaderSection() {
   const { userProfile, clientConfig } = useApp();
 
   return (

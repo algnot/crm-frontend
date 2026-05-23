@@ -1,5 +1,5 @@
 import React from "react";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "./progress-bar";
 import { useApp } from "./providers/app-provider";
 
 export default function TeirCard() {

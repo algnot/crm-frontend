@@ -1,12 +1,12 @@
 "use client";
 import Profile from "@/components/profile";
 import { useApp } from "@/components/providers/app-provider";
-import { Coupon, isErrorResponse } from "@/types/request";
+import { CouponType, isErrorResponse } from "@/types/request";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const { backendClient, clientConfig, userPoint } = useApp();
-  const [coupons, setCoupons] = useState<Coupon[]>([]);
+  const [coupons, setCoupons] = useState<CouponType[]>([]);
 
   useEffect(() => {
     fetchData();

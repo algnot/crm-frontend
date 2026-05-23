@@ -1,7 +1,7 @@
 "use client";
 
 import { useApp } from "@/components/providers/app-provider";
-import { Coupon, isErrorResponse } from "@/types/request";
+import { CouponType, isErrorResponse } from "@/types/request";
 import { ArrowLeft } from "tabler-icons-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -24,7 +24,7 @@ export default function Page() {
     ? params.couponId[0]
     : params.couponId;
 
-  const [coupon, setCoupon] = useState<Coupon>();
+  const [coupon, setCoupon] = useState<CouponType>();
 
   useEffect(() => {
     setIsShowNavbar(false);

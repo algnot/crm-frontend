@@ -16,7 +16,7 @@ interface AdsItem {
   date?: string;
 }
 
-export default function News() {
+export default function NewsSection() {
   const { clientConfig } = useApp();
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollerRef = useRef<HTMLDivElement | null>(null);

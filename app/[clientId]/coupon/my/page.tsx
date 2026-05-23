@@ -1,5 +1,5 @@
 "use client";
-import ChipButton from "@/components/ChipButton";
+import ChipButton from "@/components/chip-button";
 import { useApp } from "@/components/providers/app-provider";
 import { isErrorResponse, UserCoupon } from "@/types/request";
 import { useEffect, useState } from "react";

@@ -6,10 +6,10 @@ import {
   isErrorResponse,
 } from "@/types/request";
 import MenuCard from "./menu-card";
-import ChipButton from "./ChipButton";
+import ChipButton from "./chip-button";
 import { Award } from "tabler-icons-react";
 
-export default function History() {
+export default function HistorySection() {
   const { clientConfig, userProfile, backendClient } = useApp();
 
   const [selectedTab, setSelectedTab] = useState<

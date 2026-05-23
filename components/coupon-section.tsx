@@ -1,8 +1,8 @@
-import { isErrorResponse, type Coupon as CouponType } from "@/types/request";
+import { CouponType, isErrorResponse } from "@/types/request";
 import React, { useEffect, useState } from "react";
 import { useApp } from "./providers/app-provider";
 
-export default function Coupon() {
+export default function CouponSection() {
   const { backendClient, clientConfig, userPoint } = useApp();
   const [coupons, setCoupons] = useState<CouponType[]>([]);
 
