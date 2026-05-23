@@ -6,7 +6,7 @@ import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useApp } from "./providers/app-provider";
 
-interface AdsItem {
+export interface AdsItem {
   order: number;
   image: string;
   action?: string;
