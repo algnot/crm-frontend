@@ -5,7 +5,7 @@ import TeirCard from "@/components/teir-card";
 import CouponSection from "@/components/coupon-section";
 import NewsSection, { AdsItem } from "@/components/news-section";
 import HeaderSection from "@/components/header-section";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useApp } from "@/components/providers/app-provider";
 import { IconX } from "@tabler/icons-react";
 
@@ -14,7 +14,10 @@ export default function Home() {
 
   const [showModal, setShowModal] = useState(false);
   const [modalIndex, setModalIndex] = useState(0);
-  const hasOpenedRef = useRef(false);
+  const modalShownKey = useMemo(
+    () => `news-modal-shown:${clientConfig.slug || "default"}`,
+    [clientConfig.slug],
+  );
 
   const adsItems = useMemo<AdsItem[]>(() => {
     const groupedAds = new Map<string, Partial<AdsItem> & { order: number }>();
@@ -89,13 +92,18 @@ export default function Home() {
 
   useEffect(() => {
     if (adsItems.length === 0) return;
-    if (hasOpenedRef.current) return;
-    hasOpenedRef.current = true;
+    if (!clientConfig.slug) return;
+
+    const hasShown = sessionStorage.getItem(modalShownKey) === "1";
+    if (hasShown) return;
+
+    sessionStorage.setItem(modalShownKey, "1");
+
     Promise.resolve().then(() => {
       setModalIndex(0);
       setShowModal(true);
     });
-  }, [adsItems.length]);
+  }, [adsItems.length, clientConfig.slug, modalShownKey]);
 
   const closeModal = () => setShowModal(false);
 
