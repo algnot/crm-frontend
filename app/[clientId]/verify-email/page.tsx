@@ -3,6 +3,7 @@ import Button from "@/components/button";
 import Input from "@/components/input";
 import { useApp } from "@/components/providers/app-provider";
 import { isErrorResponse } from "@/types/request";
+import { IconArrowLeft } from "@tabler/icons-react";
 import { useEffect, useRef, useState } from "react";
 import { Mail } from "tabler-icons-react";
 
@@ -95,31 +96,67 @@ export default function Page() {
 
   return (
     <div className="min-h-screen flex flex-col items-center px-10">
-      <div className="p-2">
-        <img src={clientConfig.logo_url} className="h-30 w-30" />
+      <div className="w-full pt-4">
+        {step === "otp" && (
+          <button
+            className="rounded-xl p-2 w-fit"
+            style={{
+              background: clientConfig.ui.ui_custom_fields.find(
+                (field) => field.key === "surface_color",
+              )?.value,
+              border: `0.5px solid rgba(255,255,255,0.08)`,
+              color: clientConfig.ui.text_color,
+            }}
+            onClick={() => {
+              setStep("email");
+            }}
+          >
+            <IconArrowLeft size={20} />
+          </button>
+        )}
       </div>
 
-      <div
-        className="text-3xl mb-2 text-center"
-        style={{
-          color: clientConfig.ui.primary_color,
-        }}
-      >
-        สมัครสมาชิก {clientConfig.name}
+      <div className="pt-7 pb-3">
+        <img
+          src={clientConfig.logo_url}
+          alt="logo"
+          className="h-[68px] w-auto rounded-[18px] bg-white"
+          style={{
+            boxShadow: `0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 18px -4px color-mix(in oklch, ${clientConfig.ui.primary_color} 60%, transparent)`,
+          }}
+        />
       </div>
 
       {step === "email" && (
         <>
           <div
+            className="text-xl mb-2 text-center"
+            style={{
+              color: clientConfig.ui.primary_color,
+            }}
+          >
+            {clientConfig.name} MEMBER
+          </div>
+
+          <div
             className="text-xl mb-5 text-center"
             style={{
-              color: clientConfig.ui.secondary_color,
+              color: clientConfig.ui.text_gray_color,
             }}
           >
             กรุณาอีเมลของคุณเพื่อใช้รับข่าวสารใหม่ ๆ
           </div>
 
-          <div className="flex w-full bg-white p-4 rounded-md shadow">
+          <div
+            className="flex w-full p-4 rounded-[14px] shadow"
+            style={{
+              background: clientConfig.ui.ui_custom_fields.find(
+                (field) => field.key === "surface_color",
+              )?.value,
+              border: `0.5px solid rgba(255,255,255,0.08)`,
+              color: clientConfig.ui.text_gray_color,
+            }}
+          >
             {!!userProfile.pictureUrl && (
               <img
                 src={userProfile.pictureUrl}
@@ -150,22 +187,54 @@ export default function Page() {
             placeholder="อีเมล"
           />
 
-          <Button text="รับรหัส OTP" className="mt-5" onClick={sendOtp} />
+          <button
+            style={{
+              background: `linear-gradient(135deg, ${clientConfig.ui.primary_color}, ${clientConfig.ui.secondary_color})`,
+              boxShadow: `0 8px 24px -6px color-mix(in oklch,${clientConfig.ui.primary_color} 60%, transparent)`,
+              color: clientConfig.ui.button_text_color,
+            }}
+            className="mt-5 h-14 w-full text-center p-2 text-xl rounded-[14px] cursor-pointer flex gap-3 justify-center items-center"
+            onClick={sendOtp}
+          >
+            ขอรหัส OTP
+          </button>
         </>
       )}
 
       {step === "otp" && (
         <>
-          <div
-            className="text-xl text-center"
+          <p
+            className="text-xl mb-2 text-center"
             style={{
-              color: clientConfig.ui.secondary_color,
+              color: clientConfig.ui.primary_color,
             }}
           >
-            ส่ง OTP ไปที่ <b>{email}</b> เรียบร้อยแล้ว OTP มีอายุ 15 นาที (ref:{" "}
-            {ref})
+            VERIFY OTP
+          </p>
+          <p
+            className="text-3xl mb-2 text-center"
+            style={{
+              color: clientConfig.ui.text_color,
+            }}
+          >
+            กรอกรหัส 6 หลัก
+          </p>
+          <div
+            className="text-lg text-center"
+            style={{
+              color: clientConfig.ui.text_gray_color,
+            }}
+          >
+            OTP มีอายุ 15 นาที (ref: {ref}) ถูกส่งไปที่
           </div>
-
+          <p
+            className="text-xl text-center"
+            style={{
+              color: clientConfig.ui.text_color,
+            }}
+          >
+            <b>{email}</b>
+          </p>
           <div className="flex gap-2 mt-5">
             {otp.map((digit, index) => (
               <input
@@ -180,19 +249,27 @@ export default function Page() {
                 onKeyDown={(e) => handleBackspace(e, index)}
                 className="w-12 h-12 bg-white shadow-md border-2 rounded-lg text-center text-2xl font-bold outline-none"
                 style={{
-                  borderColor: clientConfig.ui.primary_color,
+                  background: clientConfig.ui.ui_custom_fields.find(
+                    (field) => field.key === "surface_color",
+                  )?.value,
+                  border: `0.5px solid rgba(255,255,255,0.08)`,
+                  color: clientConfig.ui.primary_color,
                 }}
               />
             ))}
           </div>
 
-          <Button text="ยืนยัน OTP" className="mt-6" onClick={verifyOtp} />
+          <Button
+            text="ยืนยัน OTP"
+            className="mt-6 rounded-2xl! h-14"
+            onClick={verifyOtp}
+          />
 
           {countdown > 0 ? (
             <div
               className="mt-4 text-md"
               style={{
-                color: clientConfig.ui.secondary_color,
+                color: clientConfig.ui.text_gray_color,
               }}
             >
               ส่ง OTP ใหม่ได้ใน {countdown} วินาที
@@ -201,7 +278,7 @@ export default function Page() {
             <button
               className="mt-4 underline cursor-pointer"
               style={{
-                color: clientConfig.ui.secondary_color,
+                color: clientConfig.ui.primary_color,
               }}
               onClick={sendOtp}
             >

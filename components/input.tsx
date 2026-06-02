@@ -157,7 +157,7 @@ export default function Input({
     }
   };
 
-  const inputClassName = `w-full py-2 text-md outline-none resize-none ${disabled ? "cursor-not-allowed" : ""}`;
+  const inputClassName = `w-full py-2 text-xl outline-none resize-none ${disabled ? "cursor-not-allowed" : ""}`;
   const showCharCount = maxLength != null && !isFile;
   const currentLength = showCharCount
     ? value == null || value === ""
@@ -166,7 +166,7 @@ export default function Input({
     : 0;
   const atLimit = showCharCount && currentLength >= maxLength;
   const showCounterInside = showCharCount && multiline;
-  const wrapperClassName = `rounded-md shadow-md bg-white flex gap-3 px-3 ${showCounterInside ? "relative pb-6" : ""} ${multiline ? "items-start" : "justify-center items-center"} ${disabled ? "opacity-50 cursor-not-allowed bg-gray-50" : isFile ? "cursor-pointer" : "cursor-text"} ${className ?? ""}`;
+  const wrapperClassName = `h-14 rounded-[14px] shadow-md flex gap-3 px-3 ${showCounterInside ? "relative pb-6" : ""} ${multiline ? "items-start" : "justify-center items-center"} ${disabled ? "opacity-50 cursor-not-allowed bg-gray-50" : isFile ? "cursor-pointer" : "cursor-text"} ${className ?? ""}`;
 
   const fileAccept = type === "image" ? "image/*" : accept;
   const isImageUpload = isFile && type === "image";
@@ -195,7 +195,17 @@ export default function Input({
           )}
         </label>
       )}
-      <div className={wrapperClassName} onClick={handleClick}>
+      <div
+        className={wrapperClassName}
+        onClick={handleClick}
+        style={{
+          background: clientConfig.ui.ui_custom_fields.find(
+            (field) => field.key === "surface_color",
+          )?.value,
+          border: `0.5px solid rgba(255,255,255,0.08)`,
+          color: clientConfig.ui.text_gray_color,
+        }}
+      >
         {icon}
         {multiline ? (
           <textarea
@@ -274,6 +284,9 @@ export default function Input({
             maxLength={maxLength}
             className={inputClassName}
             placeholder={placeholder ?? ""}
+            style={{
+              color: clientConfig.ui.text_gray_color,
+            }}
           />
         )}
         {suffix}

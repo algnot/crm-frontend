@@ -124,6 +124,7 @@ export default function Home() {
       document.body.style.overflow = prev;
     };
   }, [showModal, goModalNext, goModalPrev]);
+
   return (
     <div className="h-dvh pb-20">
       <HeaderSection />

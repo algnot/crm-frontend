@@ -4,6 +4,7 @@ import Button from "@/components/button";
 import Input from "@/components/input";
 import { useApp } from "@/components/providers/app-provider";
 import { isErrorResponse } from "@/types/request";
+import { IconArrowLeft } from "@tabler/icons-react";
 import { useEffect, useRef, useState } from "react";
 import { Phone } from "tabler-icons-react";
 
@@ -93,6 +94,26 @@ export default function Page() {
 
   return (
     <div className="min-h-screen flex flex-col items-center px-10">
+      <div className="w-full pt-4">
+        {step === "otp" && (
+          <button
+            className="rounded-xl p-2 w-fit"
+            style={{
+              background: clientConfig.ui.ui_custom_fields.find(
+                (field) => field.key === "surface_color",
+              )?.value,
+              border: `0.5px solid rgba(255,255,255,0.08)`,
+              color: clientConfig.ui.text_color,
+            }}
+            onClick={() => {
+              setStep("phone");
+            }}
+          >
+            <IconArrowLeft size={20} />
+          </button>
+        )}
+      </div>
+
       <div className="pt-7 pb-3">
         {!!clientConfig.logo_url && (
           <img
@@ -106,17 +127,16 @@ export default function Page() {
         )}
       </div>
 
-      <div
-        className="text-xl mb-2 text-center"
-        style={{
-          color: clientConfig.ui.primary_color,
-        }}
-      >
-        {clientConfig.name} MEMBER
-      </div>
-
       {step === "phone" && (
         <>
+          <div
+            className="text-xl mb-2 text-center"
+            style={{
+              color: clientConfig.ui.primary_color,
+            }}
+          >
+            {clientConfig.name} MEMBER
+          </div>
           <div
             className="text-xl mb-5 text-center leading-[1.2]"
             style={{
@@ -127,7 +147,16 @@ export default function Page() {
             เพื่อสะสมพ้อยท์และแลกสิทธิประโยชน์
           </div>
 
-          <div className="flex w-full bg-white p-4 rounded-md shadow">
+          <div
+            className="flex w-full p-4 rounded-[14px] shadow"
+            style={{
+              background: clientConfig.ui.ui_custom_fields.find(
+                (field) => field.key === "surface_color",
+              )?.value,
+              border: `0.5px solid rgba(255,255,255,0.08)`,
+              color: clientConfig.ui.text_gray_color,
+            }}
+          >
             {!!userProfile.pictureUrl && (
               <img
                 src={userProfile.pictureUrl}
@@ -175,15 +204,38 @@ export default function Page() {
 
       {step === "otp" && (
         <>
+          <p
+            className="text-xl mb-2 text-center"
+            style={{
+              color: clientConfig.ui.primary_color,
+            }}
+          >
+            VERIFY OTP
+          </p>
+          <p
+            className="text-3xl mb-2 text-center"
+            style={{
+              color: clientConfig.ui.text_color,
+            }}
+          >
+            กรอกรหัส 6 หลัก
+          </p>
           <div
-            className="text-xl text-center"
+            className="text-lg text-center"
             style={{
               color: clientConfig.ui.text_gray_color,
             }}
           >
-            ส่ง OTP ไปที่ <b>{phone}</b> เรียบร้อยแล้ว OTP มีอายุ 15 นาที (ref:{" "}
-            {ref})
+            OTP มีอายุ 15 นาที (ref: {ref}) ถูกส่งไปที่
           </div>
+          <p
+            className="text-xl text-center"
+            style={{
+              color: clientConfig.ui.text_color,
+            }}
+          >
+            <b>{phone}</b>
+          </p>
 
           <div className="flex gap-2 mt-5">
             {otp.map((digit, index) => (
@@ -199,17 +251,21 @@ export default function Page() {
                 onKeyDown={(e) => handleBackspace(e, index)}
                 className="w-12 h-12 shadow-md rounded-lg text-center text-2xl font-bold outline-none"
                 style={{
-                  borderColor: clientConfig.ui.primary_color,
                   background: clientConfig.ui.ui_custom_fields.find(
                     (field) => field.key === "surface_color",
                   )?.value,
                   border: `0.5px solid rgba(255,255,255,0.08)`,
+                  color: clientConfig.ui.primary_color,
                 }}
               />
             ))}
           </div>
 
-          <Button text="ยืนยัน OTP" className="mt-6" onClick={verifyOtp} />
+          <Button
+            text="ยืนยัน OTP"
+            className="mt-6 rounded-2xl! h-14"
+            onClick={verifyOtp}
+          />
 
           {countdown > 0 ? (
             <div
