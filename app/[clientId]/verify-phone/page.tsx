@@ -93,28 +93,38 @@ export default function Page() {
 
   return (
     <div className="min-h-screen flex flex-col items-center px-10">
-      <div className="p-2">
-        <img src={clientConfig.logo_url} className="h-30 w-30" />
+      <div className="pt-7 pb-3">
+        {!!clientConfig.logo_url && (
+          <img
+            src={clientConfig.logo_url}
+            alt="logo"
+            className="h-[68px] w-auto rounded-[18px] bg-white"
+            style={{
+              boxShadow: `0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 18px -4px color-mix(in oklch, ${clientConfig.ui.primary_color} 60%, transparent)`,
+            }}
+          />
+        )}
       </div>
 
       <div
-        className="text-3xl mb-2 text-center"
+        className="text-xl mb-2 text-center"
         style={{
           color: clientConfig.ui.primary_color,
         }}
       >
-        สมัครสมาชิก {clientConfig.name}
+        {clientConfig.name} MEMBER
       </div>
 
       {step === "phone" && (
         <>
           <div
-            className="text-xl mb-5 text-center"
+            className="text-xl mb-5 text-center leading-[1.2]"
             style={{
-              color: clientConfig.ui.secondary_color,
+              color: clientConfig.ui.text_gray_color,
             }}
           >
-            กรุณาระบุเบอร์โทรศัพท์ของคุณเพื่อใช้รับข่าวสารใหม่ ๆ
+            เข้าสู่ระบบด้วยเบอร์โทรศัพท์ของคุณ <br />
+            เพื่อสะสมพ้อยท์และแลกสิทธิประโยชน์
           </div>
 
           <div className="flex w-full bg-white p-4 rounded-md shadow">
@@ -149,7 +159,17 @@ export default function Page() {
             placeholder="เบอร์โทรศัพท์"
           />
 
-          <Button text="รับรหัส OTP" className="mt-5" onClick={sendOtp} />
+          <button
+            style={{
+              background: `linear-gradient(135deg, ${clientConfig.ui.primary_color}, ${clientConfig.ui.secondary_color})`,
+              boxShadow: `0 8px 24px -6px color-mix(in oklch,${clientConfig.ui.primary_color} 60%, transparent)`,
+              color: clientConfig.ui.button_text_color,
+            }}
+            className="mt-5 h-14 w-full text-center p-2 text-xl rounded-[14px] cursor-pointer flex gap-3 justify-center items-center"
+            onClick={sendOtp}
+          >
+            ขอรหัส OTP
+          </button>
         </>
       )}
 
@@ -158,7 +178,7 @@ export default function Page() {
           <div
             className="text-xl text-center"
             style={{
-              color: clientConfig.ui.secondary_color,
+              color: clientConfig.ui.text_gray_color,
             }}
           >
             ส่ง OTP ไปที่ <b>{phone}</b> เรียบร้อยแล้ว OTP มีอายุ 15 นาที (ref:{" "}
@@ -177,9 +197,13 @@ export default function Page() {
                 inputMode="numeric"
                 onChange={(e) => handleOtpChange(e.target.value, index)}
                 onKeyDown={(e) => handleBackspace(e, index)}
-                className="w-12 h-12 bg-white shadow-md border-2 rounded-lg text-center text-2xl font-bold outline-none"
+                className="w-12 h-12 shadow-md rounded-lg text-center text-2xl font-bold outline-none"
                 style={{
                   borderColor: clientConfig.ui.primary_color,
+                  background: clientConfig.ui.ui_custom_fields.find(
+                    (field) => field.key === "surface_color",
+                  )?.value,
+                  border: `0.5px solid rgba(255,255,255,0.08)`,
                 }}
               />
             ))}
@@ -191,7 +215,7 @@ export default function Page() {
             <div
               className="mt-4 text-md"
               style={{
-                color: clientConfig.ui.secondary_color,
+                color: clientConfig.ui.text_gray_color,
               }}
             >
               ส่ง OTP ใหม่ได้ใน {countdown} วินาที
@@ -200,7 +224,7 @@ export default function Page() {
             <button
               className="mt-4 underline cursor-pointer"
               style={{
-                color: clientConfig.ui.secondary_color,
+                color: clientConfig.ui.primary_color,
               }}
               onClick={sendOtp}
             >
