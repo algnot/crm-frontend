@@ -151,7 +151,7 @@ export default function Home() {
               background: clientConfig.ui.ui_custom_fields.find(
                 (field) => field.key === "surface_color",
               )?.value,
-              borderColor: clientConfig.ui.text_gray_color,
+              borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 8%, transparent)`,
             }}
           >
             <button

@@ -102,7 +102,7 @@ export default function Page() {
               background: clientConfig.ui.ui_custom_fields.find(
                 (field) => field.key === "surface_color",
               )?.value,
-              border: `0.5px solid rgba(255,255,255,0.08)`,
+              border: `0.5px solid color-mix(in srgb, ${clientConfig.ui.text_gray_color} 8%, transparent)`,
               color: clientConfig.ui.text_color,
             }}
             onClick={() => {
@@ -153,7 +153,7 @@ export default function Page() {
               background: clientConfig.ui.ui_custom_fields.find(
                 (field) => field.key === "surface_color",
               )?.value,
-              border: `0.5px solid rgba(255,255,255,0.08)`,
+              border: `0.5px solid color-mix(in srgb, ${clientConfig.ui.text_gray_color} 8%, transparent)`,
               color: clientConfig.ui.text_gray_color,
             }}
           >
@@ -254,7 +254,7 @@ export default function Page() {
                   background: clientConfig.ui.ui_custom_fields.find(
                     (field) => field.key === "surface_color",
                   )?.value,
-                  border: `0.5px solid rgba(255,255,255,0.08)`,
+                  border: `0.5px solid color-mix(in srgb, ${clientConfig.ui.text_gray_color} 8%, transparent)`,
                   color: clientConfig.ui.primary_color,
                 }}
               />

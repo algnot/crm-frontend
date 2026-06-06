@@ -13,7 +13,7 @@ export default function TeirCard() {
           (field) => field.key === "surface_color",
         )?.value,
         color: clientConfig.ui.text_color,
-        borderColor: clientConfig.ui.text_gray_color,
+        borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 8%, transparent)`,
       }}
     >
       <div className="flex justify-between mb-2.5">
