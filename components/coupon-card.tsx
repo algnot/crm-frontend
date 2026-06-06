@@ -23,7 +23,7 @@ export default function CouponCard({
         )?.value,
         color: clientConfig.ui.text_color,
         opacity: canUse ? 1 : 0.7,
-        borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 8%, transparent)`,
+        borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
       }}
     >
       <img

@@ -102,18 +102,18 @@ export default function HistorySection() {
           background: clientConfig.ui.ui_custom_fields.find(
             (field) => field.key === "surface_color",
           )?.value,
-          borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 8%, transparent)`,
+          borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
         }}
       >
         <div
           className="flex flex-col items-center justify-between border-r-[0.5px]"
-          style={{ borderColor: clientConfig.ui.text_gray_color }}
+          style={{ borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)` }}
         >
           <p
             className=""
             style={{
               color: clientConfig.ui.text_gray_color,
-              borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 8%, transparent)`,
+              borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
             }}
           >
             รับ
@@ -129,7 +129,7 @@ export default function HistorySection() {
         </div>
         <div
           className="flex flex-col items-center justify-between border-r-[0.5px]"
-          style={{ borderColor: clientConfig.ui.text_gray_color }}
+          style={{ borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)` }}
         >
           <p
             className=""

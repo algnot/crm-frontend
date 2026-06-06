@@ -11,7 +11,7 @@ export default function MenuCard({ pointHistory }: MenuCardProp) {
   return (
     <div
       className="flex gap-3 p-3 mb-2 border-b-[0.5px]"
-      style={{ borderColor: clientConfig.ui.text_gray_color }}
+      style={{ borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)` }}
     >
       <div className="flex gap-3 items-center">
         <div
