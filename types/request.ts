@@ -49,6 +49,38 @@ export interface UiCustomField {
   value: string;
 }
 
+export function normalizeUiCustomFields(fields: unknown): UiCustomField[] {
+  if (Array.isArray(fields)) {
+    return fields.filter(
+      (field): field is UiCustomField =>
+        field != null &&
+        typeof field === "object" &&
+        typeof field.key === "string" &&
+        typeof field.value === "string",
+    );
+  }
+
+  if (fields && typeof fields === "object") {
+    return Object.entries(fields as Record<string, unknown>)
+      .filter(([, value]) => value != null)
+      .map(([key, value]) => ({ key, value: String(value) }));
+  }
+
+  return [];
+}
+
+export function normalizePartnerAppConfig(
+  config: PartnerAppConfig,
+): PartnerAppConfig {
+  return {
+    ...config,
+    ui: {
+      ...config.ui,
+      ui_custom_fields: normalizeUiCustomFields(config.ui?.ui_custom_fields),
+    },
+  };
+}
+
 export const initPartnerAppConfig = (): PartnerAppConfig => ({
   id: 0,
   name: "",

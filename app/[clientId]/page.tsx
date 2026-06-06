@@ -22,7 +22,7 @@ export default function Home() {
   const adsItems = useMemo<AdsItem[]>(() => {
     const groupedAds = new Map<string, Partial<AdsItem> & { order: number }>();
 
-    clientConfig?.ui?.ui_custom_fields?.forEach((customField) => {
+    clientConfig.ui.ui_custom_fields.forEach((customField) => {
       const imageMatch = customField.key.match(/^ads(?:_(\d+))?$/);
       const actionMatch = customField.key.match(/^ads_action(?:_(\d+))?$/);
       const titleMatch = customField.key.match(/^ads_title(?:_(\d+))?$/);

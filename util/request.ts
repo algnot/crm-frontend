@@ -1,5 +1,6 @@
 import {
   ErrorResponse,
+  normalizePartnerAppConfig,
   PartnerAppConfig,
   SubmitPhoneRequest,
   SubmitPhoneResponse,
@@ -68,7 +69,7 @@ export class BackendClient {
       this.setLoading(true);
       const response = await this.client.get(`/partner/${clientId}`);
       this.setLoading(false);
-      return response.data;
+      return normalizePartnerAppConfig(response.data);
     } catch (e) {
       this.setLoading(false);
       return handlerError(e);
