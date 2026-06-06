@@ -38,12 +38,13 @@ export default function Page() {
         </div>
       </div>
       <div
-        className="rounded-[18px] border-[0.5px] border-[rgba(255,255,255,0.08)]"
+        className="rounded-[18px] border-[0.5px]"
         style={{
           background: clientConfig.ui.ui_custom_fields.find(
             (field) => field.key === "surface_color",
           )?.value,
           color: clientConfig.ui.text_color,
+          borderColor: clientConfig.ui.text_gray_color,
         }}
       >
         <p
@@ -54,42 +55,61 @@ export default function Page() {
         >
           ข้อมูลส่วนตัว
         </p>
-        <div className="text-md flex justify-between py-3 px-4 border-b-[0.5px] border-[rgba(255,255,255,0.08)]">
+        <div
+          className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
+          style={{ borderColor: clientConfig.ui.text_gray_color }}
+        >
           <div className="font-medium">ชื่อ-นามสกุล</div>
           <div className="text-gray-500">
             {appUserProfile?.display_name || "-"}
           </div>
         </div>
-        <div className="text-md flex justify-between py-3 px-4 border-b-[0.5px] border-[rgba(255,255,255,0.08)]">
+        <div
+          className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
+          style={{ borderColor: clientConfig.ui.text_gray_color }}
+        >
           <div className="font-medium">อีเมล</div>
           <div className="text-gray-500">{appUserProfile?.email || "-"}</div>
         </div>
-        <div className="text-md flex justify-between py-3 px-4 border-b-[0.5px] border-[rgba(255,255,255,0.08)]">
+        <div
+          className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
+          style={{ borderColor: clientConfig.ui.text_gray_color }}
+        >
           <div className="font-medium">เบอร์โทร</div>
           <div className="text-gray-500">{appUserProfile?.phone || "-"}</div>
         </div>
-        <div className="text-md flex justify-between py-3 px-4 border-b-[0.5px] border-[rgba(255,255,255,0.08)]">
+        <div
+          className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
+          style={{ borderColor: clientConfig.ui.text_gray_color }}
+        >
           <div className="font-medium">วันเกิด</div>
           <div className="text-gray-500">
             {appUserProfile?.birth_date || "-"}
           </div>
         </div>
-        <div className="text-md flex justify-between py-3 px-4 border-b-[0.5px] border-[rgba(255,255,255,0.08)]">
+        <div
+          className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
+          style={{ borderColor: clientConfig.ui.text_gray_color }}
+        >
           <div className="font-medium">เพศ</div>
           <div className="text-gray-500">{appUserProfile?.gender || "-"}</div>
         </div>
-        <div className="text-md flex justify-between py-3 px-4">
+        <div
+          className="text-md flex justify-between py-3 px-4"
+          style={{ borderColor: clientConfig.ui.text_gray_color }}
+        >
           <div className="font-medium">ที่อยู่จัดส่ง</div>
           <div className="text-gray-500">{"-"}</div>
         </div>
       </div>
       <div
-        className="h-12 rounded-[18px] border-[0.5px] border-[rgba(255,255,255,0.08)] flex items-center justify-center mt-6 cursor-pointer gap-2"
+        className="h-12 rounded-[18px] border-[0.5px] flex items-center justify-center mt-6 cursor-pointer gap-2"
         style={{
           background: clientConfig.ui.ui_custom_fields.find(
             (field) => field.key === "surface_color",
           )?.value,
           color: clientConfig.ui.text_gray_color,
+          borderColor: clientConfig.ui.text_gray_color,
         }}
         onClick={async () => {
           setFullLoading(true);

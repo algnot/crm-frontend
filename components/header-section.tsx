@@ -35,9 +35,10 @@ export default function HeaderSection() {
           )}
         </div>
         <button
-          className="w-9.5 h-9.5 rounded-xl flex items-center justify-center border border-[rgba(255,255,255,0.08)]"
+          className="w-9.5 h-9.5 rounded-xl flex items-center justify-center border"
           style={{
             background: clientConfig.ui.primary_color,
+            borderColor: clientConfig.ui.text_gray_color,
           }}
         >
           <IconBell className="text-white w-5 h-5" />
@@ -75,10 +76,11 @@ export default function HeaderSection() {
           </div>
         </div>
         <button
-          className="w-11 h-11 rounded-xl flex items-center justify-center border border-[rgba(255,255,255,0.08)]"
+          className="w-11 h-11 rounded-xl flex items-center justify-center border"
           style={{
             background: `linear-gradient(135deg, ${clientConfig.ui.primary_color}, ${clientConfig.ui.secondary_color})`,
             boxShadow: `0 6px 20px -4px color-mix(in oklch, ${clientConfig.ui.primary_color} 70%, transparent)`,
+            borderColor: clientConfig.ui.text_gray_color,
           }}
         >
           <IconQrcode className="text-white w-5.5 h-5.5" />

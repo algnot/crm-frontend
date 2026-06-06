@@ -13,7 +13,7 @@ export default function CouponCard({
 
   return (
     <div
-      className="p-3 flex gap-4 items-center rounded-[18px] overflow-hidden cursor-pointer shadow-md border-[0.5px] border-[rgba(255,255,255,0.08)]"
+      className="p-3 flex gap-4 items-center rounded-[18px] overflow-hidden cursor-pointer shadow-md border-[0.5px]"
       onClick={() => {
         window.location.href = `/${clientConfig.slug}/coupon/${coupon.id}`;
       }}
@@ -23,6 +23,7 @@ export default function CouponCard({
         )?.value,
         color: clientConfig.ui.text_color,
         opacity: canUse ? 1 : 0.7,
+        borderColor: clientConfig.ui.text_gray_color,
       }}
     >
       <img
