@@ -11,7 +11,9 @@ export default function Page() {
         {!!userProfile?.pictureUrl ? (
           <div
             className="bg-white rounded-full w-fit h-fit item-center border-2"
-            style={{ borderColor: `color-mix(in srgb, ${clientConfig.ui.primary_color} 80%, transparent)` }}
+            style={{
+              borderColor: `color-mix(in srgb, ${clientConfig.ui.primary_color} 80%, transparent)`,
+            }}
           >
             <img
               src={userProfile?.pictureUrl}
@@ -55,7 +57,9 @@ export default function Page() {
         </p>
         <div
           className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
-          style={{ borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)` }}
+          style={{
+            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+          }}
         >
           <div className="font-medium">ชื่อ-นามสกุล</div>
           <div className="text-gray-500">
@@ -64,21 +68,27 @@ export default function Page() {
         </div>
         <div
           className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
-          style={{ borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)` }}
+          style={{
+            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+          }}
         >
           <div className="font-medium">อีเมล</div>
           <div className="text-gray-500">{appUserProfile?.email || "-"}</div>
         </div>
         <div
           className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
-          style={{ borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)` }}
+          style={{
+            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+          }}
         >
           <div className="font-medium">เบอร์โทร</div>
           <div className="text-gray-500">{appUserProfile?.phone || "-"}</div>
         </div>
         <div
           className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
-          style={{ borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)` }}
+          style={{
+            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+          }}
         >
           <div className="font-medium">วันเกิด</div>
           <div className="text-gray-500">
@@ -87,14 +97,18 @@ export default function Page() {
         </div>
         <div
           className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
-          style={{ borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)` }}
+          style={{
+            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+          }}
         >
           <div className="font-medium">เพศ</div>
           <div className="text-gray-500">{appUserProfile?.gender || "-"}</div>
         </div>
         <div
           className="text-md flex justify-between py-3 px-4"
-          style={{ borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)` }}
+          style={{
+            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+          }}
         >
           <div className="font-medium">ที่อยู่จัดส่ง</div>
           <div className="text-gray-500">{"-"}</div>

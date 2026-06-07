@@ -1,18 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useApp } from "./providers/app-provider";
-
-export interface AdsItem {
-  order: number;
-  image: string;
-  action?: string;
-  title?: string;
-  subtitle?: string;
-  label?: string;
-  date?: string;
-}
 
 export default function NewsSection() {
   const { clientConfig } = useApp();
@@ -20,76 +10,7 @@ export default function NewsSection() {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  const adsItems = useMemo<AdsItem[]>(() => {
-    const groupedAds = new Map<string, Partial<AdsItem> & { order: number }>();
-
-    clientConfig.ui.ui_custom_fields.forEach((customField) => {
-      const imageMatch = customField.key.match(/^ads(?:_(\d+))?$/);
-      const actionMatch = customField.key.match(/^ads_action(?:_(\d+))?$/);
-      const titleMatch = customField.key.match(/^ads_title(?:_(\d+))?$/);
-      const subtitleMatch = customField.key.match(/^ads_subtitle(?:_(\d+))?$/);
-      const labelMatch = customField.key.match(/^ads_label(?:_(\d+))?$/);
-      const dateMatch = customField.key.match(/^ads_date(?:_(\d+))?$/);
-
-      if (
-        !imageMatch &&
-        !actionMatch &&
-        !titleMatch &&
-        !subtitleMatch &&
-        !labelMatch &&
-        !dateMatch
-      ) {
-        return;
-      }
-
-      const rawOrder =
-        imageMatch?.[1] ??
-        actionMatch?.[1] ??
-        titleMatch?.[1] ??
-        subtitleMatch?.[1] ??
-        labelMatch?.[1] ??
-        dateMatch?.[1] ??
-        "0";
-      const groupKey = rawOrder;
-      const order = Number(rawOrder);
-      const existingItem = groupedAds.get(groupKey) ?? { order };
-
-      if (imageMatch) {
-        existingItem.image = customField.value;
-      }
-
-      if (actionMatch) {
-        existingItem.action = customField.value;
-      }
-
-      if (titleMatch) {
-        existingItem.title = customField.value;
-      }
-
-      if (subtitleMatch) {
-        existingItem.subtitle = customField.value;
-      }
-
-      if (labelMatch) {
-        existingItem.label = customField.value;
-      }
-
-      if (dateMatch) {
-        existingItem.date = customField.value;
-      }
-
-      groupedAds.set(groupKey, existingItem);
-    });
-
-    return [...groupedAds.values()]
-      .filter((item): item is AdsItem => typeof item.image === "string")
-      .sort((left, right) => left.order - right.order)
-      .map((item) => ({
-        ...item,
-        subtitle:
-          item.subtitle || (item.action ? "แตะเพื่อดูรายละเอียด" : undefined),
-      }));
-  }, [clientConfig.ui.ui_custom_fields]);
+  const adsItems = clientConfig.ads;
 
   const scrollToCard = useCallback((index: number) => {
     const cardElement = cardRefs.current[index];
@@ -196,14 +117,14 @@ export default function NewsSection() {
         >
           {adsItems.map((adsItem, index) => {
             const isClickable = !!adsItem.action;
-            const eyebrow = [adsItem.label, adsItem.date]
+            const eyebrow = [adsItem.start_date, adsItem.end_date]
               .filter(Boolean)
               .join(" • ")
               .toUpperCase();
 
             return (
               <button
-                key={`${adsItem.order}-${index}`}
+                key={`${adsItem.id}-${index}`}
                 type="button"
                 ref={(element) => {
                   cardRefs.current[index] = element;
@@ -217,7 +138,7 @@ export default function NewsSection() {
                 }}
               >
                 <img
-                  src={adsItem.image}
+                  src={adsItem.image_url}
                   alt={`ads-${index + 1}`}
                   className="h-auto w-full aspect-[1.35/1] object-cover"
                 />
@@ -229,17 +150,17 @@ export default function NewsSection() {
                     </p>
                   ) : null}
 
-                  {adsItem.title ? (
+                  {adsItem.message ? (
                     <p className="text-[28px] leading-[0.95] font-medium text-white">
-                      {adsItem.title}
+                      {adsItem.message}
                     </p>
                   ) : null}
 
-                  {adsItem.subtitle ? (
+                  {/* {adsItem.subtitle ? (
                     <p className="text-[18px] leading-tight text-white/70">
                       {adsItem.subtitle}
                     </p>
-                  ) : null}
+                  ) : null} */}
                 </div>
               </button>
             );
@@ -260,7 +181,7 @@ export default function NewsSection() {
             <div className="mt-4 flex items-center justify-center gap-2">
               {adsItems.map((adsItem, index) => (
                 <button
-                  key={`indicator-${adsItem.order}-${index}`}
+                  key={`indicator-${adsItem.id}-${index}`}
                   type="button"
                   aria-label={`Go to advertisement ${index + 1}`}
                   onClick={() => scrollToCard(index)}

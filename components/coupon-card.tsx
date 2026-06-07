@@ -15,7 +15,7 @@ export default function CouponCard({
     <div
       className="p-3 flex gap-4 items-center rounded-[18px] overflow-hidden cursor-pointer shadow-md border-[0.5px]"
       onClick={() => {
-        window.location.href = `/${clientConfig.slug}/coupon/${coupon.id}`;
+        window.location.href = `/${clientConfig.slug}/coupon/my/${coupon.id}`;
       }}
       style={{
         backgroundColor: clientConfig.ui.surface_color,

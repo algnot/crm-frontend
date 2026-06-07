@@ -100,6 +100,7 @@ export default function HistorySection() {
         className="rounded-[18px] border-[0.5px] p-4.5 mb-4.5 grid grid-cols-3"
         style={{
           background: clientConfig.ui.surface_color,
+          borderColor: clientConfig.ui.text_gray_color,
         }}
       >
         <div

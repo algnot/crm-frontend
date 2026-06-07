@@ -45,6 +45,7 @@ export interface PartnerAppConfig {
   };
 
   ads: AdsItem[];
+  tier: Tier[];
 }
 
 export interface AdsItem {
@@ -53,6 +54,7 @@ export interface AdsItem {
   image_url: string;
   start_date: string;
   end_date: string;
+  message: string;
 }
 
 export interface UiCustomField {
@@ -129,6 +131,7 @@ export const initPartnerAppConfig = (): PartnerAppConfig => ({
   },
 
   ads: [],
+  tier: [],
 });
 
 export interface User {
@@ -142,9 +145,10 @@ export interface User {
   phone: string;
   force_verify_phone: boolean;
   force_verify_email: boolean;
+  tier: Tier;
 }
 
-export interface Teir {
+export interface Tier {
   code: string;
   name: string;
   min_spending: number;

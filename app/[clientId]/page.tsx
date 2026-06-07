@@ -1,13 +1,13 @@
 "use client";
 
 import PointCard from "@/components/point-card";
-import TeirCard from "@/components/teir-card";
 import CouponSection from "@/components/coupon-section";
-import NewsSection, { AdsItem } from "@/components/news-section";
+import NewsSection from "@/components/news-section";
 import HeaderSection from "@/components/header-section";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useApp } from "@/components/providers/app-provider";
 import { IconX } from "@tabler/icons-react";
+import TierCard from "@/components/tier-card";
 
 export default function Home() {
   const { clientConfig } = useApp();
@@ -19,76 +19,7 @@ export default function Home() {
     [clientConfig.slug],
   );
 
-  const adsItems = useMemo<AdsItem[]>(() => {
-    const groupedAds = new Map<string, Partial<AdsItem> & { order: number }>();
-
-    clientConfig.ui.ui_custom_fields.forEach((customField) => {
-      const imageMatch = customField.key.match(/^ads(?:_(\d+))?$/);
-      const actionMatch = customField.key.match(/^ads_action(?:_(\d+))?$/);
-      const titleMatch = customField.key.match(/^ads_title(?:_(\d+))?$/);
-      const subtitleMatch = customField.key.match(/^ads_subtitle(?:_(\d+))?$/);
-      const labelMatch = customField.key.match(/^ads_label(?:_(\d+))?$/);
-      const dateMatch = customField.key.match(/^ads_date(?:_(\d+))?$/);
-
-      if (
-        !imageMatch &&
-        !actionMatch &&
-        !titleMatch &&
-        !subtitleMatch &&
-        !labelMatch &&
-        !dateMatch
-      ) {
-        return;
-      }
-
-      const rawOrder =
-        imageMatch?.[1] ??
-        actionMatch?.[1] ??
-        titleMatch?.[1] ??
-        subtitleMatch?.[1] ??
-        labelMatch?.[1] ??
-        dateMatch?.[1] ??
-        "0";
-      const groupKey = rawOrder;
-      const order = Number(rawOrder);
-      const existingItem = groupedAds.get(groupKey) ?? { order };
-
-      if (imageMatch) {
-        existingItem.image = customField.value;
-      }
-
-      if (actionMatch) {
-        existingItem.action = customField.value;
-      }
-
-      if (titleMatch) {
-        existingItem.title = customField.value;
-      }
-
-      if (subtitleMatch) {
-        existingItem.subtitle = customField.value;
-      }
-
-      if (labelMatch) {
-        existingItem.label = customField.value;
-      }
-
-      if (dateMatch) {
-        existingItem.date = customField.value;
-      }
-
-      groupedAds.set(groupKey, existingItem);
-    });
-
-    return [...groupedAds.values()]
-      .filter((item): item is AdsItem => typeof item.image === "string")
-      .sort((left, right) => left.order - right.order)
-      .map((item) => ({
-        ...item,
-        subtitle:
-          item.subtitle || (item.action ? "แตะเพื่อดูรายละเอียด" : undefined),
-      }));
-  }, [clientConfig.ui.ui_custom_fields]);
+  const adsItems = clientConfig.ads;
 
   useEffect(() => {
     if (adsItems.length === 0) return;
@@ -137,7 +68,7 @@ export default function Home() {
     <div className="h-dvh pb-20">
       <HeaderSection />
       <PointCard />
-      <TeirCard />
+      <TierCard />
       <NewsSection />
       <CouponSection />
 
@@ -162,7 +93,7 @@ export default function Home() {
 
             <div className="overflow-hidden rounded-t-2xl">
               <img
-                src={adsItems[modalIndex].image}
+                src={adsItems[modalIndex].image_url}
                 alt={`ads-modal-${modalIndex + 1}`}
                 className="w-full object-cover"
                 style={{ height: 340 }}
@@ -171,19 +102,19 @@ export default function Home() {
 
             <div className="p-6">
               <div className="mb-2 text-sm font-semibold text-fuchsia-300">
-                {[adsItems[modalIndex].label, adsItems[modalIndex].date]
+                {[adsItems[modalIndex].action, adsItems[modalIndex].start_date]
                   .filter(Boolean)
                   .join(" • ")
                   .toUpperCase()}
               </div>
 
-              <h3 className="mb-3 text-2xl font-medium">
+              {/* <h3 className="mb-3 text-2xl font-medium">
                 {adsItems[modalIndex].title}
-              </h3>
+              </h3> */}
 
-              {adsItems[modalIndex].subtitle && (
+              {adsItems[modalIndex].message && (
                 <p className="mb-5 text-white/80">
-                  {adsItems[modalIndex].subtitle}
+                  {adsItems[modalIndex].message}
                 </p>
               )}
               <div className="mt-3.5 mb-1 w-full flex justify-center items-center gap-2">

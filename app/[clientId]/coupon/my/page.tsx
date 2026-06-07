@@ -6,7 +6,7 @@ import { CouponType, isErrorResponse, UserCoupon } from "@/types/request";
 import { useEffect, useState } from "react";
 import { Ticket } from "tabler-icons-react";
 
-export default function page() {
+export default function Page() {
   const { clientConfig, backendClient, userProfile } = useApp();
   const [userCoupons, setUserCoupons] = useState<UserCoupon[]>([]);
   const [selectedTab, setSelectedTab] = useState<
@@ -14,23 +14,26 @@ export default function page() {
   >("available");
 
   useEffect(() => {
-    fetchData();
-  }, [userProfile]);
+    const fetchData = async () => {
+      if (!userProfile) {
+        return;
+      }
 
-  const fetchData = async () => {
-    if (!userProfile) {
-      return;
-    }
-    const response = await backendClient.getUserCoupon(
-      clientConfig.slug,
-      userProfile?.userId,
-    );
-    if (isErrorResponse(response)) {
-      window.location.href = `/${clientConfig.slug}`;
-      return;
-    }
-    setUserCoupons(response);
-  };
+      const response = await backendClient.getUserCoupon(
+        clientConfig.slug,
+        userProfile.userId,
+      );
+
+      if (isErrorResponse(response)) {
+        window.location.href = `/${clientConfig.slug}`;
+        return;
+      }
+
+      setUserCoupons(response);
+    };
+
+    Promise.resolve().then(fetchData);
+  }, [backendClient, clientConfig.slug, userProfile]);
 
   const canUseCoupon = userCoupons.filter((item) => {
     const expiration = new Date(item.expiration_date.replace(" ", "T") + "Z");
