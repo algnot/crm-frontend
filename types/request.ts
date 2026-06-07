@@ -21,6 +21,7 @@ export interface PartnerAppConfig {
   };
 
   ui: {
+    banner: string;
     background_color: string;
     background_white_color: string;
     primary_color: string;
@@ -107,6 +108,7 @@ export const initPartnerAppConfig = (): PartnerAppConfig => ({
   },
 
   ui: {
+    banner: "",
     background_color: "",
     background_white_color: "",
     primary_color: "",

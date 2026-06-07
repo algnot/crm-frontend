@@ -112,7 +112,7 @@ export default function Page() {
 
   return (
     <div
-      className="min-h-screen"
+      className="min-h-screen relative p-4.5"
       style={{
         backgroundColor: clientConfig.ui.background_color,
         color: clientConfig.ui.text_color,
@@ -120,10 +120,10 @@ export default function Page() {
     >
       {/* Back */}
       <button
-        onClick={() => router.back()}
-        className="fixed top-5 left-5 z-50 rounded-full p-2 shadow-md"
+        onClick={() => router.push(`/${clientConfig.slug}/coupon/my`)}
+        className="rounded-full p-2 shadow-md"
         style={{
-          backgroundColor: clientConfig.ui.background_white_color,
+          backgroundColor: clientConfig.ui.surface_color,
         }}
       >
         <ArrowLeft size={22} color={clientConfig.ui.text_color} />
@@ -133,7 +133,7 @@ export default function Page() {
       <img
         src={coupon?.coupon.image_url || clientConfig.logo_url}
         alt="coupon"
-        className="w-full aspect-square object-cover"
+        className="mt-4 w-full object-cover rounded-2xl h-[180px]"
         style={{
           backgroundColor: clientConfig.ui.background_white_color,
         }}
@@ -141,7 +141,7 @@ export default function Page() {
 
       {/* Content */}
       <div
-        className="-mt-8 relative z-10 rounded-t-3xl p-5 pb-28 shadow-md"
+        className="mt-5 rounded-t-3xl p-5 pb-28"
         style={{
           backgroundColor: clientConfig.ui.background_white_color,
         }}

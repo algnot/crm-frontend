@@ -2,21 +2,23 @@ import React from "react";
 import { useApp } from "./providers/app-provider";
 import { CouponType } from "@/types/request";
 
+interface CouponCardProps {
+  coupon: CouponType;
+  canUse: boolean;
+  onClick?: () => void;
+}
+
 export default function CouponCard({
   coupon,
   canUse,
-}: {
-  coupon: CouponType;
-  canUse: boolean;
-}) {
+  onClick,
+}: CouponCardProps) {
   const { clientConfig } = useApp();
 
   return (
     <div
       className="p-3 flex gap-4 items-center rounded-[18px] overflow-hidden cursor-pointer shadow-md border-[0.5px]"
-      onClick={() => {
-        window.location.href = `/${clientConfig.slug}/coupon/my/${coupon.id}`;
-      }}
+      onClick={onClick}
       style={{
         backgroundColor: clientConfig.ui.surface_color,
         color: clientConfig.ui.text_color,

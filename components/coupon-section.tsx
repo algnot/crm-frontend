@@ -2,9 +2,11 @@ import { CouponType, isErrorResponse } from "@/types/request";
 import React, { useEffect, useState } from "react";
 import { useApp } from "./providers/app-provider";
 import CouponCard from "./coupon-card";
+import { useRouter } from "next/navigation";
 
 export default function CouponSection() {
   const { backendClient, clientConfig, userPoint } = useApp();
+  const router = useRouter();
   const [coupons, setCoupons] = useState<CouponType[]>([]);
 
   useEffect(() => {
@@ -33,7 +35,16 @@ export default function CouponSection() {
               ?.balance || 0;
           const canUse = currentPoint >= coupon.value;
 
-          return <CouponCard key={index} coupon={coupon} canUse={canUse} />;
+          return (
+            <CouponCard
+              key={index}
+              coupon={coupon}
+              canUse={canUse}
+              onClick={() => {
+                router.push(`/${clientConfig.slug}/coupon/${coupon.id}`);
+              }}
+            />
+          );
         })}
       </div>
     </section>

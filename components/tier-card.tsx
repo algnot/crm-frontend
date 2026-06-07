@@ -22,7 +22,7 @@ export default function TierCard() {
         </p>
         <p className="text-xl">
           {mainPoint?.balance.toLocaleString() || 0} /{" "}
-          {appUserProfile?.tier?.max_spending.toLocaleString() || 0}{" "}
+          {appUserProfile?.tier?.max_spending?.toLocaleString() || 0}{" "}
         </p>
       </div>
       <ProgressBar

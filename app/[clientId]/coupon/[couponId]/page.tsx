@@ -88,10 +88,10 @@ export default function Page() {
     >
       {/* Back Button */}
       <button
-        onClick={() => router.back()}
-        className="absolute top-8 left-8 rounded-full p-2 shadow-md cursor-pointer"
+        onClick={() => router.push(`/${clientConfig.slug}`)}
+        className="rounded-full p-2 shadow-md cursor-pointer"
         style={{
-          backgroundColor: clientConfig.ui.primary_color,
+          backgroundColor: clientConfig.ui.surface_color,
         }}
       >
         <ArrowLeft size={22} color={clientConfig.ui.text_color} />
@@ -101,14 +101,14 @@ export default function Page() {
       <img
         src={coupon?.image_url || clientConfig.logo_url}
         alt="coupon"
-        className="w-full object-cover rounded-2xl h-[180px]"
+        className="mt-4 w-full object-cover rounded-2xl h-[180px]"
         style={{
           backgroundColor: clientConfig.ui.background_white_color,
         }}
       />
 
       {/* Content */}
-      <div className="mt-5 rounded-t-3xl shadow-md">
+      <div className="mt-5 rounded-t-3xl">
         <div
           className="text-2xl font-bold"
           style={{

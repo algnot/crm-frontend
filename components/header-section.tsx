@@ -1,5 +1,4 @@
 import React from "react";
-import Banner from "@/public/banner.jpg";
 import { useApp } from "./providers/app-provider";
 import { IconBell, IconQrcode } from "@tabler/icons-react";
 
@@ -10,7 +9,7 @@ export default function HeaderSection() {
     <div>
       <div className="relative h-80 -mb-45 pointer-events-none">
         <img
-          src={Banner.src}
+          src={clientConfig?.ui?.banner ?? ""}
           alt="banner"
           className="absolute inset-0 w-full h-full object-cover block"
         />

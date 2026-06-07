@@ -3,11 +3,13 @@ import ChipButton from "@/components/chip-button";
 import CouponCard from "@/components/coupon-card";
 import { useApp } from "@/components/providers/app-provider";
 import { CouponType, isErrorResponse, UserCoupon } from "@/types/request";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Ticket } from "tabler-icons-react";
 
 export default function Page() {
   const { clientConfig, backendClient, userProfile } = useApp();
+  const router = useRouter();
   const [userCoupons, setUserCoupons] = useState<UserCoupon[]>([]);
   const [selectedTab, setSelectedTab] = useState<
     "available" | "used" | "expired"
@@ -133,7 +135,16 @@ export default function Page() {
             currency: coupon.currency,
           };
 
-          return <CouponCard key={index} coupon={cp} canUse={canUse} />;
+          return (
+            <CouponCard
+              key={index}
+              coupon={cp}
+              canUse={canUse}
+              onClick={() => {
+                router.push(`/${clientConfig.slug}/coupon/my/${coupon.id}`);
+              }}
+            />
+          );
         })}
       </div>
     </div>
