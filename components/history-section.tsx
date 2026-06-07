@@ -99,9 +99,7 @@ export default function HistorySection() {
       <div
         className="rounded-[18px] border-[0.5px] border-[rgba(255,255,255,0.08)] p-4.5 mb-4.5 grid grid-cols-3"
         style={{
-          background: clientConfig.ui.ui_custom_fields.find(
-            (field) => field.key === "surface_color",
-          )?.value,
+          background: clientConfig.ui.surface_color,
         }}
       >
         <div className="flex flex-col items-center justify-between border-r-[0.5px] border-[rgba(255,255,255,0.08)]">

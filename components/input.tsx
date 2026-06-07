@@ -199,9 +199,7 @@ export default function Input({
         className={wrapperClassName}
         onClick={handleClick}
         style={{
-          background: clientConfig.ui.ui_custom_fields.find(
-            (field) => field.key === "surface_color",
-          )?.value,
+          background: clientConfig.ui.surface_color,
           border: `0.5px solid rgba(255,255,255,0.08)`,
           color: clientConfig.ui.text_gray_color,
         }}

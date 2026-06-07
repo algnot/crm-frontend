@@ -18,9 +18,7 @@ export default function CouponCard({
         window.location.href = `/${clientConfig.slug}/coupon/${coupon.id}`;
       }}
       style={{
-        backgroundColor: clientConfig.ui.ui_custom_fields.find(
-          (field) => field.key === "surface_color",
-        )?.value,
+        backgroundColor: clientConfig.ui.surface_color,
         color: clientConfig.ui.text_color,
         opacity: canUse ? 1 : 0.7,
       }}

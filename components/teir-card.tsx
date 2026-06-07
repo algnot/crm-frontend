@@ -9,9 +9,7 @@ export default function TeirCard() {
     <section
       className="mx-4.5 mb-5.5 rounded-[18px] pt-4 px-4.5 pb-3.5 border-[0.5px] border-[rgba(255,255,255,0.08)]"
       style={{
-        background: clientConfig.ui.ui_custom_fields.find(
-          (field) => field.key === "surface_color",
-        )?.value,
+        background: clientConfig.ui.surface_color,
         color: clientConfig.ui.text_color,
       }}
     >

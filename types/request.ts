@@ -25,6 +25,7 @@ export interface PartnerAppConfig {
     background_white_color: string;
     primary_color: string;
     secondary_color: string;
+    surface_color: string;
 
     text_color: string;
     text_white_color: string;
@@ -66,6 +67,7 @@ export const initPartnerAppConfig = (): PartnerAppConfig => ({
     background_white_color: "",
     primary_color: "",
     secondary_color: "",
+    surface_color: "",
 
     text_color: "",
     text_white_color: "",
@@ -96,6 +98,15 @@ export interface User {
   phone: string;
   force_verify_phone: boolean;
   force_verify_email: boolean;
+}
+
+export interface Teir {
+  code: string;
+  name: string;
+  min_spending: number;
+  max_spending: number;
+  color: string;
+  image_url: string;
 }
 
 export interface SubmitPhoneRequest {

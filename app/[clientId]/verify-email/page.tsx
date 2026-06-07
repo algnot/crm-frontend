@@ -101,9 +101,7 @@ export default function Page() {
           <button
             className="rounded-xl p-2 w-fit"
             style={{
-              background: clientConfig.ui.ui_custom_fields.find(
-                (field) => field.key === "surface_color",
-              )?.value,
+              background: clientConfig.ui.surface_color,
               border: `0.5px solid rgba(255,255,255,0.08)`,
               color: clientConfig.ui.text_color,
             }}
@@ -150,9 +148,7 @@ export default function Page() {
           <div
             className="flex w-full p-4 rounded-[14px] shadow"
             style={{
-              background: clientConfig.ui.ui_custom_fields.find(
-                (field) => field.key === "surface_color",
-              )?.value,
+              background: clientConfig.ui.surface_color,
               border: `0.5px solid rgba(255,255,255,0.08)`,
               color: clientConfig.ui.text_gray_color,
             }}
@@ -249,9 +245,7 @@ export default function Page() {
                 onKeyDown={(e) => handleBackspace(e, index)}
                 className="w-12 h-12 bg-white shadow-md border-2 rounded-lg text-center text-2xl font-bold outline-none"
                 style={{
-                  background: clientConfig.ui.ui_custom_fields.find(
-                    (field) => field.key === "surface_color",
-                  )?.value,
+                  background: clientConfig.ui.surface_color,
                   border: `0.5px solid rgba(255,255,255,0.08)`,
                   color: clientConfig.ui.primary_color,
                 }}

@@ -24,9 +24,7 @@ export default function ChipButton({
       style={{
         backgroundColor: selected
           ? clientConfig.ui.secondary_color
-          : clientConfig.ui.ui_custom_fields.find(
-              (field) => field.key === "surface_color",
-            )?.value,
+          : clientConfig.ui.surface_color,
         color: selected
           ? clientConfig.ui.text_white_color
           : clientConfig.ui.text_color,

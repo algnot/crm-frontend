@@ -148,9 +148,7 @@ export default function Home() {
           <div
             className="relative w-full max-w-lg rounded-2xl text-white shadow-2xl border-[0.5px] border-[rgba(255,255,255,0.08)]"
             style={{
-              background: clientConfig.ui.ui_custom_fields.find(
-                (field) => field.key === "surface_color",
-              )?.value,
+              background: clientConfig.ui.surface_color,
             }}
           >
             <button

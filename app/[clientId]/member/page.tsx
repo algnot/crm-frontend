@@ -40,9 +40,7 @@ export default function Page() {
       <div
         className="rounded-[18px] border-[0.5px] border-[rgba(255,255,255,0.08)]"
         style={{
-          background: clientConfig.ui.ui_custom_fields.find(
-            (field) => field.key === "surface_color",
-          )?.value,
+          background: clientConfig.ui.surface_color,
           color: clientConfig.ui.text_color,
         }}
       >
@@ -86,9 +84,7 @@ export default function Page() {
       <div
         className="h-12 rounded-[18px] border-[0.5px] border-[rgba(255,255,255,0.08)] flex items-center justify-center mt-6 cursor-pointer gap-2"
         style={{
-          background: clientConfig.ui.ui_custom_fields.find(
-            (field) => field.key === "surface_color",
-          )?.value,
+          background: clientConfig.ui.surface_color,
           color: clientConfig.ui.text_gray_color,
         }}
         onClick={async () => {
