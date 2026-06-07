@@ -8,6 +8,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useApp } from "@/components/providers/app-provider";
 import { IconX } from "@tabler/icons-react";
 import TierCard from "@/components/tier-card";
+import Button from "@/components/button";
 
 export default function Home() {
   const { clientConfig } = useApp();
@@ -77,7 +78,7 @@ export default function Home() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-8">
           <div
-            className="relative w-full max-w-lg rounded-2xl text-white shadow-2xl border-[0.5px]"
+            className="relative w-full max-w-lg rounded-2xl text-white shadow-2xl"
             style={{
               background: clientConfig.ui.surface_color,
             }}
@@ -85,8 +86,11 @@ export default function Home() {
             <button
               type="button"
               onClick={closeModal}
-              className="absolute top-3 right-3 z-20 grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white"
+              className="absolute top-3 right-3 z-20 grid h-9 w-9 place-items-center rounded-full text-white"
               aria-label="Close"
+              style={{
+                background: clientConfig.ui.surface_color,
+              }}
             >
               <IconX size={18} />
             </button>
@@ -95,13 +99,17 @@ export default function Home() {
               <img
                 src={adsItems[modalIndex].image_url}
                 alt={`ads-modal-${modalIndex + 1}`}
-                className="w-full object-cover"
-                style={{ height: 340 }}
+                className="w-full h-[180px] object-cover"
               />
             </div>
 
             <div className="p-6">
-              <div className="mb-2 text-sm font-semibold text-fuchsia-300">
+              <div
+                className="mb-2 text-sm font-semibold"
+                style={{
+                  color: clientConfig.ui.text_gray_color,
+                }}
+              >
                 {[adsItems[modalIndex].action, adsItems[modalIndex].start_date]
                   .filter(Boolean)
                   .join(" • ")
@@ -127,31 +135,21 @@ export default function Home() {
                   />
                 ))}
               </div>
-              <div className="mt-5 flex items-center justify-between gap-3">
-                <button
-                  type="button"
+              <div className="mt-5 flex items-center gap-3">
+                <Button
+                  text="ข้าม"
                   onClick={closeModal}
-                  className="rounded-xl bg-white/10 px-4 py-3 text-sm"
-                >
-                  ข้าม
-                </button>
+                  className="bg-white/10! w-1/3!"
+                />
 
-                <div className="flex items-center gap-3"></div>
-                <button
-                  type="button"
+                <Button
+                  text="อ่านเงื่อนไข"
                   onClick={() => {
                     const action = adsItems[modalIndex].action;
                     if (action) window.location.href = action;
                     else goModalNext();
                   }}
-                  className="w-full rounded-xl px-6 py-3 font-semibold"
-                  style={{
-                    background: clientConfig.ui.primary_color,
-                    color: clientConfig.ui.text_color,
-                  }}
-                >
-                  อ่านเงื่อนไข →
-                </button>
+                />
               </div>
             </div>
           </div>

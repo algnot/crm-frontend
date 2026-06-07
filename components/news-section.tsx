@@ -88,14 +88,14 @@ export default function NewsSection() {
           ประกาศข่าวสาร
         </p>
 
-        <button
+        {/* <button
           type="button"
           onClick={goToNext}
           className="flex items-center gap-1 text-[18px] text-white/65"
         >
           <span>ดูทั้งหมด</span>
           <IconChevronRight size={20} />
-        </button>
+        </button> */}
       </div>
 
       <div className="relative">
@@ -129,7 +129,7 @@ export default function NewsSection() {
                 ref={(element) => {
                   cardRefs.current[index] = element;
                 }}
-                className="block w-[82%] shrink-0 snap-start overflow-hidden rounded-[28px] border border-white/8 bg-[#111111] text-left shadow-[0_18px_50px_-24px_rgba(0,0,0,0.9)] disabled:cursor-default sm:w-[78%]"
+                className="block w-[70%] shrink-0 snap-start overflow-hidden rounded-[28px] border border-white/8 bg-[#111111] text-left shadow-[0_18px_50px_-24px_rgba(0,0,0,0.9)] disabled:cursor-default sm:w-[78%]"
                 disabled={!isClickable}
                 onClick={() => {
                   if (adsItem.action) {
@@ -140,7 +140,7 @@ export default function NewsSection() {
                 <img
                   src={adsItem.image_url}
                   alt={`ads-${index + 1}`}
-                  className="h-auto w-full aspect-[1.35/1] object-cover"
+                  className="h-32.5 w-full aspect-[1.35/1] object-cover"
                 />
 
                 <div className="space-y-2 bg-[#161616] px-5 py-4 text-white">

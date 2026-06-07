@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft } from "tabler-icons-react";
 import QRCode from "react-qr-code";
 import Barcode from "react-barcode";
+import { formatDate } from "@/util/format-date";
 
 function parseUtcExpiration(dateStr: string): Date {
   return new Date(dateStr.replace(" ", "T") + "Z");
@@ -139,39 +140,73 @@ export default function Page() {
         }}
       />
 
-      {/* Content */}
       <div
-        className="mt-5 rounded-t-3xl p-5 pb-28"
+        className="mt-8 text-4xl font-bold"
         style={{
-          backgroundColor: clientConfig.ui.background_white_color,
+          color: clientConfig.ui.primary_color,
+        }}
+      >
+        {coupon?.name}
+      </div>
+
+      <div
+        className="mt-5 rounded-3xl border-[0.5px]"
+        style={{
+          backgroundColor: clientConfig.ui.surface_color,
+          borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
         }}
       >
         <div
-          className="text-2xl font-bold"
+          className="p-5 mt-1 flex items-center justify-between text-lg border-b-[0.5px]"
           style={{
-            color: clientConfig.ui.primary_color,
+            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
           }}
         >
-          {coupon?.name}
-        </div>
-
-        <div
-          className="mt-1"
-          style={{
-            color: clientConfig.ui.text_gray_color,
-          }}
-        >
-          ใช้ได้ถึง {coupon?.expiration_date}
-        </div>
-
-        {coupon?.is_used && (
-          <div
-            className="mt-1"
+          <p
             style={{
               color: clientConfig.ui.text_gray_color,
             }}
           >
-            ใช้เมื่อ {coupon.used_date}
+            ใช้แต้ม
+          </p>
+          <p
+            style={{
+              color: clientConfig.ui.text_color,
+            }}
+          >
+            {coupon?.value} {coupon?.currency.name.toUpperCase()}
+          </p>
+        </div>
+        <div
+          className="p-5 mt-1 flex items-center justify-between text-lg border-b-[0.5px]"
+          style={{
+            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+          }}
+        >
+          <p
+            style={{
+              color: clientConfig.ui.text_gray_color,
+            }}
+          >
+            หมดอายุ
+          </p>
+          <p
+            style={{
+              color: clientConfig.ui.text_color,
+            }}
+          >
+            {formatDate(coupon?.expiration_date)}
+          </p>
+        </div>
+
+        {coupon?.is_used && (
+          <div
+            className="mt-1 p-5"
+            style={{
+              color: clientConfig.ui.text_gray_color,
+            }}
+          >
+            ใช้เมื่อ {formatDate(coupon.used_date)}
           </div>
         )}
 
@@ -272,31 +307,31 @@ export default function Page() {
             </div>
           </div>
         )}
+      </div>
 
-        {/* Terms */}
-        <div
-          className="mt-8 whitespace-pre-line leading-8 min-h-56"
-          style={{
-            color: clientConfig.ui.text_color,
-          }}
-        >
-          {coupon?.coupon.term_and_condition || "-"}
-        </div>
+      {/* Terms */}
+      <p
+        className="mt-8 text-lg font-semibold"
+        style={{ color: clientConfig.ui.text_color }}
+      >
+        เงื่อนไข
+      </p>
+      <div
+        className="whitespace-pre-line leading-8 min-h-56"
+        style={{
+          color: clientConfig.ui.text_color,
+        }}
+      >
+        {coupon?.coupon.term_and_condition || "-"}
       </div>
 
       {/* Bottom Button */}
-      <div
-        className="fixed bottom-0 left-0 z-30 w-full p-4 shadow-lg"
-        style={{
-          backgroundColor: clientConfig.ui.background_white_color,
-        }}
-      >
+      <div className="fixed bottom-0 left-0 z-30 w-full p-4 shadow-lg">
         {coupon?.is_used ? (
           <div
-            className="text-center text-xl rounded-md p-3"
+            className="text-center text-xl rounded-xl p-3"
             style={{
               color: clientConfig.ui.background_white_color,
-
               backgroundColor: clientConfig.ui.secondary_color,
             }}
           >

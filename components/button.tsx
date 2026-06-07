@@ -14,7 +14,7 @@ export default function Button({ text, className, onClick, icon }: InputProp) {
     <div
       className={
         className +
-        " w-full text-center p-2 text-xl rounded-md cursor-pointer flex gap-3 justify-center items-center"
+        " w-full text-center p-2 text-xl rounded-xl cursor-pointer flex gap-3 justify-center items-center"
       }
       style={{
         backgroundColor: clientConfig.ui.button_color,
