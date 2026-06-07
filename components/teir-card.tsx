@@ -7,10 +7,11 @@ export default function TeirCard() {
 
   return (
     <section
-      className="mx-4.5 mb-5.5 rounded-[18px] pt-4 px-4.5 pb-3.5 border-[0.5px] border-[rgba(255,255,255,0.08)]"
+      className="mx-4.5 mb-5.5 rounded-[18px] pt-4 px-4.5 pb-3.5 border-[0.5px]"
       style={{
         background: clientConfig.ui.surface_color,
         color: clientConfig.ui.text_color,
+        borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
       }}
     >
       <div className="flex justify-between mb-2.5">

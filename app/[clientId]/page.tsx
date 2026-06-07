@@ -146,7 +146,7 @@ export default function Home() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-8">
           <div
-            className="relative w-full max-w-lg rounded-2xl text-white shadow-2xl border-[0.5px] border-[rgba(255,255,255,0.08)]"
+            className="relative w-full max-w-lg rounded-2xl text-white shadow-2xl border-[0.5px]"
             style={{
               background: clientConfig.ui.surface_color,
             }}

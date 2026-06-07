@@ -9,7 +9,10 @@ export default function MenuCard({ pointHistory }: MenuCardProp) {
   const { clientConfig } = useApp();
 
   return (
-    <div className="flex gap-3 p-3 mb-2 border-b-[0.5px] border-[rgba(255,255,255,0.08)]">
+    <div
+      className="flex gap-3 p-3 mb-2 border-b-[0.5px]"
+      style={{ borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)` }}
+    >
       <div className="flex gap-3 items-center">
         <div
           className="w-9 h-9 rounded-full flex items-center justify-center"

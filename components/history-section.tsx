@@ -97,16 +97,22 @@ export default function HistorySection() {
       </div>
 
       <div
-        className="rounded-[18px] border-[0.5px] border-[rgba(255,255,255,0.08)] p-4.5 mb-4.5 grid grid-cols-3"
+        className="rounded-[18px] border-[0.5px] p-4.5 mb-4.5 grid grid-cols-3"
         style={{
           background: clientConfig.ui.surface_color,
         }}
       >
-        <div className="flex flex-col items-center justify-between border-r-[0.5px] border-[rgba(255,255,255,0.08)]">
+        <div
+          className="flex flex-col items-center justify-between border-r-[0.5px]"
+          style={{
+            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+          }}
+        >
           <p
             className=""
             style={{
               color: clientConfig.ui.text_gray_color,
+              borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
             }}
           >
             รับ
@@ -120,7 +126,12 @@ export default function HistorySection() {
             +{mainPoint.earn.toLocaleString()}
           </p>
         </div>
-        <div className="flex flex-col items-center justify-between border-r-[0.5px] border-[rgba(255,255,255,0.08)]">
+        <div
+          className="flex flex-col items-center justify-between border-r-[0.5px]"
+          style={{
+            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+          }}
+        >
           <p
             className=""
             style={{
