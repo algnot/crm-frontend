@@ -43,6 +43,16 @@ export interface PartnerAppConfig {
 
     ui_custom_fields: UiCustomField[];
   };
+
+  ads: AdsItem[];
+}
+
+export interface AdsItem {
+  id: number;
+  action: string;
+  image_url: string;
+  start_date: string;
+  end_date: string;
 }
 
 export interface UiCustomField {
@@ -85,6 +95,8 @@ export const initPartnerAppConfig = (): PartnerAppConfig => ({
 
     ui_custom_fields: [],
   },
+
+  ads: [],
 });
 
 export interface User {
