@@ -64,7 +64,7 @@ export default function HistorySection() {
         return;
       }
 
-      setpointHistories(histories);
+      setpointHistories(histories.filter((h) => h.currency.is_default));
     };
 
     Promise.resolve().then(loadHistories);
