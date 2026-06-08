@@ -34,14 +34,14 @@ export default function CouponCard({
 
       <div className="flex flex-col flex-1">
         <p
-          className="line-clamp-1"
+          className="line-clamp-1 font-bodoni font-medium"
           style={{ color: clientConfig.ui.text_color }}
         >
           {coupon.name}
         </p>
 
         <p
-          className="flex gap-1 text-xs tracking-[1.3]"
+          className="flex gap-1 text-xs tracking-[1.3] text-[11.5px]"
           style={{ color: clientConfig.ui.text_gray_color }}
         >
           ใช้ {coupon.value.toLocaleString()}{" "}
@@ -50,19 +50,21 @@ export default function CouponCard({
 
         <p className="">
           <span
-            className="text-[10px] mr-2 font-medium"
+            className="text-[10px] mr-2 font-semibold leading-[1.3]"
             style={{ color: clientConfig.ui.primary_color }}
           >
             {/* แลกได้ถึง {coupon.end_time} */}
             {coupon.value.toLocaleString()}{" "}
             {coupon.currency.name.toLocaleUpperCase()}
           </span>
-          <span
-            className="text-[10px]"
-            style={{ color: clientConfig.ui.text_gray_color }}
-          >
-            หมดอายุ {coupon.end_time}
-          </span>
+          {coupon.end_time && (
+            <span
+              className="text-[10px]"
+              style={{ color: clientConfig.ui.text_gray_color }}
+            >
+              หมดอายุ {coupon.end_time}
+            </span>
+          )}
         </p>
       </div>
     </div>

@@ -3,6 +3,7 @@
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useApp } from "./providers/app-provider";
+import { formatDate } from "@/util/format-date";
 
 export default function NewsSection() {
   const { clientConfig } = useApp();
@@ -82,7 +83,7 @@ export default function NewsSection() {
     <section className="mx-4.5 mb-5.5">
       <div className="mb-4 flex items-center justify-between px-0.5 text-white">
         <p
-          className="text-3xl leading-none font-medium"
+          className="text-xl leading-none font-medium font-bodoni"
           style={{ color: clientConfig.ui.text_color }}
         >
           ประกาศข่าวสาร
@@ -117,7 +118,10 @@ export default function NewsSection() {
         >
           {adsItems.map((adsItem, index) => {
             const isClickable = !!adsItem.action;
-            const eyebrow = [adsItem.start_date, adsItem.end_date]
+            const eyebrow = [
+              formatDate(adsItem.start_date),
+              formatDate(adsItem.end_date),
+            ]
               .filter(Boolean)
               .join(" • ")
               .toUpperCase();
@@ -129,7 +133,7 @@ export default function NewsSection() {
                 ref={(element) => {
                   cardRefs.current[index] = element;
                 }}
-                className="block w-[70%] shrink-0 snap-start overflow-hidden rounded-[28px] border border-white/8 bg-[#111111] text-left shadow-[0_18px_50px_-24px_rgba(0,0,0,0.9)] disabled:cursor-default sm:w-[78%]"
+                className="block w-[70%] shrink-0 snap-start overflow-hidden rounded-2xl border border-white/8 bg-[#111111] text-left shadow-[0_18px_50px_-24px_rgba(0,0,0,0.9)] disabled:cursor-default sm:w-[78%]"
                 disabled={!isClickable}
                 onClick={() => {
                   if (adsItem.action) {
@@ -145,13 +149,18 @@ export default function NewsSection() {
 
                 <div className="space-y-2 bg-[#161616] px-5 py-4 text-white">
                   {eyebrow ? (
-                    <p className="text-[14px] font-semibold tracking-[0.32em] text-fuchsia-300/90 uppercase">
+                    <p
+                      className="text-[9.5px] font-bold tracking-[0.32em] uppercase font-mono"
+                      style={{
+                        color: clientConfig.ui.primary_color,
+                      }}
+                    >
                       {eyebrow}
                     </p>
                   ) : null}
 
                   {adsItem.message ? (
-                    <p className="text-[28px] leading-[0.95] font-medium text-white">
+                    <p className="text-base leading-[0.95] font-medium text-white font-bodoni">
                       {adsItem.message}
                     </p>
                   ) : null}

@@ -5,7 +5,7 @@ import { useApp } from "./providers/app-provider";
 export default function TierCard() {
   const { clientConfig, userPoint, appUserProfile } = useApp();
 
-  const mainPoint = userPoint.find((point) => point.currency.is_default);
+  const mainPoint = userPoint.find((point) => !point.currency.is_default);
   return (
     <section
       className="mx-4.5 mb-5.5 rounded-[18px] pt-4 px-4.5 pb-3.5 border-[0.5px]"
@@ -16,11 +16,11 @@ export default function TierCard() {
       }}
     >
       <div className="flex justify-between mb-2.5">
-        <p>
+        <p className="text-xs">
           ความคืบหน้า · {appUserProfile?.tier?.name || "Tier Mock"} → Platinum
           Mock
         </p>
-        <p className="text-xl">
+        <p className="text-xs font-mono">
           {mainPoint?.balance.toLocaleString() || 0} /{" "}
           {appUserProfile?.tier?.max_spending?.toLocaleString() || 0}{" "}
         </p>
@@ -31,7 +31,9 @@ export default function TierCard() {
         barClassName="bg-red-600"
         showValue={false}
       />
-      <p className="mt-2.5">mock อีก 1,750 แต้มก็จะเป็น Platinum แล้ว ✦</p>
+      <p className="mt-2.5 text-xs">
+        mock อีก 1,750 แต้มก็จะเป็น Platinum แล้ว ✦
+      </p>
     </section>
   );
 }

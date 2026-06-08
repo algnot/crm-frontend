@@ -1,17 +1,36 @@
 import "./globals.css";
 import { Suspense } from "react";
 import { AppProvider } from "@/components/providers/app-provider";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Bodoni_Moda,
+  IBM_Plex_Sans_Thai,
+  JetBrains_Mono,
+  Manrope,
+} from "next/font/google";
 import { FullLoadingProvider } from "@/components/providers/full-loading-provider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const ibmPlexSansThai = IBM_Plex_Sans_Thai({
+  variable: "--font-ibm-plex-sans-thai",
+  subsets: ["thai", "latin"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const bodoniModa = Bodoni_Moda({
+  variable: "--font-bodoni-moda",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const jetBrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export default function RootLayout({
@@ -22,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${ibmPlexSansThai.variable} ${bodoniModa.variable} ${jetBrainsMono.variable} ${manrope.variable} antialiased`}
       >
         <Suspense fallback={<div></div>}>
           <FullLoadingProvider>

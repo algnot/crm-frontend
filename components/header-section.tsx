@@ -66,7 +66,7 @@ export default function HeaderSection() {
           </div>
 
           <div
-            className="text-xs truncate"
+            className="text-[10px] tracking-[0.02em] truncate font-mono"
             style={{
               color: clientConfig.ui.text_gray_color,
             }}

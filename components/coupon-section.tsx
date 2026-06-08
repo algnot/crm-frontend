@@ -23,7 +23,7 @@ export default function CouponSection() {
   return (
     <section className="mx-4.5 mb-5.5">
       <div
-        className="text-3xl leading-none font-medium mb-4"
+        className="text-xl leading-none font-medium font-bodoni mb-4"
         style={{ color: clientConfig.ui.text_color }}
       >
         สิทธิพิเศษทั้งหมด

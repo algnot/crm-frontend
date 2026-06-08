@@ -5,7 +5,13 @@ import { IconScan } from "@tabler/icons-react";
 import { openScanner, closeScanner } from "@/util/qr-scanner";
 
 export default function PointCard() {
-  const { userProfile, clientConfig, backendClient, setUserPoint } = useApp();
+  const {
+    userProfile,
+    clientConfig,
+    backendClient,
+    setUserPoint,
+    appUserProfile,
+  } = useApp();
 
   const [mainPoint, setMainPoint] = useState<GetUserPointRespont>({
     currency: {
@@ -35,7 +41,7 @@ export default function PointCard() {
 
     const mainPoint = points.find((point) => point.currency.is_default);
     if (mainPoint) setMainPoint(mainPoint);
-  }, [clientConfig.slug, userProfile?.userId, backendClient, setUserPoint]);
+  }, [clientConfig.slug, userProfile, backendClient, setUserPoint]);
 
   useEffect(() => {
     Promise.resolve().then(fetchData);
@@ -74,22 +80,39 @@ export default function PointCard() {
             "radial-gradient(circle, rgba(255,255,255,0.25), transparent 60%)",
         }}
       ></div>
-      <p
-        style={{ color: clientConfig.ui.text_white_color }}
-        className="text-xs font-medium"
-      >
-        พ้อยคงเหลือ
-      </p>
+      <div className="flex justify-between items-center">
+        <p
+          style={{ color: clientConfig.ui.text_white_color }}
+          className="text-xs font-medium"
+        >
+          พ้อยคงเหลือ
+        </p>
+        <div
+          className="px-2 py-0.5 rounded-full flex items-center gap-[5px] text-[10px] font-bold"
+          style={{
+            color: appUserProfile?.tier.color,
+            border: `1px solid ${appUserProfile?.tier.color}`,
+          }}
+        >
+          <div
+            className="w-[5px] h-[5px] rounded-full"
+            style={{
+              backgroundColor: appUserProfile?.tier.color,
+            }}
+          ></div>
+          {appUserProfile?.tier.name}
+        </div>
+      </div>
       <p className="text-white mt-1">
-        <span className="text-5xl font-semibold">
+        <span className="text-[54px] font-semibold font-bodoni">
           {mainPoint.balance.toLocaleString()}{" "}
         </span>
-        <span>PTS</span>
+        <span className="text-[11px] font-semibold tracking-[0.16em]">PTS</span>
       </p>
-      <div className="pt-3 flex justify-between border-t border-white text-white">
-        <p>Lifetime · xxxx</p>
-        <div
-          className="cursor-pointer flex items-center gap-2.5 border rounded-full px-3 py-1 bg-[rgba(255,255,255,0.18)] z-1"
+      <div className="pt-3 flex justify-between border-t-[0.5px] border-[rgba(255,255,255,0.18)] text-white">
+        <p className="text-[10.5px] font-mono">Lifetime · xxxx</p>
+        <button
+          className="h-7 font-mono cursor-pointer flex items-center gap-2.5 border-[0.5px] rounded-full px-3 py-1 bg-[rgba(255,255,255,0.18)] z-1"
           onClick={() =>
             openScanner({
               onResult: handleQRCode,
@@ -102,8 +125,9 @@ export default function PointCard() {
             })
           }
         >
-          <IconScan size={16} /> เก็บแต้ม
-        </div>
+          <IconScan size={16} />{" "}
+          <p className="text-xs font-semibold">เก็บแต้ม</p>
+        </button>
       </div>
     </section>
   );
