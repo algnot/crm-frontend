@@ -20,7 +20,7 @@ export default function ChipButton({
   return (
     <div
       onClick={onSelect ? () => onSelect(!selected) : undefined}
-      className="px-3.5 h-8 rounded-full cursor-pointer flex items-center justify-center text-sm whitespace-nowrap"
+      className="px-3.5 h-8 rounded-full cursor-pointer flex items-center justify-center text-xs font-semibold whitespace-nowrap"
       style={{
         backgroundColor: selected
           ? clientConfig.ui.secondary_color

@@ -1,5 +1,6 @@
 import { GetUserPointHistoryRespont } from "@/types/request";
 import { useApp } from "./providers/app-provider";
+import { formatDate } from "@/util/format-date";
 
 interface MenuCardProp {
   pointHistory: GetUserPointHistoryRespont;
@@ -11,7 +12,9 @@ export default function MenuCard({ pointHistory }: MenuCardProp) {
   return (
     <div
       className="flex gap-3 p-3 mb-2 border-b-[0.5px]"
-      style={{ borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)` }}
+      style={{
+        borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+      }}
     >
       <div className="flex gap-3 items-center">
         <div
@@ -31,15 +34,17 @@ export default function MenuCard({ pointHistory }: MenuCardProp) {
         </div>
         <div className="flex flex-col">
           <div
-            className="text-xl"
+            className="text-[13px] font-medium"
             style={{ color: clientConfig.ui.text_color }}
           >
             {pointHistory.name}
           </div>
-          <div className="text-gray-500">{pointHistory.given_date}</div>
+          <div className="text-gray-500 text-[11px] font-mono">
+            {formatDate(pointHistory.given_date)}
+          </div>
         </div>
       </div>
-      <div className="ml-auto text-xl">
+      <div className="ml-auto text-[19px] font-medium font-bodoni">
         {pointHistory.type === "earn" && (
           <div style={{ color: clientConfig.ui.text_success_color }}>
             + {pointHistory.value.toLocaleString()}

@@ -128,7 +128,7 @@ export default function Navbar() {
                 key={index}
               >
                 <Icon size={24} />
-                <span className="text-sm">{navbar.title}</span>
+                <span className="text-[10px] font-medium">{navbar.title}</span>
               </div>
             );
           }

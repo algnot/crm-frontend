@@ -141,7 +141,7 @@ export default function Page() {
       />
 
       <div
-        className="mt-8 text-4xl font-bold"
+        className="mt-8 text-[32px] font-medium font-bodoni"
         style={{
           color: clientConfig.ui.primary_color,
         }}
@@ -150,14 +150,14 @@ export default function Page() {
       </div>
 
       <div
-        className="mt-5 rounded-3xl border-[0.5px]"
+        className="mt-5 rounded-3xl border-[0.5px] text-[13px]"
         style={{
           backgroundColor: clientConfig.ui.surface_color,
           borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
         }}
       >
         <div
-          className="p-5 mt-1 flex items-center justify-between text-lg border-b-[0.5px]"
+          className="p-5 mt-1 flex items-center justify-between text-lg border-b-[0.5px] text-[13px]"
           style={{
             borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
           }}
@@ -178,7 +178,7 @@ export default function Page() {
           </p>
         </div>
         <div
-          className="p-5 mt-1 flex items-center justify-between text-lg border-b-[0.5px]"
+          className="p-5 mt-1 flex items-center justify-between text-lg border-b-[0.5px] text-[13px]"
           style={{
             borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
           }}
@@ -201,7 +201,7 @@ export default function Page() {
 
         {coupon?.is_used && (
           <div
-            className="mt-1 p-5"
+            className="mt-1 p-5 text-[13px]"
             style={{
               color: clientConfig.ui.text_gray_color,
             }}
@@ -222,7 +222,7 @@ export default function Page() {
                   เหลือเวลาใช้งาน
                 </div>
                 <div
-                  className="mt-1 text-2xl font-mono font-bold tracking-wider"
+                  className="mt-1 text-5xl font-bodoni font-bold tracking-wider"
                   style={{
                     color:
                       remainingSeconds > 0
@@ -244,7 +244,7 @@ export default function Page() {
             >
               <button
                 onClick={() => setCodeType("qr")}
-                className="px-5 py-2 cursor-pointer text-xl"
+                className="px-5 py-2 cursor-pointer font-medium"
                 style={{
                   backgroundColor:
                     codeType === "qr"
@@ -260,7 +260,7 @@ export default function Page() {
 
               <button
                 onClick={() => setCodeType("bar")}
-                className="px-5 py-2 cursor-pointer text-xl"
+                className="px-5 py-2 cursor-pointer font-medium"
                 style={{
                   backgroundColor:
                     codeType === "bar"
@@ -297,7 +297,7 @@ export default function Page() {
 
             {/* Raw code */}
             <div
-              className="mt-4 font-mono break-all text-center p-3 rounded-sm"
+              className="mt-4 font-mono text-[13px] font-semibold break-all text-center p-3 rounded-sm mb-2"
               style={{
                 color: clientConfig.ui.text_color,
                 backgroundColor: clientConfig.ui.background_color,
@@ -311,7 +311,7 @@ export default function Page() {
 
       {/* Terms */}
       <p
-        className="mt-8 text-lg font-semibold"
+        className="mt-8 text-[10px] font-semibold"
         style={{ color: clientConfig.ui.text_color }}
       >
         เงื่อนไข
@@ -329,7 +329,7 @@ export default function Page() {
       <div className="fixed bottom-0 left-0 z-30 w-full p-4 shadow-lg">
         {coupon?.is_used ? (
           <div
-            className="text-center text-xl rounded-xl p-3"
+            className="text-center text-[15px] font-semibold rounded-xl p-3"
             style={{
               color: clientConfig.ui.background_white_color,
               backgroundColor: clientConfig.ui.secondary_color,

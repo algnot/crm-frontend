@@ -90,7 +90,7 @@ export default function HistorySection() {
   return (
     <div>
       <div
-        className="text-3xl leading-none font-medium mt-5 mb-2"
+        className="text-3xl font-medium mt-5 mb-2 font-bodoni pb-4.5"
         style={{ color: clientConfig.ui.text_color }}
       >
         ประวัติการได้รับคะแนน
@@ -110,7 +110,7 @@ export default function HistorySection() {
           }}
         >
           <p
-            className=""
+            className="text-[10px]"
             style={{
               color: clientConfig.ui.text_gray_color,
               borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
@@ -119,7 +119,7 @@ export default function HistorySection() {
             รับ
           </p>
           <p
-            className="text-3xl font-medium"
+            className="text-[22px] font-medium font-bodoni"
             style={{
               color: clientConfig.ui.text_success_color,
             }}
@@ -134,7 +134,7 @@ export default function HistorySection() {
           }}
         >
           <p
-            className=""
+            className="text-[10px]"
             style={{
               color: clientConfig.ui.text_gray_color,
             }}
@@ -142,7 +142,7 @@ export default function HistorySection() {
             ใช้
           </p>
           <p
-            className="text-3xl font-medium"
+            className="text-[22px] font-medium font-bodoni"
             style={{
               color: clientConfig.ui.text_error_color,
             }}
@@ -152,7 +152,7 @@ export default function HistorySection() {
         </div>
         <div className="flex flex-col items-center justify-between">
           <p
-            className=""
+            className="text-[10px]"
             style={{
               color: clientConfig.ui.text_gray_color,
             }}
@@ -160,7 +160,7 @@ export default function HistorySection() {
             คงเหลือ
           </p>
           <div
-            className="text-3xl font-medium"
+            className="text-[22px] font-medium font-bodoni"
             style={{
               color: clientConfig.ui.text_color,
             }}

@@ -7,6 +7,13 @@ export default function Page() {
     useApp();
   return (
     <div className="p-5">
+      <div
+        className="text-3xl font-medium mt-5 mb-2 font-bodoni pb-4.5"
+        style={{ color: clientConfig.ui.text_color }}
+      >
+        ตั้งค่าโปรไฟล์
+      </div>
+
       <div className="flex flex-col justify-center items-center mb-5">
         {!!userProfile?.pictureUrl ? (
           <div
@@ -30,9 +37,11 @@ export default function Page() {
           className="text-center"
           style={{ color: clientConfig.ui.text_color }}
         >
-          <div className="text-2xl">{userProfile?.displayName}</div>
+          <div className="text-[22px] font-medium font-bodoni">
+            {userProfile?.displayName}
+          </div>
           <div
-            className="text-sm"
+            className="text-xs font-mono"
             style={{ color: clientConfig.ui.text_gray_color }}
           >
             เลขสมาชิก: {userProfile?.userId}
@@ -48,7 +57,7 @@ export default function Page() {
         }}
       >
         <p
-          className="pt-3 px-4 pb-1.5"
+          className="pt-3 px-4 pb-1.5 text-[10px]"
           style={{
             color: clientConfig.ui.text_gray_color,
           }}
@@ -56,13 +65,13 @@ export default function Page() {
           ข้อมูลส่วนตัว
         </p>
         <div
-          className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
+          className="flex justify-between py-3 px-4 border-b-[0.5px]"
           style={{
             borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
           }}
         >
-          <div className="font-medium">ชื่อ-นามสกุล</div>
-          <div className="text-gray-500">
+          <div className="font-medium text-sm">ชื่อ-นามสกุล</div>
+          <div className="text-gray-500 text-xs font-mono">
             {appUserProfile?.display_name || "-"}
           </div>
         </div>
@@ -72,8 +81,10 @@ export default function Page() {
             borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
           }}
         >
-          <div className="font-medium">อีเมล</div>
-          <div className="text-gray-500">{appUserProfile?.email || "-"}</div>
+          <div className="font-medium text-sm">อีเมล</div>
+          <div className="text-gray-500 text-xs font-mono">
+            {appUserProfile?.email || "-"}
+          </div>
         </div>
         <div
           className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
@@ -81,8 +92,10 @@ export default function Page() {
             borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
           }}
         >
-          <div className="font-medium">เบอร์โทร</div>
-          <div className="text-gray-500">{appUserProfile?.phone || "-"}</div>
+          <div className="font-medium text-sm">เบอร์โทร</div>
+          <div className="text-gray-500 text-xs font-mono">
+            {appUserProfile?.phone || "-"}
+          </div>
         </div>
         <div
           className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
@@ -90,8 +103,8 @@ export default function Page() {
             borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
           }}
         >
-          <div className="font-medium">วันเกิด</div>
-          <div className="text-gray-500">
+          <div className="font-medium text-sm">วันเกิด</div>
+          <div className="text-gray-500 text-xs font-mono">
             {appUserProfile?.birth_date || "-"}
           </div>
         </div>
@@ -101,8 +114,10 @@ export default function Page() {
             borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
           }}
         >
-          <div className="font-medium">เพศ</div>
-          <div className="text-gray-500">{appUserProfile?.gender || "-"}</div>
+          <div className="font-medium text-sm">เพศ</div>
+          <div className="text-gray-500 text-xs font-mono">
+            {appUserProfile?.gender || "-"}
+          </div>
         </div>
         <div
           className="text-md flex justify-between py-3 px-4"
@@ -110,8 +125,8 @@ export default function Page() {
             borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
           }}
         >
-          <div className="font-medium">ที่อยู่จัดส่ง</div>
-          <div className="text-gray-500">{"-"}</div>
+          <div className="font-medium text-sm">ที่อยู่จัดส่ง</div>
+          <div className="text-gray-500 text-xs font-mono">{"-"}</div>
         </div>
       </div>
       <div

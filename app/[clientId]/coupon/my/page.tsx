@@ -61,7 +61,7 @@ export default function Page() {
   return (
     <div className="px-5 pt-4">
       <div
-        className="text-3xl leading-none font-medium mt-5 mb-2"
+        className="text-3xl font-medium mt-5 mb-2 font-bodoni pb-4.5"
         style={{ color: clientConfig.ui.text_color }}
       >
         คูปองของฉัน
