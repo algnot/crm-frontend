@@ -37,14 +37,31 @@ export default function Page() {
           className="text-center"
           style={{ color: clientConfig.ui.text_color }}
         >
-          <div className="text-[22px] font-medium font-bodoni">
+          <div className="text-[22px] font-medium font-bodoni my-1.5">
             {userProfile?.displayName}
           </div>
-          <div
-            className="text-xs font-mono"
-            style={{ color: clientConfig.ui.text_gray_color }}
-          >
-            เลขสมาชิก: {userProfile?.userId}
+          <div className="flex items-center gap-2">
+            <div
+              className="w-fit px-2 py-0.5 rounded-full flex items-center gap-[5px] text-[10px] font-bold"
+              style={{
+                color: appUserProfile?.tier.color,
+                border: `1px solid ${appUserProfile?.tier.color}`,
+              }}
+            >
+              <div
+                className="w-[5px] h-[5px] rounded-full"
+                style={{
+                  backgroundColor: appUserProfile?.tier.color,
+                }}
+              ></div>
+              {appUserProfile?.tier.name}
+            </div>
+            <div
+              className="text-xs font-mono"
+              style={{ color: clientConfig.ui.text_gray_color }}
+            >
+              {userProfile?.userId}
+            </div>
           </div>
         </div>
       </div>
@@ -130,7 +147,7 @@ export default function Page() {
         </div>
       </div>
       <div
-        className="h-12 rounded-[18px] border-[0.5px] flex items-center justify-center mt-6 cursor-pointer gap-2"
+        className="h-12 rounded-[18px] border-[0.5px] flex items-center justify-center mt-6 cursor-pointer gap-2 text-[13px]"
         style={{
           background: clientConfig.ui.surface_color,
           color: clientConfig.ui.text_gray_color,

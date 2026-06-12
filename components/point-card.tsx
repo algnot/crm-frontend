@@ -111,7 +111,7 @@ export default function PointCard() {
       </p>
       <div className="pt-3 flex justify-between border-t-[0.5px] border-[rgba(255,255,255,0.18)] text-white">
         <p className="text-[10.5px] font-mono">Lifetime · xxxx</p>
-        <button
+        {/* <button
           className="h-7 font-mono cursor-pointer flex items-center gap-2.5 border-[0.5px] rounded-full px-3 py-1 bg-[rgba(255,255,255,0.18)] z-1"
           onClick={() =>
             openScanner({
@@ -127,7 +127,7 @@ export default function PointCard() {
         >
           <IconScan size={16} />{" "}
           <p className="text-xs font-semibold">เก็บแต้ม</p>
-        </button>
+        </button> */}
       </div>
     </section>
   );

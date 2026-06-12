@@ -340,4 +340,27 @@ export class BackendClient {
       return handlerError(e);
     }
   }
+
+  async submitReceipt(
+    clientId: string,
+    userId: string,
+    receiptNumber: string,
+    receiptImage: string,
+  ): Promise<ErrorResponse | void> {
+    try {
+      this.setLoading(true);
+      const response = await this.client.post(
+        `/partner/${clientId}/user/${userId}/receipt`,
+        {
+          receipt_number: receiptNumber,
+          receipt_image: receiptImage,
+        },
+      );
+      this.setLoading(false);
+      return response.data;
+    } catch (e) {
+      this.setLoading(false);
+      return handlerError(e);
+    }
+  }
 }
