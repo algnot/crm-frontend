@@ -282,11 +282,11 @@ function ReceiptCameraModal({
           <img
             src={`data:image/jpeg;base64,${receiptImage}`}
             alt="receipt-preview"
-            className="w-full flex-1 bg-black object-contain"
+            className="w-full bg-black object-contain mt-[40%]"
           />
 
           <div
-            className="pt-8 pb-6 px-4 rounded-t-[22px]"
+            className="pt-8 pb-6 px-4 rounded-t-[22px] absolute bottom-0 left-0 right-0"
             style={{ background: clientConfig?.ui?.surface_color }}
           >
             <div
