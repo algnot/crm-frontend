@@ -90,9 +90,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const openAlert = useCallback(
     (options: OpenAlertOptions) => {
-      return openAlertModal({ ...options, clientConfig });
+      return openAlertModal({ ...options });
     },
-    [openAlertModal, clientConfig],
+    [openAlertModal],
   );
 
   const openReceipt = useCallback(
