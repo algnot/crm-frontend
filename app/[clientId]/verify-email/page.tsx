@@ -207,7 +207,7 @@ export default function Page() {
       {step === "otp" && (
         <>
           <p
-            className="text-xl mb-2 text-center"
+            className="text-xs font-bold font-mono mb-2 text-center"
             style={{
               color: clientConfig.ui.primary_color,
             }}
@@ -215,7 +215,7 @@ export default function Page() {
             VERIFY OTP
           </p>
           <p
-            className="text-3xl mb-2 text-center"
+            className="text-[32px] mb-2 text-center font-bodoni"
             style={{
               color: clientConfig.ui.text_color,
             }}
@@ -223,7 +223,7 @@ export default function Page() {
             กรอกรหัส 6 หลัก
           </p>
           <div
-            className="text-lg text-center"
+            className="text-[13px] text-center"
             style={{
               color: clientConfig.ui.text_gray_color,
             }}
@@ -231,7 +231,7 @@ export default function Page() {
             OTP มีอายุ 15 นาที (ref: {ref}) ถูกส่งไปที่
           </div>
           <p
-            className="text-xl text-center"
+            className="text-[13px] font-semibold font-mono text-center"
             style={{
               color: clientConfig.ui.text_color,
             }}
