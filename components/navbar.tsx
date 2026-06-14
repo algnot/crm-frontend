@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Ticket } from "tabler-icons-react";
 import {
+  IconCamera,
   IconClock,
   IconScan,
   IconSettings,
@@ -12,6 +13,8 @@ import {
 import { closeScanner, openScanner } from "@/util/qr-scanner";
 import { useRouter } from "next/navigation";
 import { useApp } from "./providers/app-provider";
+import { openReceipt } from "@/util/receipt-camera";
+import { isErrorResponse } from "@/types/request";
 
 const navbars = [
   {
@@ -46,7 +49,13 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const { clientConfig, appUserProfile, isShowNavbar } = useApp();
+  const {
+    clientConfig,
+    appUserProfile,
+    isShowNavbar,
+    userProfile,
+    backendClient,
+  } = useApp();
 
   const getHref = (href: string) =>
     href === "/" ? `/${clientConfig.slug}` : `/${clientConfig.slug}${href}`;
@@ -103,16 +112,41 @@ export default function Navbar() {
                     background: `linear-gradient(135deg, ${clientConfig.ui.primary_color}, ${clientConfig.ui.secondary_color})`,
                     boxShadow: `0 6px 24px -4px color-mix(in oklch, ${clientConfig.ui.primary_color} 70%, transparent), 0 0 0 6px ${clientConfig.ui.background_color}`,
                   }}
-                  onClick={() =>
-                    openScanner({
-                      onResult: handleQRCode,
+                  onClick={() => {
+                    // openScanner({
+                    //   onResult: handleQRCode,
+                    //   primaryColor: clientConfig.ui.primary_color,
+                    //   secondaryColor: clientConfig.ui.secondary_color,
+                    //   textWhiteColor: clientConfig.ui.text_white_color,
+                    // })
+
+                    openReceipt({
                       primaryColor: clientConfig.ui.primary_color,
-                      secondaryColor: clientConfig.ui.secondary_color,
                       textWhiteColor: clientConfig.ui.text_white_color,
-                    })
-                  }
+                      textGrayColor: clientConfig.ui.text_gray_color,
+                      backgroundWhiteColor:
+                        clientConfig.ui.background_white_color,
+                      onSubmit: async ({ receiptNumber, receiptImage }) => {
+                        if (!userProfile?.userId) {
+                          return;
+                        }
+
+                        const response = await backendClient.submitReceipt(
+                          clientConfig.slug,
+                          userProfile.userId,
+                          receiptNumber,
+                          receiptImage,
+                        );
+
+                        if (isErrorResponse(response)) {
+                          return;
+                        }
+                      },
+                    });
+                  }}
                 >
-                  <Icon size={26} />
+                  {/* <Icon size={26} /> */}
+                  <IconCamera size={26} />
                 </div>
               </div>
             );
