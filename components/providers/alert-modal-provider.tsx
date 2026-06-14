@@ -1,5 +1,6 @@
 "use client";
 
+import { PartnerAppConfig } from "@/types/request";
 import {
   createContext,
   ReactNode,
@@ -14,10 +15,9 @@ export type OpenAlertOptions = {
   title?: string;
   message: string;
   confirmText?: string;
-  primaryColor?: string;
-  backgroundColor?: string;
-  textColor?: string;
+  clientConfig?: PartnerAppConfig;
   icon?: ReactNode;
+  onConfirm?: () => void;
 };
 
 type AlertModalContextType = {
@@ -39,9 +39,8 @@ function AlertModal({
     title = "แจ้งเตือน",
     message,
     confirmText = "ตกลง",
-    primaryColor = "#7C3AED",
-    backgroundColor = "#FFFFFF",
-    textColor = "#111827",
+    clientConfig,
+    onConfirm = () => {},
   } = options;
 
   return (
@@ -53,8 +52,8 @@ function AlertModal({
       <div
         className="w-full max-w-sm overflow-hidden rounded-[28px] shadow-2xl"
         style={{
-          background: backgroundColor,
-          color: textColor,
+          background: clientConfig?.ui.surface_color,
+          color: clientConfig?.ui.text_color,
           paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
         }}
         onClick={(event) => event.stopPropagation()}
@@ -63,22 +62,35 @@ function AlertModal({
           {options.icon && (
             <div
               className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full"
-              style={{ background: `${primaryColor}1A`, color: primaryColor }}
+              style={{
+                background: `${clientConfig?.ui.primary_color}1A`,
+                color: clientConfig?.ui.primary_color,
+              }}
             >
               {options.icon}
             </div>
           )}
 
           <h3 className="text-lg font-semibold leading-6">{title}</h3>
-          <p className="mt-2 text-sm leading-6 text-black/65">{message}</p>
+          <p
+            className="mt-2 text-sm leading-6"
+            style={{
+              color: clientConfig?.ui.text_gray_color,
+            }}
+          >
+            {message}
+          </p>
         </div>
 
         <div className="px-5 pt-1">
           <button
             type="button"
             className="w-full rounded-2xl px-4 py-3 text-sm font-medium text-white active:scale-[0.99]"
-            style={{ background: primaryColor }}
-            onClick={onClose}
+            style={{ background: clientConfig?.ui.primary_color }}
+            onClick={() => {
+              onConfirm();
+              onClose();
+            }}
           >
             {confirmText}
           </button>

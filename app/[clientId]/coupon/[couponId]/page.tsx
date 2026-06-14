@@ -10,6 +10,8 @@ import { ArrowLeft } from "tabler-icons-react";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Button from "@/components/button";
+import { formatDate } from "@/util/format-date";
+import { IconMoodSadFilled, IconTicket } from "@tabler/icons-react";
 
 export default function Page() {
   const params = useParams();
@@ -22,6 +24,7 @@ export default function Page() {
     userPoint,
     userProfile,
     setUserPoint,
+    openAlert,
   } = useApp();
 
   const couponId = Array.isArray(params.couponId)
@@ -80,18 +83,29 @@ export default function Page() {
     );
 
     if (isErrorResponse(res)) {
-      alert(res.message);
-      window.location.href = `/${clientConfig.slug}`;
+      openAlert({
+        title: "แลกรับสิทธิ์ไม่สำเร็จ",
+        message: res.message,
+        clientConfig,
+        icon: <IconMoodSadFilled />,
+      });
       return;
     }
 
-    alert("redeem coupon done :)");
-    window.location.href = `/${clientConfig.slug}/coupon/my/${res.id}`;
+    openAlert({
+      title: "แลกรับสิทธิ์สำเร็จ",
+      message: `คุณได้แลกรับสิทธิ์ ${coupon.name} เรียบร้อยแล้ว`,
+      icon: <IconTicket />,
+      clientConfig,
+      onConfirm: () => {
+        router.push(`/${clientConfig.slug}/coupon/my/${res.id}`);
+      },
+    });
   };
 
   return (
     <div
-      className="min-h-screen relative p-4.5"
+      className="min-h-screen relative px-4.5 pt-4.5 pb-20"
       style={{
         backgroundColor: clientConfig.ui.background_color,
         color: clientConfig.ui.text_color,
@@ -121,7 +135,7 @@ export default function Page() {
       {/* Content */}
       <div className="mt-5 rounded-t-3xl">
         <div
-          className="text-2xl font-bold"
+          className="text-[32px] font-medium font-bodoni"
           style={{
             color: clientConfig.ui.text_color,
           }}
@@ -129,42 +143,66 @@ export default function Page() {
           {coupon?.name}
         </div>
 
-        {(coupon?.value || 0) > 0 ? (
-          <div
-            className="mt-3 text-xl font-medium"
-            style={{
-              color: clientConfig.ui.text_color,
-            }}
-          >
-            ใช้ {coupon?.value?.toLocaleString()} {coupon?.currency.name}{" "}
-            <span style={{ color: clientConfig.ui.text_gray_color }}>
-              (มีอยู่ {currentPoint.toLocaleString()} {coupon?.currency.name})
-            </span>
-          </div>
-        ) : (
-          <div
-            className="mt-3 text-xl font-medium"
-            style={{
-              color: clientConfig.ui.text_color,
-            }}
-          >
-            แลกได้ฟรี
-          </div>
-        )}
-
         <div
-          className="mt-1"
+          className="mt-5 rounded-3xl border-[0.5px] text-[13px]"
           style={{
-            color: clientConfig.ui.text_gray_color,
+            backgroundColor: clientConfig.ui.surface_color,
+            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
           }}
         >
-          แลกได้ถึง {coupon?.end_time}
+          <div className="p-5 mt-1 flex items-center justify-between text-lg text-[13px]">
+            <p
+              style={{
+                color: clientConfig.ui.text_gray_color,
+              }}
+            >
+              ใช้แต้ม
+            </p>
+            <p
+              style={{
+                color: clientConfig.ui.text_color,
+              }}
+            >
+              {coupon?.value} {coupon?.currency.name.toUpperCase()}
+            </p>
+          </div>
+
+          {coupon?.end_time && (
+            <div
+              className="p-5 mt-1 flex items-center justify-between text-lg border-t-[0.5px] text-[13px]"
+              style={{
+                borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+              }}
+            >
+              <p
+                style={{
+                  color: clientConfig.ui.text_gray_color,
+                }}
+              >
+                หมดอายุ
+              </p>
+              <p
+                style={{
+                  color: clientConfig.ui.text_color,
+                }}
+              >
+                {formatDate(coupon?.end_time)}
+              </p>
+            </div>
+          )}
         </div>
 
+        {/* Terms */}
+        <p
+          className="mt-8 text-[10px] font-semibold"
+          style={{ color: clientConfig.ui.text_gray_color }}
+        >
+          เงื่อนไข
+        </p>
         <div
-          className="mt-6 whitespace-pre-line leading-8 min-h-56"
+          className="whitespace-pre-line min-h-56 text-[11.5px]"
           style={{
-            color: clientConfig.ui.text_color,
+            color: clientConfig.ui.text_gray_color,
           }}
         >
           {coupon?.term_and_condition || "-"}
@@ -183,7 +221,7 @@ export default function Page() {
             {coupon?.currency.name.toLocaleUpperCase()} ของคุณไม่พอ
           </div>
         ) : (
-          <Button text="แลกคูปอง" onClick={redeemCoupon} />
+          <Button text="แลกรับสิทธิ์" onClick={redeemCoupon} />
         )}
       </div>
     </div>

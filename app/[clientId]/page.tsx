@@ -144,12 +144,14 @@ export default function Home() {
               <div className="mt-5 flex items-center gap-3">
                 <Button
                   text="ข้าม"
+                  size="sm"
                   onClick={closeModal}
                   className="bg-white/10! w-1/3!"
                 />
 
                 <Button
                   text="อ่านเงื่อนไข"
+                  size="sm"
                   onClick={() => {
                     const action = adsItems[modalIndex].action;
                     if (action) window.location.href = action;

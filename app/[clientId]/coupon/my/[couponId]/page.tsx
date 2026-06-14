@@ -1,14 +1,23 @@
 "use client";
 
+/* eslint-disable react-hooks/set-state-in-effect */
+
+/* eslint-disable @next/next/no-img-element */
+
 import Button from "@/components/button";
 import { useApp } from "@/components/providers/app-provider";
 import { isErrorResponse, UserCoupon } from "@/types/request";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft } from "tabler-icons-react";
 import QRCode from "react-qr-code";
 import Barcode from "react-barcode";
 import { formatDate } from "@/util/format-date";
+import {
+  IconCopy,
+  IconMoodSadFilled,
+  IconMoodSmileDizzy,
+} from "@tabler/icons-react";
 
 function parseUtcExpiration(dateStr: string): Date {
   return new Date(dateStr.replace(" ", "T") + "Z");
@@ -34,8 +43,13 @@ export default function Page() {
   const params = useParams();
   const router = useRouter();
 
-  const { backendClient, clientConfig, userProfile, setIsShowNavbar } =
-    useApp();
+  const {
+    backendClient,
+    clientConfig,
+    userProfile,
+    setIsShowNavbar,
+    openAlert,
+  } = useApp();
 
   const couponId = Array.isArray(params.couponId)
     ? params.couponId[0]
@@ -44,16 +58,36 @@ export default function Page() {
   const [coupon, setCoupon] = useState<UserCoupon>();
   const [codeType, setCodeType] = useState<"qr" | "bar">("qr");
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
+  const [used, setUsed] = useState<boolean>(false);
+
+  const fetchData = useCallback(async () => {
+    if (!userProfile || !couponId) {
+      return;
+    }
+
+    const coupon = await backendClient.getUserCouponById(
+      clientConfig.slug,
+      userProfile.userId,
+      couponId,
+    );
+
+    if (isErrorResponse(coupon)) {
+      window.location.href = `/${clientConfig.slug}`;
+      return;
+    }
+
+    setCoupon(coupon);
+  }, [backendClient, clientConfig.slug, couponId, userProfile]);
 
   useEffect(() => {
     setIsShowNavbar(false);
 
-    fetchData();
+    void fetchData();
 
     return () => {
       setIsShowNavbar(true);
     };
-  }, [userProfile, couponId]);
+  }, [fetchData, setIsShowNavbar]);
 
   useEffect(() => {
     if (!coupon?.expiration_date || coupon.is_used) {
@@ -71,25 +105,6 @@ export default function Page() {
     return () => clearInterval(interval);
   }, [coupon?.expiration_date, coupon?.is_used]);
 
-  const fetchData = async () => {
-    if (!userProfile || !couponId) {
-      return;
-    }
-
-    const coupon = await backendClient.getUserCouponById(
-      clientConfig.slug,
-      userProfile.userId,
-      couponId,
-    );
-
-    if (isErrorResponse(coupon)) {
-      window.location.href = `/${clientConfig.slug}`;
-      return;
-    }
-
-    setCoupon(coupon);
-  };
-
   const onUseCoupon = async () => {
     if (!userProfile || !couponId || !coupon) {
       return;
@@ -102,18 +117,53 @@ export default function Page() {
     );
 
     if (isErrorResponse(response)) {
-      window.location.href = `/${clientConfig.slug}`;
+      openAlert({
+        title: "ใช้คูปองไม่สำเร็จ",
+        message: response.message,
+        clientConfig,
+        icon: <IconMoodSadFilled />,
+      });
       return;
     }
 
-    alert("ใช้คูปองแล้ว");
+    openAlert({
+      title: "ใช้คูปองสำเร็จ",
+      message: `คุณได้ใช้คูปอง ${coupon.name} เรียบร้อยแล้ว`,
+      icon: <IconMoodSmileDizzy />,
+      clientConfig,
+      onConfirm: () => {
+        router.push(`/${clientConfig.slug}/history`);
+      },
+    });
 
     fetchData();
   };
 
+  const onCopyCode = async () => {
+    if (!coupon?.code) return;
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(coupon.code);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = coupon.code;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div
-      className="min-h-screen relative p-4.5"
+      className="min-h-screen relative pt-4.5 px-4.5 pb-20"
       style={{
         backgroundColor: clientConfig.ui.background_color,
         color: clientConfig.ui.text_color,
@@ -134,7 +184,7 @@ export default function Page() {
       <img
         src={coupon?.coupon.image_url || clientConfig.logo_url}
         alt="coupon"
-        className="mt-4 w-full object-cover rounded-2xl h-[180px]"
+        className="mt-4 h-45 w-full rounded-2xl object-cover"
         style={{
           backgroundColor: clientConfig.ui.background_white_color,
         }}
@@ -148,197 +198,206 @@ export default function Page() {
       >
         {coupon?.name}
       </div>
-
-      <div
-        className="mt-5 rounded-3xl border-[0.5px] text-[13px]"
-        style={{
-          backgroundColor: clientConfig.ui.surface_color,
-          borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
-        }}
-      >
+      {coupon?.is_used && (
         <div
-          className="p-5 mt-1 flex items-center justify-between text-lg border-b-[0.5px] text-[13px]"
+          className="mt-1 text-[13px]"
           style={{
+            color: clientConfig.ui.text_gray_color,
+          }}
+        >
+          ใช้เมื่อ {formatDate(coupon.used_date)}
+        </div>
+      )}
+
+      {!used && (
+        <div
+          className="mt-5 rounded-3xl border-[0.5px] text-[13px]"
+          style={{
+            backgroundColor: clientConfig.ui.surface_color,
             borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
           }}
         >
-          <p
-            style={{
-              color: clientConfig.ui.text_gray_color,
-            }}
-          >
-            ใช้แต้ม
-          </p>
-          <p
-            style={{
-              color: clientConfig.ui.text_color,
-            }}
-          >
-            {coupon?.value} {coupon?.currency.name.toUpperCase()}
-          </p>
-        </div>
-        <div
-          className="p-5 mt-1 flex items-center justify-between text-lg border-b-[0.5px] text-[13px]"
-          style={{
-            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
-          }}
-        >
-          <p
-            style={{
-              color: clientConfig.ui.text_gray_color,
-            }}
-          >
-            หมดอายุ
-          </p>
-          <p
-            style={{
-              color: clientConfig.ui.text_color,
-            }}
-          >
-            {formatDate(coupon?.expiration_date)}
-          </p>
-        </div>
-
-        {coupon?.is_used && (
           <div
-            className="mt-1 p-5 text-[13px]"
+            className="p-5 mt-1 flex items-center justify-between text-lg border-b-[0.5px] text-[13px]"
             style={{
-              color: clientConfig.ui.text_gray_color,
+              borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
             }}
           >
-            ใช้เมื่อ {formatDate(coupon.used_date)}
-          </div>
-        )}
-
-        {/* QR / Barcode */}
-        {coupon?.code && !coupon.is_used && (
-          <div className="mt-8 flex flex-col items-center">
-            {remainingSeconds !== null && (
-              <div className="mb-5 text-center">
-                <div
-                  className="text-lg"
-                  style={{ color: clientConfig.ui.text_gray_color }}
-                >
-                  เหลือเวลาใช้งาน
-                </div>
-                <div
-                  className="mt-1 text-5xl font-bodoni font-bold tracking-wider"
-                  style={{
-                    color:
-                      remainingSeconds > 0
-                        ? clientConfig.ui.primary_color
-                        : clientConfig.ui.text_error_color,
-                  }}
-                >
-                  {formatCountdown(remainingSeconds)}
-                </div>
-              </div>
-            )}
-
-            {/* Toggle */}
-            <div
-              className="flex rounded-full overflow-hidden my-5"
+            <p
               style={{
-                backgroundColor: clientConfig.ui.background_color,
+                color: clientConfig.ui.text_gray_color,
               }}
             >
-              <button
-                onClick={() => setCodeType("qr")}
-                className="px-5 py-2 cursor-pointer font-medium"
-                style={{
-                  backgroundColor:
-                    codeType === "qr"
-                      ? clientConfig.ui.primary_color
-                      : clientConfig.ui.background_color,
-
-                  color:
-                    codeType === "qr" ? "#fff" : clientConfig.ui.text_color,
-                }}
-              >
-                QR Code
-              </button>
-
-              <button
-                onClick={() => setCodeType("bar")}
-                className="px-5 py-2 cursor-pointer font-medium"
-                style={{
-                  backgroundColor:
-                    codeType === "bar"
-                      ? clientConfig.ui.primary_color
-                      : clientConfig.ui.background_color,
-
-                  color:
-                    codeType === "bar" ? "#fff" : clientConfig.ui.text_color,
-                }}
-              >
-                Barcode
-              </button>
-            </div>
-
-            {/* Code */}
-            <div
-              className="p-5 flex justify-center items-center min-h-[250px] w-full"
-              style={{
-                backgroundColor: clientConfig.ui.background_white_color,
-              }}
-            >
-              {codeType === "qr" ? (
-                <QRCode value={coupon.code} size={240} />
-              ) : (
-                <Barcode
-                  value={coupon.code}
-                  format="CODE128"
-                  width={2}
-                  height={100}
-                  displayValue={false}
-                />
-              )}
-            </div>
-
-            {/* Raw code */}
-            <div
-              className="mt-4 font-mono text-[13px] font-semibold break-all text-center p-3 rounded-sm mb-2"
+              ใช้แต้ม
+            </p>
+            <p
               style={{
                 color: clientConfig.ui.text_color,
-                backgroundColor: clientConfig.ui.background_color,
               }}
             >
-              {coupon.code}
-            </div>
+              {coupon?.value} {coupon?.currency.name.toUpperCase()}
+            </p>
           </div>
-        )}
-      </div>
+          <div className="p-5 mt-1 flex items-center justify-between text-lg text-[13px]">
+            <p
+              style={{
+                color: clientConfig.ui.text_gray_color,
+              }}
+            >
+              หมดอายุ
+            </p>
+            <p
+              style={{
+                color: clientConfig.ui.text_color,
+              }}
+            >
+              {formatDate(coupon?.expiration_date)}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {coupon?.code && !coupon.is_used && used && (
+        <div className="flex flex-col items-center">
+          {/* Toggle */}
+          <div
+            className="flex rounded-full overflow-hidden my-5"
+            style={{
+              backgroundColor: clientConfig.ui.surface_color,
+            }}
+          >
+            <button
+              onClick={() => setCodeType("qr")}
+              className="px-5 py-2 cursor-pointer font-medium"
+              style={{
+                backgroundColor:
+                  codeType === "qr"
+                    ? clientConfig.ui.primary_color
+                    : clientConfig.ui.surface_color,
+
+                color: codeType === "qr" ? "#fff" : clientConfig.ui.text_color,
+              }}
+            >
+              QR Code
+            </button>
+
+            <button
+              onClick={() => setCodeType("bar")}
+              className="px-5 py-2 cursor-pointer font-medium"
+              style={{
+                backgroundColor:
+                  codeType === "bar"
+                    ? clientConfig.ui.primary_color
+                    : clientConfig.ui.surface_color,
+
+                color: codeType === "bar" ? "#fff" : clientConfig.ui.text_color,
+              }}
+            >
+              Barcode
+            </button>
+          </div>
+
+          {/* Code */}
+          <div
+            className="mt-5.5 mb-3.5 flex min-h-62.5 w-fit items-center justify-center rounded-[18px] p-3"
+            style={{
+              backgroundColor: clientConfig.ui.background_white_color,
+              boxShadow: `0 0 0 1px ${clientConfig.ui.primary_color}, 0 0 40px -10px color-mix(in oklch, ${clientConfig.ui.primary_color} 70%, transparent)`,
+            }}
+          >
+            {codeType === "qr" ? (
+              <QRCode
+                value={coupon.code}
+                size={240}
+                bgColor={clientConfig.ui.surface_color}
+                fgColor={clientConfig.ui.text_color}
+              />
+            ) : (
+              <Barcode
+                value={coupon.code}
+                format="CODE128"
+                width={2}
+                height={100}
+                displayValue={false}
+              />
+            )}
+          </div>
+
+          {remainingSeconds !== null && (
+            <div className="mb-5 text-center">
+              <div
+                className="text-[10px]"
+                style={{ color: clientConfig.ui.text_gray_color }}
+              >
+                เหลือเวลาใช้งาน
+              </div>
+              <div
+                className="mt-1 text-5xl font-bodoni font-bold tracking-wider"
+                style={{
+                  color:
+                    remainingSeconds > 0
+                      ? clientConfig.ui.primary_color
+                      : clientConfig.ui.text_error_color,
+                }}
+              >
+                {formatCountdown(remainingSeconds)}
+              </div>
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={onCopyCode}
+            className="mt-1 mb-8 flex w-full items-center justify-center rounded-3xl border-[0.5px] p-5 text-[13px] text-lg font-semibold font-mono tracking-[0.06em]"
+            style={{
+              backgroundColor: clientConfig.ui.surface_color,
+              borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+              color: clientConfig.ui.primary_color,
+            }}
+          >
+            <p className="w-full text-center">{coupon.code}</p>
+            <span className="flex items-center gap-1">
+              <IconCopy size={18} className="active:text-white" />
+            </span>
+          </button>
+        </div>
+      )}
 
       {/* Terms */}
-      <p
-        className="mt-8 text-[10px] font-semibold"
-        style={{ color: clientConfig.ui.text_color }}
-      >
-        เงื่อนไข
-      </p>
-      <div
-        className="whitespace-pre-line leading-8 min-h-56"
-        style={{
-          color: clientConfig.ui.text_color,
-        }}
-      >
-        {coupon?.coupon.term_and_condition || "-"}
-      </div>
+      {(!used || coupon?.is_used) && (
+        <>
+          <p
+            className="mt-8 text-[10px] font-semibold"
+            style={{ color: clientConfig.ui.text_gray_color }}
+          >
+            เงื่อนไข
+          </p>
+          <div
+            className="whitespace-pre-line leading-8 min-h-56 text-[11.5px]"
+            style={{
+              color: clientConfig.ui.text_gray_color,
+            }}
+          >
+            {coupon?.coupon.term_and_condition || "-"}
+          </div>
+        </>
+      )}
 
       {/* Bottom Button */}
       <div className="fixed bottom-0 left-0 z-30 w-full p-4 shadow-lg">
         {coupon?.is_used ? (
-          <div
-            className="text-center text-[15px] font-semibold rounded-xl p-3"
-            style={{
-              color: clientConfig.ui.background_white_color,
-              backgroundColor: clientConfig.ui.secondary_color,
-            }}
-          >
-            คุณใช้คูปองนี้เรียบร้อยแล้ว
-          </div>
+          <Button text="คุณใช้คูปองนี้เรียบร้อยแล้ว" disabled />
+        ) : remainingSeconds !== null && remainingSeconds <= 0 ? (
+          <Button text="หมดอายุ" disabled />
+        ) : used ? (
+          <Button text="ใช้สิทธิ์แล้ว" onClick={onUseCoupon} />
         ) : (
-          <Button text="ใช้คูปอง" onClick={onUseCoupon} />
+          <Button
+            text="ใช้สิทธิ์"
+            onClick={() => {
+              setUsed(true);
+            }}
+          />
         )}
       </div>
     </div>

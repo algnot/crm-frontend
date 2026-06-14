@@ -4,7 +4,7 @@
 
 import React from "react";
 import { useApp } from "./providers/app-provider";
-import { IconBell, IconCamera } from "@tabler/icons-react";
+import { IconCamera } from "@tabler/icons-react";
 import { isErrorResponse } from "@/types/request";
 
 export default function HeaderSection() {
