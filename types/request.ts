@@ -51,6 +51,7 @@ export interface PartnerAppConfig {
 
 export interface AdsItem {
   id: number;
+  title: string;
   action: string;
   image_url: string;
   start_date: string;

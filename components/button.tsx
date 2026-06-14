@@ -27,7 +27,7 @@ export default function Button({
     <button
       type="button"
       disabled={disabled}
-      className={`${className ?? ""} w-full text-center p-2 text-xl rounded-xl flex gap-3 justify-center items-center ${
+      className={`${className ?? ""} w-full text-center p-2 text-[13.5px] font-semibold rounded-xl flex gap-3 justify-center items-center ${
         disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"
       }`}
       style={{

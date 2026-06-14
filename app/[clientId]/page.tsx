@@ -9,6 +9,7 @@ import { useApp } from "@/components/providers/app-provider";
 import { IconX } from "@tabler/icons-react";
 import TierCard from "@/components/tier-card";
 import Button from "@/components/button";
+import { formatDate } from "@/util/format-date";
 
 export default function Home() {
   const { clientConfig } = useApp();
@@ -105,23 +106,31 @@ export default function Home() {
 
             <div className="p-6">
               <div
-                className="mb-2 text-sm font-semibold"
+                className="mb-2 text-[10px] font-semibold font-mono text-end"
                 style={{
                   color: clientConfig.ui.text_gray_color,
                 }}
               >
-                {[adsItems[modalIndex].action, adsItems[modalIndex].start_date]
+                {[
+                  formatDate(adsItems[modalIndex].start_date),
+                  formatDate(adsItems[modalIndex].end_date),
+                ]
                   .filter(Boolean)
                   .join(" • ")
                   .toUpperCase()}
               </div>
 
-              {/* <h3 className="mb-3 text-2xl font-medium">
+              <h3 className="mb-3 text-2xl font-medium font-bodoni">
                 {adsItems[modalIndex].title}
-              </h3> */}
+              </h3>
 
               {adsItems[modalIndex].message && (
-                <p className="mb-5 text-white/80">
+                <p
+                  className="mb-5 text-[12.5px] leading-5 text-pretty"
+                  style={{
+                    color: clientConfig.ui.text_gray_color,
+                  }}
+                >
                   {adsItems[modalIndex].message}
                 </p>
               )}
