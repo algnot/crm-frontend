@@ -1,10 +1,14 @@
 "use client";
 
+/* eslint-disable react-hooks/set-state-in-effect */
+
+/* eslint-disable @next/next/no-img-element */
+
 import { useApp } from "@/components/providers/app-provider";
 import { CouponType, isErrorResponse } from "@/types/request";
 import { ArrowLeft } from "tabler-icons-react";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Button from "@/components/button";
 
 export default function Page() {
@@ -26,12 +30,7 @@ export default function Page() {
 
   const [coupon, setCoupon] = useState<CouponType>();
 
-  useEffect(() => {
-    setIsShowNavbar(false);
-    fetchData();
-  }, [couponId, userProfile]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!couponId || !userProfile) return;
 
     const res = await backendClient.getCouponDetailById(
@@ -50,7 +49,19 @@ export default function Page() {
     if (isErrorResponse(userPoint)) return;
 
     setUserPoint(userPoint);
-  };
+  }, [backendClient, clientConfig.slug, couponId, setUserPoint, userProfile]);
+
+  useEffect(() => {
+    Promise.resolve().then(() => setIsShowNavbar(false));
+
+    return () => {
+      setIsShowNavbar(true);
+    };
+  }, [setIsShowNavbar]);
+
+  useEffect(() => {
+    void fetchData();
+  }, [fetchData]);
 
   const currentPoint = useMemo(() => {
     return (
@@ -101,7 +112,7 @@ export default function Page() {
       <img
         src={coupon?.image_url || clientConfig.logo_url}
         alt="coupon"
-        className="mt-4 w-full object-cover rounded-2xl h-[180px]"
+        className="mt-4 h-45 w-full rounded-2xl object-cover"
         style={{
           backgroundColor: clientConfig.ui.background_white_color,
         }}

@@ -38,7 +38,7 @@ export default function HeaderSection() {
             />
           )}
         </div>
-        <button
+        {/* <button
           className="w-9.5 h-9.5 rounded-xl flex items-center justify-center border"
           style={{
             background: clientConfig.ui.primary_color,
@@ -46,7 +46,7 @@ export default function HeaderSection() {
           }}
         >
           <IconBell className="text-white w-5 h-5" />
-        </button>
+        </button> */}
       </header>
       <div className="relative z-2 flex items-center gap-4 px-4.5 pb-5.5">
         {!!userProfile?.pictureUrl ? (

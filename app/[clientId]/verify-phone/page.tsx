@@ -128,15 +128,23 @@ export default function Page() {
       {step === "phone" && (
         <>
           <div
-            className="text-xl mb-2 text-center"
+            className="text-xs font-bold font-mono mb-2 text-center"
             style={{
               color: clientConfig.ui.primary_color,
             }}
           >
             {clientConfig.name} MEMBER
           </div>
+          <p
+            className="font-bodoni text-[32px] font-medium"
+            style={{
+              color: clientConfig.ui.text_color,
+            }}
+          >
+            Welcome
+          </p>
           <div
-            className="text-xl mb-5 text-center leading-[1.2]"
+            className="text-[13px] mb-7 text-center leading-[1.2]"
             style={{
               color: clientConfig.ui.text_gray_color,
             }}
@@ -160,16 +168,17 @@ export default function Page() {
               />
             )}
 
-            <div className="ml-4">
+            <div className="ml-4 flex flex-col justify-between">
               <div
                 style={{
                   color: clientConfig.ui.primary_color,
                 }}
+                className=""
               >
                 ข้อมูลสมาชิก
               </div>
 
-              <div className="text-2xl">{userProfile.displayName}</div>
+              <div className="text-[18px]">{userProfile.displayName}</div>
             </div>
           </div>
 
@@ -190,7 +199,7 @@ export default function Page() {
               boxShadow: `0 8px 24px -6px color-mix(in oklch,${clientConfig.ui.primary_color} 60%, transparent)`,
               color: clientConfig.ui.button_text_color,
             }}
-            className="mt-5 h-14 w-full text-center p-2 text-xl rounded-[14px] cursor-pointer flex gap-3 justify-center items-center"
+            className="mt-5 h-14 w-full text-center p-2 text-[15px] rounded-[14px] cursor-pointer flex gap-3 justify-center items-center"
             onClick={sendOtp}
           >
             ขอรหัส OTP

@@ -74,10 +74,9 @@ function ReceiptCameraModal({
     options.textGrayColor ||
     options.clientConfig?.ui?.text_gray_color ||
     "#9CA3AF";
-  const backgroundWhiteColor =
-    options.backgroundWhiteColor ||
-    options.clientConfig?.ui?.background_white_color ||
-    "#FFFFFF";
+
+  const secondaryColor = options.clientConfig?.ui?.secondary_color || "#9333EA";
+  const clientConfig = options.clientConfig;
 
   const [receiptNumber, setReceiptNumber] = useState("");
   const [receiptImage, setReceiptImage] = useState("");
@@ -294,9 +293,14 @@ function ReceiptCameraModal({
 
           <div
             className="pt-8 pb-6 px-4 rounded-t-[22px]"
-            style={{ background: backgroundWhiteColor }}
+            style={{ background: clientConfig?.ui?.surface_color }}
           >
-            <div className="flex justify-between mb-3">
+            <div
+              className="flex justify-between mb-3"
+              style={{
+                color: clientConfig?.ui.text_color,
+              }}
+            >
               <p className="block text-lg font-semibold">เลขใบเสร็จ</p>
               <div className="flex items-center gap-1" onClick={handleRetake}>
                 <IconCamera size={20} />
@@ -309,13 +313,19 @@ function ReceiptCameraModal({
               onChange={(event) => setReceiptNumber(event.target.value)}
               placeholder="กรอกเลขใบเสร็จ"
               className="w-full rounded-xl px-4 py-5"
-              style={{ border: `1px solid ${textGrayColor}` }}
+              style={{
+                border: `1px solid ${textGrayColor}`,
+                color: clientConfig?.ui?.text_color,
+              }}
             />
 
             <button
-              type="button"
-              className="mt-6 w-full rounded-xl px-4 py-3 text-white"
-              style={{ background: primaryColor }}
+              style={{
+                background: `linear-gradient(135deg, ${primaryColor}, ${secondaryColor})`,
+                boxShadow: `0 8px 24px -6px color-mix(in oklch,${primaryColor} 60%, transparent)`,
+                color: clientConfig?.ui?.button_text_color,
+              }}
+              className="mt-5 h-14 w-full text-center p-2 text-[15px] rounded-[14px] cursor-pointer flex gap-3 justify-center items-center"
               onClick={handleSubmit}
             >
               ส่งใบเสร็จ
