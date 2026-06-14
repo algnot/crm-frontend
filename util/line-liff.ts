@@ -2,7 +2,7 @@ import liff from "@line/liff";
 
 export async function getLiffUserProfile(liffId: string) {
   // return {
-  //   userId: "U4e4b31ba7d4aba32da947d56890d0069",
+  //   userId: "Uc6dbdef7cdf7c97e811519ea04fff58d",
   //   displayName: "Khaimook",
   //   statusMessage: "(แมว)(แมว)(แมว)",
   //   pictureUrl:

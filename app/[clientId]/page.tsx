@@ -114,10 +114,7 @@ export default function Home() {
                 {[
                   formatDate(adsItems[modalIndex].start_date),
                   formatDate(adsItems[modalIndex].end_date),
-                ]
-                  .filter(Boolean)
-                  .join(" • ")
-                  .toUpperCase()}
+                ].join(" • ")}
               </div>
 
               <h3 className="mb-3 text-2xl font-medium font-bodoni">

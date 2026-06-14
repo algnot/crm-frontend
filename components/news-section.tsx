@@ -88,15 +88,6 @@ export default function NewsSection() {
         >
           ประกาศข่าวสาร
         </p>
-
-        {/* <button
-          type="button"
-          onClick={goToNext}
-          className="flex items-center gap-1 text-[18px] text-white/65"
-        >
-          <span>ดูทั้งหมด</span>
-          <IconChevronRight size={20} />
-        </button> */}
       </div>
 
       <div className="relative">
@@ -147,29 +138,22 @@ export default function NewsSection() {
                   className="h-32.5 w-full aspect-[1.35/1] object-cover"
                 />
 
-                <div className="space-y-2 bg-[#161616] px-5 py-4 text-white">
-                  {eyebrow ? (
-                    <p
-                      className="text-[9.5px] font-bold tracking-[0.32em] uppercase font-mono"
-                      style={{
-                        color: clientConfig.ui.primary_color,
-                      }}
-                    >
-                      {eyebrow}
-                    </p>
-                  ) : null}
+                <div className="space-y-1 bg-[#161616] px-3.5 pt-3 pb-3.5 text-white">
+                  <p
+                    className="text-[10px] font-semibold font-mono"
+                    style={{
+                      color: clientConfig.ui.primary_color,
+                    }}
+                  >
+                    {[
+                      formatDate(adsItem.start_date),
+                      formatDate(adsItem.end_date),
+                    ].join(" • ")}
+                  </p>
 
-                  {adsItem.message ? (
-                    <p className="text-base leading-[0.95] font-medium text-white font-bodoni">
-                      {adsItem.message}
-                    </p>
-                  ) : null}
-
-                  {/* {adsItem.subtitle ? (
-                    <p className="text-[18px] leading-tight text-white/70">
-                      {adsItem.subtitle}
-                    </p>
-                  ) : null} */}
+                  <h3 className="text-2xl font-medium font-bodoni">
+                    {adsItem.title}
+                  </h3>
                 </div>
               </button>
             );
