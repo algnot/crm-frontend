@@ -15,7 +15,6 @@ export type OpenAlertOptions = {
   title?: string;
   message: string;
   confirmText?: string;
-  clientConfig?: PartnerAppConfig;
   icon?: ReactNode;
   onConfirm?: () => void;
 };
@@ -24,24 +23,28 @@ type AlertModalContextType = {
   openAlert: (options: OpenAlertOptions) => Promise<void>;
   closeAlert: () => void;
   setFullLoading: (value: boolean) => void;
+  setAlertClientConfig: (config: PartnerAppConfig) => void;
 };
 
 const AlertModalContext = createContext<AlertModalContextType | null>(null);
 
 function AlertModal({
   options,
+  clientConfig: providerClientConfig,
   onClose,
 }: {
   options: OpenAlertOptions;
+  clientConfig: PartnerAppConfig | null;
   onClose: () => void;
 }) {
   const {
     title = "แจ้งเตือน",
     message,
     confirmText = "ตกลง",
-    clientConfig,
     onConfirm = () => {},
   } = options;
+
+  const clientConfig = providerClientConfig;
 
   return (
     <div
@@ -104,8 +107,14 @@ export function AlertModalProvider({ children }: { children: ReactNode }) {
   const [alertOptions, setAlertOptions] = useState<OpenAlertOptions | null>(
     null,
   );
+  const [providerClientConfig, setProviderClientConfig] =
+    useState<PartnerAppConfig | null>(null);
   const resolverRef = useRef<(() => void) | null>(null);
   const previousOverflowRef = useRef<string | null>(null);
+
+  const setAlertClientConfig = useCallback((config: PartnerAppConfig) => {
+    setProviderClientConfig(config);
+  }, []);
 
   const closeAlert = useCallback(() => {
     setAlertOptions(null);
@@ -151,10 +160,19 @@ export function AlertModalProvider({ children }: { children: ReactNode }) {
 
   return (
     <AlertModalContext.Provider
-      value={{ openAlert, closeAlert, setFullLoading: () => {} }}
+      value={{
+        openAlert,
+        closeAlert,
+        setFullLoading: () => {},
+        setAlertClientConfig,
+      }}
     >
       {alertOptions && (
-        <AlertModal options={alertOptions} onClose={closeAlert} />
+        <AlertModal
+          options={alertOptions}
+          clientConfig={providerClientConfig}
+          onClose={closeAlert}
+        />
       )}
       {children}
     </AlertModalContext.Provider>

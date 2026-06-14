@@ -5,6 +5,7 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -65,11 +66,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
   const [userPoint, setUserPoint] = useState<GetUserPointRespont[]>([]);
   const [isShowNavbar, setIsShowNavbar] = useState<boolean>(true);
-  const { openAlert, closeAlert } = useAlertModalContext();
+  const {
+    openAlert: openAlertModal,
+    closeAlert,
+    setAlertClientConfig,
+  } = useAlertModalContext();
   const { openScanner: openScannerModal, closeScanner } =
     useScannerModalContext();
   const { openReceipt: openReceiptModal, closeReceipt } =
     useReceiptCameraModalContext();
+
+  useEffect(() => {
+    setAlertClientConfig(clientConfig);
+  }, [clientConfig, setAlertClientConfig]);
 
   const openScanner = useCallback(
     (options: OpenScannerOptions = {}) => {
@@ -77,6 +86,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
       openScannerModal(options);
     },
     [closeReceipt, openScannerModal],
+  );
+
+  const openAlert = useCallback(
+    (options: OpenAlertOptions) => {
+      return openAlertModal({ ...options, clientConfig });
+    },
+    [openAlertModal, clientConfig],
   );
 
   const openReceipt = useCallback(

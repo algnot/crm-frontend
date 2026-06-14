@@ -87,14 +87,12 @@ export default function Navbar() {
       await openAlert({
         title: "QR Code",
         message: qrText,
-        primaryColor: clientConfig.ui.primary_color,
       });
     } catch (err) {
       console.error(err);
       await openAlert({
         title: "เกิดข้อผิดพลาด",
         message: "เกิดข้อผิดพลาด",
-        primaryColor: clientConfig.ui.primary_color,
       });
     }
   };

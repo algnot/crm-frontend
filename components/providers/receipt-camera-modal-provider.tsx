@@ -163,7 +163,6 @@ function ReceiptCameraModal({
       await openAlert({
         title: "ถ่ายรูปไม่สำเร็จ",
         message: "ไม่สามารถถ่ายรูปได้",
-        primaryColor,
         icon: <IconAlertTriangle size={24} />,
       });
     }
@@ -178,7 +177,6 @@ function ReceiptCameraModal({
       await openAlert({
         title: "ข้อมูลไม่ครบ",
         message: "กรุณากรอกเลขใบเสร็จ",
-        primaryColor,
         icon: <IconAlertTriangle size={24} />,
       });
       return;
@@ -188,7 +186,6 @@ function ReceiptCameraModal({
       await openAlert({
         title: "ข้อมูลไม่ครบ",
         message: "กรุณาถ่ายรูปใบเสร็จ",
-        primaryColor,
         icon: <IconAlertTriangle size={24} />,
       });
       return;
@@ -209,7 +206,6 @@ function ReceiptCameraModal({
           await openAlert({
             title: "ส่งใบเสร็จไม่สำเร็จ",
             message: result.message,
-            primaryColor,
             icon: <IconAlertTriangle size={24} />,
           });
         }
@@ -219,7 +215,6 @@ function ReceiptCameraModal({
       await openAlert({
         title: "สำเร็จ",
         message: "ส่งใบเสร็จเรียบร้อย",
-        primaryColor,
         icon: <IconRosetteDiscountCheck size={24} />,
       });
       onClose();
@@ -228,7 +223,6 @@ function ReceiptCameraModal({
       await openAlert({
         title: "เกิดข้อผิดพลาด",
         message: "เกิดข้อผิดพลาดขณะส่งใบเสร็จ",
-        primaryColor,
         icon: <IconAlertTriangle size={24} />,
       });
     } finally {

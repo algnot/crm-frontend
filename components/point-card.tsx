@@ -61,7 +61,6 @@ export default function PointCard() {
       await openAlert({
         title: "QR Code",
         message: qrText,
-        primaryColor: clientConfig.ui.primary_color,
       });
       await fetchData();
     } catch (err) {
@@ -69,7 +68,6 @@ export default function PointCard() {
       await openAlert({
         title: "เกิดข้อผิดพลาด",
         message: "เกิดข้อผิดพลาด",
-        primaryColor: clientConfig.ui.primary_color,
       });
     }
   };

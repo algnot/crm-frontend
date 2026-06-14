@@ -86,7 +86,6 @@ export default function Page() {
       openAlert({
         title: "แลกรับสิทธิ์ไม่สำเร็จ",
         message: res.message,
-        clientConfig,
         icon: <IconMoodSadFilled />,
       });
       return;
@@ -96,7 +95,6 @@ export default function Page() {
       title: "แลกรับสิทธิ์สำเร็จ",
       message: `คุณได้แลกรับสิทธิ์ ${coupon.name} เรียบร้อยแล้ว`,
       icon: <IconTicket />,
-      clientConfig,
       onConfirm: () => {
         router.push(`/${clientConfig.slug}/coupon/my/${res.id}`);
       },

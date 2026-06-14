@@ -120,7 +120,6 @@ export default function Page() {
       openAlert({
         title: "ใช้คูปองไม่สำเร็จ",
         message: response.message,
-        clientConfig,
         icon: <IconMoodSadFilled />,
       });
       return;
@@ -130,7 +129,6 @@ export default function Page() {
       title: "ใช้คูปองสำเร็จ",
       message: `คุณได้ใช้คูปอง ${coupon.name} เรียบร้อยแล้ว`,
       icon: <IconMoodSmileDizzy />,
-      clientConfig,
       onConfirm: () => {
         router.push(`/${clientConfig.slug}/history`);
       },
