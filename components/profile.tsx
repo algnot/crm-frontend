@@ -3,11 +3,18 @@ import { useEffect, useState, useCallback } from "react";
 import { useApp } from "./providers/app-provider";
 import Link from "next/link";
 import { Award, Scan } from "tabler-icons-react";
-import { openScanner, closeScanner } from "@/util/qr-scanner";
 import { GetUserPointRespont, isErrorResponse } from "@/types/request";
 
 export default function Profile() {
-  const { userProfile, clientConfig, backendClient, setUserPoint } = useApp();
+  const {
+    userProfile,
+    clientConfig,
+    backendClient,
+    setUserPoint,
+    openScanner,
+    closeScanner,
+    openAlert,
+  } = useApp();
 
   const [mainPoint, setMainPoint] = useState<GetUserPointRespont>({
     currency: {
@@ -55,11 +62,19 @@ export default function Profile() {
         return;
       }
 
-      alert(`QR Code:\n${qrText}`);
+      await openAlert({
+        title: "QR Code",
+        message: qrText,
+        primaryColor: clientConfig.ui.primary_color,
+      });
       await fetchData();
     } catch (err) {
       console.error(err);
-      alert("เกิดข้อผิดพลาด");
+      await openAlert({
+        title: "เกิดข้อผิดพลาด",
+        message: "เกิดข้อผิดพลาด",
+        primaryColor: clientConfig.ui.primary_color,
+      });
     }
   };
 

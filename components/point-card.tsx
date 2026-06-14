@@ -1,8 +1,6 @@
 import { GetUserPointRespont, isErrorResponse } from "@/types/request";
 import React, { useEffect, useState, useCallback } from "react";
 import { useApp } from "./providers/app-provider";
-import { IconScan } from "@tabler/icons-react";
-import { openScanner, closeScanner } from "@/util/qr-scanner";
 
 export default function PointCard() {
   const {
@@ -11,6 +9,8 @@ export default function PointCard() {
     backendClient,
     setUserPoint,
     appUserProfile,
+    closeScanner,
+    openAlert,
   } = useApp();
 
   const [mainPoint, setMainPoint] = useState<GetUserPointRespont>({
@@ -58,11 +58,19 @@ export default function PointCard() {
         return;
       }
 
-      alert(`QR Code:\n${qrText}`);
+      await openAlert({
+        title: "QR Code",
+        message: qrText,
+        primaryColor: clientConfig.ui.primary_color,
+      });
       await fetchData();
     } catch (err) {
       console.error(err);
-      alert("เกิดข้อผิดพลาด");
+      await openAlert({
+        title: "เกิดข้อผิดพลาด",
+        message: "เกิดข้อผิดพลาด",
+        primaryColor: clientConfig.ui.primary_color,
+      });
     }
   };
   return (
@@ -88,14 +96,14 @@ export default function PointCard() {
           พ้อยคงเหลือ
         </p>
         <div
-          className="px-2 py-0.5 rounded-full flex items-center gap-[5px] text-[10px] font-bold"
+          className="flex items-center gap-1.25 rounded-full px-2 py-0.5 text-[10px] font-bold"
           style={{
             color: appUserProfile?.tier.color,
             border: `1px solid ${appUserProfile?.tier.color}`,
           }}
         >
           <div
-            className="w-[5px] h-[5px] rounded-full"
+            className="h-1.25 w-1.25 rounded-full"
             style={{
               backgroundColor: appUserProfile?.tier.color,
             }}

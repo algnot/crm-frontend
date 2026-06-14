@@ -5,11 +5,10 @@
 import React from "react";
 import { useApp } from "./providers/app-provider";
 import { IconBell, IconCamera } from "@tabler/icons-react";
-import { openReceipt } from "@/util/receipt-camera";
 import { isErrorResponse } from "@/types/request";
 
 export default function HeaderSection() {
-  const { userProfile, clientConfig, backendClient } = useApp();
+  const { userProfile, clientConfig, backendClient, openReceipt } = useApp();
 
   return (
     <div>
@@ -129,8 +128,13 @@ export default function HeaderSection() {
                 );
 
                 if (isErrorResponse(response)) {
-                  return;
+                  return {
+                    ok: false,
+                    message: response.message || "ส่งใบเสร็จไม่สำเร็จ",
+                  };
                 }
+
+                return { ok: true };
               },
             });
           }}

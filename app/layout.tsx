@@ -8,6 +8,9 @@ import {
   Manrope,
 } from "next/font/google";
 import { FullLoadingProvider } from "@/components/providers/full-loading-provider";
+import { AlertModalProvider } from "@/components/providers/alert-modal-provider";
+import { ScannerModalProvider } from "@/components/providers/scanner-modal-provider";
+import { ReceiptCameraModalProvider } from "@/components/providers/receipt-camera-modal-provider";
 
 const ibmPlexSansThai = IBM_Plex_Sans_Thai({
   variable: "--font-ibm-plex-sans-thai",
@@ -45,9 +48,15 @@ export default function RootLayout({
       >
         <Suspense fallback={<div></div>}>
           <FullLoadingProvider>
-            <AppProvider>
-              <div className="container">{children}</div>
-            </AppProvider>
+            <AlertModalProvider>
+              <ScannerModalProvider>
+                <ReceiptCameraModalProvider>
+                  <AppProvider>
+                    <div className="container">{children}</div>
+                  </AppProvider>
+                </ReceiptCameraModalProvider>
+              </ScannerModalProvider>
+            </AlertModalProvider>
           </FullLoadingProvider>
         </Suspense>
       </body>

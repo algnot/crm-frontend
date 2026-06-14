@@ -10,10 +10,8 @@ import {
   IconSettings,
   IconShoppingBag,
 } from "@tabler/icons-react";
-import { closeScanner, openScanner } from "@/util/qr-scanner";
 import { useRouter } from "next/navigation";
 import { useApp } from "./providers/app-provider";
-import { openReceipt } from "@/util/receipt-camera";
 import { isErrorResponse } from "@/types/request";
 
 const navbars = [
@@ -55,6 +53,9 @@ export default function Navbar() {
     isShowNavbar,
     userProfile,
     backendClient,
+    closeScanner,
+    openReceipt,
+    openAlert,
   } = useApp();
 
   const getHref = (href: string) =>
@@ -83,10 +84,18 @@ export default function Navbar() {
         return;
       }
 
-      alert(`QR Code:\n${qrText}`);
+      await openAlert({
+        title: "QR Code",
+        message: qrText,
+        primaryColor: clientConfig.ui.primary_color,
+      });
     } catch (err) {
       console.error(err);
-      alert("เกิดข้อผิดพลาด");
+      await openAlert({
+        title: "เกิดข้อผิดพลาด",
+        message: "เกิดข้อผิดพลาด",
+        primaryColor: clientConfig.ui.primary_color,
+      });
     }
   };
   return (
@@ -139,8 +148,13 @@ export default function Navbar() {
                         );
 
                         if (isErrorResponse(response)) {
-                          return;
+                          return {
+                            ok: false,
+                            message: response.message || "ส่งใบเสร็จไม่สำเร็จ",
+                          };
                         }
+
+                        return { ok: true };
                       },
                     });
                   }}

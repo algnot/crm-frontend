@@ -1,6 +1,25 @@
 "use client";
 import type { Profile } from "@liff/get-profile";
-import { createContext, ReactNode, useContext, useState, useMemo } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
+import {
+  type OpenAlertOptions,
+  useAlertModalContext,
+} from "./alert-modal-provider";
+import {
+  type OpenReceiptOptions,
+  useReceiptCameraModalContext,
+} from "./receipt-camera-modal-provider";
+import {
+  type OpenScannerOptions,
+  useScannerModalContext,
+} from "./scanner-modal-provider";
 import { useFullLoadingContext } from "./full-loading-provider";
 import { BackendClient } from "@/util/request";
 import {
@@ -23,6 +42,12 @@ interface AppContextType {
   setUserPoint: (value: GetUserPointRespont[]) => void;
   isShowNavbar: boolean;
   setIsShowNavbar: (value: boolean) => void;
+  openAlert: (options: OpenAlertOptions) => Promise<void>;
+  closeAlert: () => void;
+  openScanner: (options?: OpenScannerOptions) => void;
+  closeScanner: () => void;
+  openReceipt: (options?: OpenReceiptOptions) => void;
+  closeReceipt: () => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -40,6 +65,30 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
   const [userPoint, setUserPoint] = useState<GetUserPointRespont[]>([]);
   const [isShowNavbar, setIsShowNavbar] = useState<boolean>(true);
+  const { openAlert, closeAlert } = useAlertModalContext();
+  const { openScanner: openScannerModal, closeScanner } =
+    useScannerModalContext();
+  const { openReceipt: openReceiptModal, closeReceipt } =
+    useReceiptCameraModalContext();
+
+  const openScanner = useCallback(
+    (options: OpenScannerOptions = {}) => {
+      closeReceipt();
+      openScannerModal(options);
+    },
+    [closeReceipt, openScannerModal],
+  );
+
+  const openReceipt = useCallback(
+    (options: OpenReceiptOptions = {}) => {
+      closeScanner();
+      openReceiptModal({
+        ...options,
+        clientConfig,
+      });
+    },
+    [closeScanner, openReceiptModal, clientConfig],
+  );
 
   const value: AppContextType = useMemo(
     () => ({
@@ -55,6 +104,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setUserPoint,
       isShowNavbar,
       setIsShowNavbar,
+      openAlert,
+      closeAlert,
+      openScanner,
+      closeScanner,
+      openReceipt,
+      closeReceipt,
     }),
     [
       userProfile,
@@ -69,6 +124,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setUserPoint,
       isShowNavbar,
       setIsShowNavbar,
+      openAlert,
+      closeAlert,
+      openScanner,
+      closeScanner,
+      openReceipt,
+      closeReceipt,
     ],
   );
 
