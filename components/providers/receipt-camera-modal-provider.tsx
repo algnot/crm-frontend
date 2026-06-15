@@ -282,7 +282,7 @@ function ReceiptCameraModal({
           <img
             src={`data:image/jpeg;base64,${receiptImage}`}
             alt="receipt-preview"
-            className="w-full bg-black object-contain mt-[40%]"
+            className="w-full h-full bg-black object-cover"
           />
 
           <div

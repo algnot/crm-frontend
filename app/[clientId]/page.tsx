@@ -137,7 +137,13 @@ export default function Home() {
                     key={`modal-ind-${i}`}
                     type="button"
                     onClick={() => setModalIndex(i)}
-                    className={`h-2.5 rounded-full ${modalIndex === i ? "w-7 bg-fuchsia-400" : "w-2.5 bg-white/25"}`}
+                    className={`h-2.5 rounded-full ${modalIndex === i ? "w-7" : "w-2.5"}`}
+                    style={{
+                      backgroundColor:
+                        modalIndex === i
+                          ? clientConfig.ui.primary_color
+                          : clientConfig.ui.text_gray_color,
+                    }}
                   />
                 ))}
               </div>
@@ -146,18 +152,20 @@ export default function Home() {
                   text="ข้าม"
                   size="sm"
                   onClick={closeModal}
-                  className="bg-white/10! w-1/3!"
+                  className="bg-white/10!"
                 />
 
-                <Button
-                  text="อ่านเงื่อนไข"
-                  size="sm"
-                  onClick={() => {
-                    const action = adsItems[modalIndex].action;
-                    if (action) window.location.href = action;
-                    else goModalNext();
-                  }}
-                />
+                {adsItems[modalIndex].action && (
+                  <Button
+                    text="อ่านเงื่อนไข"
+                    size="sm"
+                    className="w-5/2!"
+                    onClick={() => {
+                      const action = adsItems[modalIndex].action;
+                      if (action) window.location.href = action;
+                    }}
+                  />
+                )}
               </div>
             </div>
           </div>

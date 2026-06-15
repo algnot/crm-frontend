@@ -109,13 +109,6 @@ export default function NewsSection() {
         >
           {adsItems.map((adsItem, index) => {
             const isClickable = !!adsItem.action;
-            const eyebrow = [
-              formatDate(adsItem.start_date),
-              formatDate(adsItem.end_date),
-            ]
-              .filter(Boolean)
-              .join(" • ")
-              .toUpperCase();
 
             return (
               <button
