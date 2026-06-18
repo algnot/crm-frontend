@@ -36,6 +36,12 @@ const manrope = Manrope({
   weight: ["400", "500", "600", "700", "800"],
 });
 
+const notoSansThai = IBM_Plex_Sans_Thai({
+  variable: "--font-noto-sans-thai",
+  subsets: ["thai", "latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -43,9 +49,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${ibmPlexSansThai.variable} ${bodoniModa.variable} ${jetBrainsMono.variable} ${manrope.variable} antialiased`}
-      >
+      <body className={`${notoSansThai.variable} antialiased`}>
         <Suspense fallback={<div></div>}>
           <FullLoadingProvider>
             <AlertModalProvider>

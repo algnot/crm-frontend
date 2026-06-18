@@ -15,15 +15,17 @@
 body {
   color: var(--primary);
   background: var(--background);
-  font-family:
+  /* font-family:
     var(--font-ibm-plex-sans-thai),
     -apple-system,
     BlinkMacSystemFont,
-    sans-serif;
+    sans-serif; */
+  /* font-family: var(--font-jetbrains-mono), monospace; */
+  font-family: var(--font-noto-sans-thai), sans-serif;
   width: 500px;
   margin: 0 auto;
 }
-
+/* 
 .font-bodoni {
   font-family: var(--font-bodoni-moda), serif;
 }
@@ -38,6 +40,14 @@ body {
     -apple-system,
     BlinkMacSystemFont,
     sans-serif;
+} */
+
+.noto-sans-thai {
+  font-family: "Noto Sans Thai", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
 }
 
 .font-manrope {
