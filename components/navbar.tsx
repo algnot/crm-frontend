@@ -98,7 +98,9 @@ export default function Navbar() {
   };
   return (
     <>
-      <div style={{ height: 110 }}></div>
+      <div
+        style={{ height: 110, paddingBottom: "env(safe-area-inset-bottom)" }}
+      ></div>
       <div
         className="navbar grid grid-cols-[1fr_1fr_72px_1fr_1fr] justify-around items-center pt-2 px-3.5 pb-7.5 shadow-md bg-[linear-gradient(180deg,transparent,var(--bg)_30%)]"
         style={{

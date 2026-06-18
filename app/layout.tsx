@@ -11,6 +11,7 @@ import { FullLoadingProvider } from "@/components/providers/full-loading-provide
 import { AlertModalProvider } from "@/components/providers/alert-modal-provider";
 import { ScannerModalProvider } from "@/components/providers/scanner-modal-provider";
 import { ReceiptCameraModalProvider } from "@/components/providers/receipt-camera-modal-provider";
+import { Viewport } from "next";
 
 const ibmPlexSansThai = IBM_Plex_Sans_Thai({
   variable: "--font-ibm-plex-sans-thai",
@@ -41,6 +42,12 @@ const notoSansThai = IBM_Plex_Sans_Thai({
   subsets: ["thai", "latin"],
   weight: ["300", "400", "500", "600", "700"],
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export default function RootLayout({
   children,
