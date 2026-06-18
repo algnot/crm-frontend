@@ -4,10 +4,12 @@ import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useApp } from "./providers/app-provider";
 import { formatDate } from "@/util/format-date";
+import { AdsItem } from "@/types/request";
 
 export default function NewsSection() {
   const { clientConfig } = useApp();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedAdsItem, setSelectedAdsItem] = useState<AdsItem | null>(null);
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const cardRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -108,22 +110,11 @@ export default function NewsSection() {
           className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-1"
         >
           {adsItems.map((adsItem, index) => {
-            const isClickable = !!adsItem.action;
-
             return (
-              <button
+              <div
                 key={`${adsItem.id}-${index}`}
-                type="button"
-                ref={(element) => {
-                  cardRefs.current[index] = element;
-                }}
-                className="block w-[70%] shrink-0 snap-start overflow-hidden rounded-2xl border border-white/8 bg-[#111111] text-left shadow-[0_18px_50px_-24px_rgba(0,0,0,0.9)] disabled:cursor-default sm:w-[78%]"
-                disabled={!isClickable}
-                onClick={() => {
-                  if (adsItem.action) {
-                    window.location.href = adsItem.action;
-                  }
-                }}
+                className="block w-[70%] shrink-0 snap-start overflow-hidden rounded-2xl border border-white/8 bg-[#111111] text-left shadow-[0_18px_50px_-24px_rgba(0,0,0,0.9)] disabled:cursor-default sm:w-[78%] cursor-pointer"
+                onClick={() => setSelectedAdsItem(adsItem)}
               >
                 <img
                   src={adsItem.image_url}
@@ -148,7 +139,7 @@ export default function NewsSection() {
                     {adsItem.title}
                   </h3>
                 </div>
-              </button>
+              </div>
             );
           })}
         </div>
@@ -182,6 +173,77 @@ export default function NewsSection() {
           </>
         )}
       </div>
+
+      {selectedAdsItem && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm"
+          onClick={() => setSelectedAdsItem(null)}
+        >
+          <div
+            className="w-full max-w-md rounded-t-3xl text-white overflow-hidden h-[80vh] flex flex-col"
+            style={{
+              background: clientConfig.ui.surface_color,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={selectedAdsItem.image_url}
+              alt={selectedAdsItem.title}
+              className="w-full aspect-video object-cover"
+            />
+
+            <div className="px-5 pt-4 pb-8 space-y-3 flex-1 flex flex-col overflow-y-auto">
+              <div className="flex items-start justify-between gap-3">
+                <div className="space-y-1">
+                  <p
+                    className="text-[10px] font-semibold font-mono"
+                    style={{ color: clientConfig.ui.primary_color }}
+                  >
+                    {[
+                      formatDate(selectedAdsItem.start_date),
+                      formatDate(selectedAdsItem.end_date),
+                    ].join(" • ")}
+                  </p>
+                  <h3 className="text-2xl font-medium font-bodoni leading-tight">
+                    {selectedAdsItem.title}
+                  </h3>
+                </div>
+              </div>
+
+              {selectedAdsItem.message && (
+                <p className="text-sm text-white/70 leading-relaxed flex-1">
+                  {selectedAdsItem.message}
+                </p>
+              )}
+
+              {selectedAdsItem.action && (
+                <>
+                  <a
+                    href={selectedAdsItem.action}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-1 block w-full rounded-xl py-3 text-center text-sm font-semibold"
+                    style={{
+                      backgroundColor: clientConfig.ui.primary_color,
+                      color: clientConfig.ui.text_color,
+                    }}
+                  >
+                    ดูเพิ่มเติม
+                  </a>
+                  <button
+                    type="button"
+                    aria-label="Close"
+                    onClick={() => setSelectedAdsItem(null)}
+                    className="mt-1 rounded-xl py-2 text-sm font-semibold border border-white/12 bg-white/8 p-1.5 text-white/60"
+                  >
+                    ปิด
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
