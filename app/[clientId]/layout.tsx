@@ -1,5 +1,6 @@
 "use client";
 import Navbar from "@/components/navbar";
+import SkeletonHome from "@/components/skeleton-home";
 import { useApp } from "@/components/providers/app-provider";
 import { isErrorResponse } from "@/types/request";
 import { getLiffUserProfile } from "@/util/line-liff";
@@ -34,7 +35,7 @@ export default function RootLayout({
         window.location.href = "/";
         return;
       }
-      setIsWaiting(false);
+      setIsWaiting(true);
       setClientConfig(response);
 
       const liffProfile = await getLiffUserProfile(
@@ -70,6 +71,7 @@ export default function RootLayout({
         }
 
         setAppUserProfile(appProfile);
+        setIsWaiting(false);
       }
     };
 
@@ -106,8 +108,12 @@ export default function RootLayout({
     clientConfig.ui.background_color,
   ]);
 
-  if (isWaiting || !clientConfig || !userProfile) {
+  if (!clientConfig || !userProfile) {
     return;
+  }
+
+  if (isWaiting && window.location.pathname !== `/${clientId}/member`) {
+    return <SkeletonHome />;
   }
 
   return (

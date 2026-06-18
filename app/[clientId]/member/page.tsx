@@ -1,10 +1,16 @@
 "use client";
 import { useApp } from "@/components/providers/app-provider";
+import SkeletonMember from "@/components/skeleton-member";
 import { IconLogout } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
-  const { userProfile, clientConfig, appUserProfile, setFullLoading } =
-    useApp();
+  const { userProfile, clientConfig, appUserProfile } = useApp();
+
+  const router = useRouter();
+
+  if (!appUserProfile) return <SkeletonMember />;
+
   return (
     <div className="p-5">
       <div
@@ -154,9 +160,8 @@ export default function Page() {
           borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
         }}
         onClick={async () => {
-          setFullLoading(true);
           window.localStorage.clear();
-          window.location.href = `/${clientConfig.slug}`;
+          router.push(`/${clientConfig.slug}`);
         }}
       >
         <IconLogout size={18} /> ออกจากระบบ

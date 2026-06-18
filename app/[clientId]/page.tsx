@@ -135,7 +135,7 @@ export default function Home() {
 
               {adsItems[modalIndex].message && (
                 <p
-                  className="mb-5 text-[12.5px] leading-5 text-pretty"
+                  className="mb-5 text-[12.5px] leading-5 text-pretty line-clamp-4"
                   style={{
                     color: clientConfig.ui.text_gray_color,
                   }}

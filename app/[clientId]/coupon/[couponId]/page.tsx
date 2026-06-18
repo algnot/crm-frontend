@@ -5,6 +5,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useApp } from "@/components/providers/app-provider";
+import { Sk } from "@/components/skeleton";
 import { CouponType, isErrorResponse } from "@/types/request";
 import { ArrowLeft } from "tabler-icons-react";
 import { useParams, useRouter } from "next/navigation";
@@ -72,6 +73,45 @@ export default function Page() {
         ?.balance || 0
     );
   }, [userPoint, coupon]);
+
+  if (!coupon) {
+    const line = `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 22%, transparent)`;
+    const surface = clientConfig.ui.surface_color;
+    const border = `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`;
+    return (
+      <div
+        className="min-h-screen relative px-4.5 pt-4.5 pb-20"
+        style={{ backgroundColor: clientConfig.ui.background_color }}
+      >
+        <Sk className="h-10 w-10 rounded-full" bg={surface} />
+        <Sk className="mt-4 h-45 w-full rounded-2xl" bg={surface} />
+        <Sk className="mt-5 h-9 rounded-lg" bg={line} style={{ width: "72%" }} />
+        <div
+          className="mt-5 rounded-3xl border-[0.5px]"
+          style={{ background: surface, borderColor: border }}
+        >
+          <div className="p-5 flex justify-between items-center">
+            <Sk className="h-4 w-16" bg={line} />
+            <Sk className="h-4 w-24" bg={line} />
+          </div>
+          <div
+            className="p-5 flex justify-between items-center border-t-[0.5px]"
+            style={{ borderColor: border }}
+          >
+            <Sk className="h-4 w-16" bg={line} />
+            <Sk className="h-4 w-20" bg={line} />
+          </div>
+        </div>
+        <Sk className="mt-8 mb-3 h-3 w-12" bg={line} />
+        {[90, 75, 85, 55].map((w, i) => (
+          <Sk key={i} className="h-3 mb-2.5" bg={line} style={{ width: `${w}%` }} />
+        ))}
+        <div className="fixed bottom-0 left-0 z-30 w-full p-4">
+          <Sk className="h-14 rounded-2xl" bg={surface} />
+        </div>
+      </div>
+    );
+  }
 
   const redeemCoupon = async () => {
     if (!coupon || !clientConfig || !userProfile) return;

@@ -4,6 +4,7 @@
 
 import Button from "@/components/button";
 import { useApp } from "@/components/providers/app-provider";
+import { Sk } from "@/components/skeleton";
 import { isErrorResponse, Redeem } from "@/types/request";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -51,6 +52,41 @@ export default function Page() {
   useEffect(() => {
     void fetchData();
   }, [fetchData]);
+
+  if (!redeemDetail) {
+    const line = `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 22%, transparent)`;
+    const surface = clientConfig.ui.surface_color;
+    const border = `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`;
+    return (
+      <div
+        className="min-h-screen relative px-4.5 pt-4.5 pb-28"
+        style={{ backgroundColor: clientConfig.ui.background_color }}
+      >
+        <Sk className="h-10 w-10 rounded-full" bg={surface} />
+        <Sk className="mt-4 h-45 w-full rounded-2xl" bg={surface} />
+        <Sk className="mt-5 h-9 rounded-lg" bg={line} style={{ width: "72%" }} />
+        <Sk className="mt-1 h-3 w-28" bg={line} />
+        <div
+          className="mt-5 rounded-3xl border-[0.5px]"
+          style={{ background: surface, borderColor: border }}
+        >
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className={`p-5 flex justify-between items-center ${i > 1 ? "border-t-[0.5px]" : ""}`}
+              style={{ borderColor: border }}
+            >
+              <Sk className="h-4 w-16" bg={line} />
+              <Sk className="h-4 w-24" bg={line} />
+            </div>
+          ))}
+        </div>
+        <div className="fixed bottom-0 left-0 z-30 w-full p-4">
+          <Sk className="h-14 rounded-2xl" bg={surface} />
+        </div>
+      </div>
+    );
+  }
 
   const onReedeem = async () => {
     if (!redeemCode || !userProfile?.userId) return;

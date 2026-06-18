@@ -2,6 +2,7 @@
 import ChipButton from "@/components/chip-button";
 import CouponCard from "@/components/coupon-card";
 import { useApp } from "@/components/providers/app-provider";
+import { Sk } from "@/components/skeleton";
 import { CouponType, isErrorResponse, UserCoupon } from "@/types/request";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,6 +11,7 @@ import { Ticket } from "tabler-icons-react";
 export default function Page() {
   const { clientConfig, backendClient, userProfile } = useApp();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
   const [userCoupons, setUserCoupons] = useState<UserCoupon[]>([]);
   const [selectedTab, setSelectedTab] = useState<
     "available" | "used" | "expired"
@@ -18,6 +20,7 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       if (!userProfile) {
+        setIsLoading(false);
         return;
       }
 
@@ -32,6 +35,7 @@ export default function Page() {
       }
 
       setUserCoupons(response);
+      setIsLoading(false);
     };
 
     Promise.resolve().then(fetchData);
@@ -57,6 +61,25 @@ export default function Page() {
       : selectedTab === "used"
         ? usedCoupon
         : expiredCoupon;
+
+  if (isLoading) {
+    const line = `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 22%, transparent)`;
+    return (
+      <div className="px-5 pt-4">
+        <Sk className="h-9 w-44 mt-5 mb-5" bg={line} />
+        <div className="flex gap-2 mb-5">
+          {[80, 72, 80].map((w, i) => (
+            <Sk key={i} className="h-8 rounded-full" bg={line} style={{ width: w }} />
+          ))}
+        </div>
+        <div className="mt-5 flex flex-col gap-3">
+          {[1, 2, 3].map((i) => (
+            <Sk key={i} className="h-24 rounded-[18px]" bg={clientConfig.ui.surface_color} />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="px-5 pt-4">

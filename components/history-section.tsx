@@ -8,10 +8,12 @@ import {
 import MenuCard from "./menu-card";
 import ChipButton from "./chip-button";
 import { Award } from "tabler-icons-react";
+import { Sk } from "./skeleton";
 
 export default function HistorySection() {
   const { clientConfig, userProfile, backendClient } = useApp();
 
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState<
     "all" | "earn" | "burn" | "tranfer" | "expire"
   >("all");
@@ -52,7 +54,10 @@ export default function HistorySection() {
 
   useEffect(() => {
     const loadHistories = async () => {
-      if (!clientConfig.slug || !userProfile?.userId) return;
+      if (!clientConfig.slug || !userProfile?.userId) {
+        setIsLoading(false);
+        return;
+      }
 
       const histories = await backendClient.getUserPointHistory(
         clientConfig.slug,
@@ -61,10 +66,12 @@ export default function HistorySection() {
 
       if (isErrorResponse(histories)) {
         setpointHistories([]);
+        setIsLoading(false);
         return;
       }
 
       setpointHistories(histories.filter((h) => h.currency.is_default));
+      setIsLoading(false);
     };
 
     Promise.resolve().then(loadHistories);
@@ -86,6 +93,40 @@ export default function HistorySection() {
       : selectedTab === "expire"
         ? pointHistories.filter((ph) => isExpired(ph.expiration_date))
         : pointHistories.filter((ph) => ph.type === selectedTab);
+
+  if (isLoading) {
+    const line = `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 22%, transparent)`;
+    const surface = clientConfig.ui.surface_color;
+    const border = `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`;
+    return (
+      <div>
+        <Sk className="h-9 w-56 mt-5 mb-6" bg={line} />
+        <div
+          className="rounded-[18px] border-[0.5px] p-4.5 mb-4.5 grid grid-cols-3"
+          style={{ background: surface, borderColor: clientConfig.ui.text_gray_color }}
+        >
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className={`flex flex-col items-center gap-2 py-1 ${i < 2 ? "border-r-[0.5px]" : ""}`}
+              style={{ borderColor: border }}
+            >
+              <Sk className="h-2.5 w-6" bg={line} />
+              <Sk className="h-7 w-14" bg={line} />
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-2 mb-4.5">
+          {[72, 52, 52, 40, 60].map((w, i) => (
+            <Sk key={i} className="h-8 rounded-full shrink-0" bg={line} style={{ width: w }} />
+          ))}
+        </div>
+        {Array.from({ length: 7 }).map((_, i) => (
+          <Sk key={i} className="h-16 mb-3 rounded-2xl" bg={surface} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div>
