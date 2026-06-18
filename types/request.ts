@@ -223,6 +223,14 @@ export interface Redeem {
   expiration_date: number;
   active: boolean;
   currency: Currency;
+  reward_coupon: RewardCoupon;
+}
+
+export interface RewardCoupon {
+  id: number;
+  name: string;
+  image_url: string;
+  value: number;
 }
 
 export interface CouponType {

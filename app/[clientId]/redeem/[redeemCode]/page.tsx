@@ -1,26 +1,39 @@
 "use client";
+
+/* eslint-disable react-hooks/set-state-in-effect */
+
 import Button from "@/components/button";
 import { useApp } from "@/components/providers/app-provider";
 import { isErrorResponse, Redeem } from "@/types/request";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { ArrowLeft } from "tabler-icons-react";
+import { IconGift } from "@tabler/icons-react";
 
 export default function Page() {
   const params = useParams();
-  const { backendClient, clientConfig, userProfile } = useApp();
+  const router = useRouter();
+  const {
+    backendClient,
+    clientConfig,
+    userProfile,
+    setIsShowNavbar,
+    openAlert,
+  } = useApp();
   const redeemCode = Array.isArray(params.redeemCode)
     ? params.redeemCode[0]
     : params.redeemCode;
   const [redeemDetail, setRedeemDetail] = useState<Redeem>();
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    Promise.resolve().then(() => setIsShowNavbar(false));
+    return () => {
+      setIsShowNavbar(true);
+    };
+  }, [setIsShowNavbar]);
 
-  const fetchData = async () => {
-    if (!redeemCode) {
-      return;
-    }
+  const fetchData = useCallback(async () => {
+    if (!redeemCode) return;
 
     const redeemDetail = await backendClient.getRedeemDetail(
       clientConfig.slug,
@@ -33,12 +46,14 @@ export default function Page() {
     if (redeemDetail) {
       setRedeemDetail(redeemDetail);
     }
-  };
+  }, [backendClient, clientConfig.slug, redeemCode]);
+
+  useEffect(() => {
+    void fetchData();
+  }, [fetchData]);
 
   const onReedeem = async () => {
-    if (!redeemCode || !userProfile?.userId) {
-      return;
-    }
+    if (!redeemCode || !userProfile?.userId) return;
 
     const response = await backendClient.redeemCode(
       clientConfig.slug,
@@ -47,61 +62,127 @@ export default function Page() {
     );
 
     if (isErrorResponse(response)) {
-      alert(response.message);
-      window.location.href = `/${clientConfig.slug}`;
+      openAlert({
+        title: "เกิดข้อผิดพลาด",
+        message: response.message,
+      });
       return;
     }
 
-    alert("สะสมคะแนนสำเร็จแล้ว!");
-    window.location.href = `/${clientConfig.slug}`;
+    openAlert({
+      title: "สำเร็จ",
+      message: "สะสมคะแนนสำเร็จแล้ว!",
+    });
+    router.push(`/${clientConfig.slug}`);
   };
 
+  const typeLabel =
+    redeemDetail?.type === "burn"
+      ? "ใช้แต้ม"
+      : redeemDetail?.type === "tranfer"
+        ? "โอนแต้ม"
+        : "สะสมแต้ม";
+
   return (
-    <div>
-      <div className="p-5">
-        <div className="bg-white rounded-md shadow-md p-5">
-          <div className="flex items-center gap-4">
-            <div className="bg-white p-2 rounded-full w-fit h-fit item-center">
-              <img src={clientConfig.logo_url} className="h-10 w-10" />
-            </div>
-            <div style={{ color: clientConfig.ui.text_color }}>
-              <div className="text-2xl">{redeemDetail?.name}</div>
-              <div className="text-sm text-gray-400">{redeemDetail?.code}</div>
-            </div>
+    <div
+      className="min-h-screen relative px-4.5 pt-4.5 pb-28"
+      style={{
+        backgroundColor: clientConfig.ui.background_color,
+        color: clientConfig.ui.text_color,
+      }}
+    >
+      {/* Back Button */}
+      <button
+        onClick={() => router.push(`/${clientConfig.slug}`)}
+        className="rounded-full p-2 shadow-md cursor-pointer"
+        style={{ backgroundColor: clientConfig.ui.surface_color }}
+      >
+        <ArrowLeft size={22} color={clientConfig.ui.text_color} />
+      </button>
+
+      {/* Logo / Image */}
+      <div
+        className="mt-4 h-45 w-full rounded-2xl flex items-center justify-center overflow-hidden"
+        style={{ backgroundColor: clientConfig.ui.surface_color }}
+      >
+        {clientConfig.logo_url ? (
+          <img
+            src={clientConfig.logo_url}
+            alt="redeem"
+            className="h-24 w-24 object-contain"
+          />
+        ) : (
+          <IconGift size={64} color={clientConfig.ui.text_gray_color} />
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="mt-5">
+        <div
+          className="text-[32px] font-medium font-bodoni"
+          style={{ color: clientConfig.ui.text_color }}
+        >
+          {redeemDetail?.name || "—"}
+        </div>
+
+        <p
+          className="mt-1 text-[12px] font-mono"
+          style={{ color: clientConfig.ui.text_gray_color }}
+        >
+          {redeemDetail?.code}
+        </p>
+
+        {/* Details Card */}
+        <div
+          className="mt-5 rounded-3xl border-[0.5px]"
+          style={{
+            backgroundColor: clientConfig.ui.surface_color,
+            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+          }}
+        >
+          {/* Type row */}
+          <div className="p-5 flex items-center justify-between text-[13px]">
+            <p style={{ color: clientConfig.ui.text_gray_color }}>ประเภท</p>
+            <p style={{ color: clientConfig.ui.text_color }}>{typeLabel}</p>
           </div>
 
-          <div className="text-md mt-6 flex justify-between">
-            <div className="font-medium">จำนวน</div>
-            <div className="text-gray-500">
+          {/* Points row */}
+          <div
+            className="p-5 flex items-center justify-between border-t-[0.5px] text-[13px]"
+            style={{
+              borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+            }}
+          >
+            <p style={{ color: clientConfig.ui.text_gray_color }}>จำนวน</p>
+            <p style={{ color: clientConfig.ui.text_color }}>
               {redeemDetail?.value.toLocaleString()}{" "}
               {redeemDetail?.currency.name}
-            </div>
-          </div>
-          <div className="text-md mt-1 flex justify-between">
-            <div className="font-medium">จำกัดต่อ user</div>
-            <div className="text-gray-500">
-              {redeemDetail?.limit_per_user} ครั้ง
-            </div>
-          </div>
-          <div className="text-md mt-1 flex justify-between">
-            <div className="font-medium">จำกัดต่อ QR Code</div>
-            <div className="text-gray-500">
-              {redeemDetail?.limit_per_qr.toLocaleString()} ครั้ง
-            </div>
-          </div>
-          <div className="text-md mt-1 flex justify-between">
-            <div className="font-medium">คงเหลือที่ใช้ได้</div>
-            <div className="text-gray-500">
-              {(
-                (redeemDetail?.limit_per_qr || 0) -
-                (redeemDetail?.redeemed_count || 0)
-              ).toLocaleString()}{" "}
-              ครั้ง
-            </div>
+            </p>
           </div>
 
-          <Button className="mt-6" text="สะสมคะแนน" onClick={onReedeem} />
+          {/* Reward coupon row */}
+          {redeemDetail?.reward_coupon?.name && (
+            <div
+              className="p-5 flex items-center justify-between border-t-[0.5px] text-[13px]"
+              style={{
+                borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+              }}
+            >
+              <p style={{ color: clientConfig.ui.text_gray_color }}>
+                รางวัลคูปอง
+              </p>
+              <p style={{ color: clientConfig.ui.text_color }}>
+                {redeemDetail.reward_coupon.name} (
+                {redeemDetail.reward_coupon.value} {redeemDetail.currency.name})
+              </p>
+            </div>
+          )}
         </div>
+      </div>
+
+      {/* Bottom Button */}
+      <div className="fixed bottom-0 left-0 z-30 w-full p-4">
+        <Button text="สะสมคะแนน" onClick={onReedeem} />
       </div>
     </div>
   );

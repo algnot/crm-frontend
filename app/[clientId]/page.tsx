@@ -10,9 +10,21 @@ import { IconX } from "@tabler/icons-react";
 import TierCard from "@/components/tier-card";
 import Button from "@/components/button";
 import { formatDate } from "@/util/format-date";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { clientConfig } = useApp();
+
+  const searchParams = useSearchParams();
+  const redeemCode = searchParams.get("redeem_code");
+  const router = useRouter();
+
+  useEffect(() => {
+    if (redeemCode) {
+      router.push(`/${clientConfig.slug}/redeem/${redeemCode}`);
+    }
+  }, [redeemCode, clientConfig.slug, router]);
 
   const [showModal, setShowModal] = useState(false);
   const [modalIndex, setModalIndex] = useState(0);
