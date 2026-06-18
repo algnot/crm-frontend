@@ -234,7 +234,12 @@ export default function NewsSection() {
                     type="button"
                     aria-label="Close"
                     onClick={() => setSelectedAdsItem(null)}
-                    className="mt-1 rounded-xl py-2 text-sm font-semibold border border-white/12 bg-white/8 p-1.5 text-white/60"
+                    className="rounded-xl py-2.5 text-sm font-semibold border"
+                    style={{
+                      background: clientConfig.ui.surface_color,
+                      color: clientConfig.ui.text_color,
+                      borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+                    }}
                   >
                     ปิด
                   </button>
