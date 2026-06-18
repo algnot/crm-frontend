@@ -100,23 +100,21 @@ export default function Page() {
         <ArrowLeft size={22} color={clientConfig.ui.text_color} />
       </button>
 
-      {/* Logo / Image */}
       <div
         className="mt-4 h-45 w-full rounded-2xl flex items-center justify-center overflow-hidden"
         style={{ backgroundColor: clientConfig.ui.surface_color }}
       >
-        {clientConfig.logo_url ? (
+        {redeemDetail?.reward_coupon.image_url ? (
           <img
-            src={clientConfig.logo_url}
+            src={redeemDetail.reward_coupon.image_url}
             alt="redeem"
-            className="h-24 w-24 object-contain"
+            className="w-full h-full object-cover"
           />
         ) : (
           <IconGift size={64} color={clientConfig.ui.text_gray_color} />
         )}
       </div>
 
-      {/* Content */}
       <div className="mt-5">
         <div
           className="text-[32px] font-medium font-bodoni"
@@ -142,8 +140,11 @@ export default function Page() {
         >
           {/* Type row */}
           <div className="p-5 flex items-center justify-between text-[13px]">
-            <p style={{ color: clientConfig.ui.text_gray_color }}>ประเภท</p>
-            <p style={{ color: clientConfig.ui.text_color }}>{typeLabel}</p>
+            <p style={{ color: clientConfig.ui.text_gray_color }}>คะแนน</p>
+            <p style={{ color: clientConfig.ui.text_color }}>
+              {redeemDetail?.value.toLocaleString()}{" "}
+              {redeemDetail?.currency.name}
+            </p>
           </div>
 
           {/* Points row */}
@@ -153,10 +154,9 @@ export default function Page() {
               borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
             }}
           >
-            <p style={{ color: clientConfig.ui.text_gray_color }}>จำนวน</p>
+            <p style={{ color: clientConfig.ui.text_gray_color }}>รางวัล</p>
             <p style={{ color: clientConfig.ui.text_color }}>
-              {redeemDetail?.value.toLocaleString()}{" "}
-              {redeemDetail?.currency.name}
+              {redeemDetail?.reward_coupon.name}
             </p>
           </div>
 
@@ -169,11 +169,10 @@ export default function Page() {
               }}
             >
               <p style={{ color: clientConfig.ui.text_gray_color }}>
-                รางวัลคูปอง
+                มูลค่ารางวัล
               </p>
               <p style={{ color: clientConfig.ui.text_color }}>
-                {redeemDetail.reward_coupon.name} (
-                {redeemDetail.reward_coupon.value} {redeemDetail.currency.name})
+                {redeemDetail.reward_coupon.value}
               </p>
             </div>
           )}
