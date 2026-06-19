@@ -93,7 +93,7 @@ export default function NewsSection() {
       </div>
 
       <div className="relative">
-        {adsItems.length > 1 && (
+        {/* {adsItems.length > 1 && (
           <button
             type="button"
             aria-label="Previous advertisement"
@@ -102,7 +102,7 @@ export default function NewsSection() {
           >
             <IconChevronLeft size={18} />
           </button>
-        )}
+        )} */}
 
         <div
           ref={scrollerRef}
@@ -113,18 +113,18 @@ export default function NewsSection() {
             return (
               <div
                 key={`${adsItem.id}-${index}`}
-                className="block w-[70%] shrink-0 snap-start overflow-hidden rounded-2xl border border-white/8 bg-[#111111] text-left shadow-[0_18px_50px_-24px_rgba(0,0,0,0.9)] disabled:cursor-default sm:w-[78%] cursor-pointer"
+                className="block w-60 shrink-0 snap-start overflow-hidden rounded-2xl border border-white/8 bg-[#111111] text-left shadow-[0_18px_50px_-24px_rgba(0,0,0,0.9)] disabled:cursor-default sm:w-[78%] cursor-pointer"
                 onClick={() => setSelectedAdsItem(adsItem)}
               >
                 <img
                   src={adsItem.image_url}
                   alt={`ads-${index + 1}`}
-                  className="h-32.5 w-full aspect-[1.35/1] object-cover"
+                  className="w-full object-cover aspect-video"
                 />
 
                 <div className="space-y-1 bg-[#161616] px-3.5 pt-3 pb-3.5 text-white">
                   <p
-                    className="text-[10px] font-semibold font-mono"
+                    className="text-[10px] font-semibold font-mono truncate"
                     style={{
                       color: clientConfig.ui.primary_color,
                     }}
@@ -135,7 +135,7 @@ export default function NewsSection() {
                     ].join(" • ")}
                   </p>
 
-                  <p className="text-lg font-medium font-bodoni">
+                  <p className="text-lg font-medium font-bodoni line-clamp-2 mt-1">
                     {adsItem.title}
                   </p>
                 </div>
@@ -144,7 +144,7 @@ export default function NewsSection() {
           })}
         </div>
 
-        {adsItems.length > 1 && (
+        {/* {adsItems.length > 1 && (
           <>
             <button
               type="button"
@@ -153,7 +153,7 @@ export default function NewsSection() {
               className="absolute right-2 top-[38%] z-10 -translate-y-1/2 rounded-full border border-white/12 bg-black/45 p-2 text-white shadow-lg backdrop-blur-sm"
             >
               <IconChevronRight size={18} />
-            </button>
+            </button> 
 
             <div className="mt-4 flex items-center justify-center gap-2">
               {adsItems.map((adsItem, index) => (
@@ -171,7 +171,7 @@ export default function NewsSection() {
               ))}
             </div>
           </>
-        )}
+        )} */}
       </div>
 
       {selectedAdsItem && (
@@ -229,21 +229,21 @@ export default function NewsSection() {
                   >
                     ดูเพิ่มเติม
                   </a>
-                  <button
-                    type="button"
-                    aria-label="Close"
-                    onClick={() => setSelectedAdsItem(null)}
-                    className="mb-1 rounded-xl py-2.5 text-sm font-semibold border"
-                    style={{
-                      background: clientConfig.ui.surface_color,
-                      color: clientConfig.ui.text_color,
-                      borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
-                    }}
-                  >
-                    ปิด
-                  </button>
                 </>
               )}
+              <button
+                type="button"
+                aria-label="Close"
+                onClick={() => setSelectedAdsItem(null)}
+                className="mb-1 rounded-xl py-2.5 text-sm font-semibold border"
+                style={{
+                  background: clientConfig.ui.surface_color,
+                  color: clientConfig.ui.text_color,
+                  borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+                }}
+              >
+                ปิด
+              </button>
             </div>
           </div>
         </div>

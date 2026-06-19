@@ -1,6 +1,7 @@
 "use client";
 import { useApp } from "@/components/providers/app-provider";
 import SkeletonMember from "@/components/skeleton-member";
+import liff from "@line/liff";
 import { IconLogout } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
@@ -152,20 +153,23 @@ export default function Page() {
           <div className="text-gray-500 text-xs font-mono">{"-"}</div>
         </div>
       </div>
-      <div
-        className="h-12 rounded-[18px] border-[0.5px] flex items-center justify-center mt-6 cursor-pointer gap-2 text-[13px]"
-        style={{
-          background: clientConfig.ui.surface_color,
-          color: clientConfig.ui.text_gray_color,
-          borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
-        }}
-        onClick={async () => {
-          window.localStorage.clear();
-          router.push(`/${clientConfig.slug}`);
-        }}
-      >
-        <IconLogout size={18} /> ออกจากระบบ
-      </div>
+      {!liff.isInClient() && (
+        <div
+          className="h-12 rounded-[18px] border-[0.5px] flex items-center justify-center mt-6 cursor-pointer gap-2 text-[13px]"
+          style={{
+            background: clientConfig.ui.surface_color,
+            color: clientConfig.ui.text_gray_color,
+            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+          }}
+          onClick={async () => {
+            window.localStorage.clear();
+            liff.logout();
+            router.push(`/${clientConfig.slug}`);
+          }}
+        >
+          <IconLogout size={18} /> ออกจากระบบ
+        </div>
+      )}
     </div>
   );
 }

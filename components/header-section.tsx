@@ -26,18 +26,6 @@ export default function HeaderSection() {
         ></div>
       </div>
       <header className="relative z-2 pt-16 px-4.5 pb-4.5 flex items-center justify-between">
-        <div>
-          {!!clientConfig.logo_url && (
-            <img
-              src={clientConfig.logo_url}
-              alt="logo"
-              className="h-9.5 w-auto rounded-xl bg-white"
-              style={{
-                boxShadow: `0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 18px -4px color-mix(in oklch, ${clientConfig.ui.primary_color} 60%, transparent)`,
-              }}
-            />
-          )}
-        </div>
         {/* <button
           className="w-9.5 h-9.5 rounded-xl flex items-center justify-center border"
           style={{
@@ -84,6 +72,18 @@ export default function HeaderSection() {
             {userProfile?.userId}
           </div>
         </div>
+        <div>
+          {!!clientConfig.logo_url && (
+            <img
+              src={clientConfig.logo_url}
+              alt="logo"
+              className="h-9.5 w-auto rounded-xl bg-white"
+              style={{
+                boxShadow: `0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 18px -4px color-mix(in oklch, ${clientConfig.ui.primary_color} 60%, transparent)`,
+              }}
+            />
+          )}
+        </div>
         {/* <button
           className="w-11 h-11 rounded-xl flex items-center justify-center border"
           style={{
@@ -102,7 +102,7 @@ export default function HeaderSection() {
         >
           <IconQrcode className="text-white w-5.5 h-5.5" />
         </button> */}
-        <button
+        {/* <button
           className="w-11 h-11 rounded-xl flex items-center justify-center border"
           style={{
             background: `linear-gradient(135deg, ${clientConfig.ui.primary_color}, ${clientConfig.ui.secondary_color})`,
@@ -140,7 +140,7 @@ export default function HeaderSection() {
           }}
         >
           <IconCamera className="text-white w-5.5 h-5.5" />
-        </button>
+        </button> */}
       </div>
     </div>
   );

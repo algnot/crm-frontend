@@ -231,7 +231,7 @@ export default function Page() {
       <img
         src={coupon?.coupon.image_url || clientConfig.logo_url}
         alt="coupon"
-        className="mt-4 h-45 w-full rounded-2xl object-cover"
+        className="mt-4 w-full aspect-square rounded-2xl object-cover"
         style={{
           backgroundColor: clientConfig.ui.background_white_color,
         }}
@@ -298,7 +298,7 @@ export default function Page() {
                 color: clientConfig.ui.text_color,
               }}
             >
-              {formatDate(coupon?.expiration_date)}
+              {formatDate(coupon?.expiration_date, {}, true)}
             </p>
           </div>
         </div>
@@ -431,7 +431,12 @@ export default function Page() {
       )}
 
       {/* Bottom Button */}
-      <div className="fixed bottom-0 left-0 z-30 w-full p-4 shadow-lg">
+      <div
+        className="fixed bottom-0 left-0 z-30 w-full p-4 shadow-lg"
+        style={{
+          backgroundColor: clientConfig.ui.background_color,
+        }}
+      >
         {coupon?.is_used ? (
           <Button text="คุณใช้คูปองนี้เรียบร้อยแล้ว" disabled />
         ) : remainingSeconds !== null && remainingSeconds <= 0 ? (
@@ -442,7 +447,14 @@ export default function Page() {
           <Button
             text="ใช้สิทธิ์"
             onClick={() => {
-              setUsed(true);
+              openAlert({
+                title: "ยืนยันการใช้สิทธิ์",
+                message: "คุณต้องการใช้สิทธิ์นี้หรือไม่?",
+                hasCancel: true,
+                onConfirm: () => {
+                  setUsed(true);
+                },
+              });
             }}
           />
         )}

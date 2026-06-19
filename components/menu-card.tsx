@@ -38,7 +38,7 @@ export default function MenuCard({ pointHistory }: MenuCardProp) {
             {pointHistory.name}
           </div>
           <div className="text-gray-500 text-[11px] font-mono">
-            {formatDate(pointHistory.given_date)}
+            {formatDate(pointHistory.given_date, {}, true)}
           </div>
         </div>
       </div>

@@ -34,6 +34,8 @@ export default function Page() {
 
   const [coupon, setCoupon] = useState<CouponType>();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const fetchData = useCallback(async () => {
     if (!couponId || !userProfile) return;
 
@@ -124,13 +126,14 @@ export default function Page() {
 
   const redeemCoupon = async () => {
     if (!coupon || !clientConfig || !userProfile) return;
-
+    setIsLoading(true);
     const res = await backendClient.redeemCoupon(
       clientConfig.slug,
       coupon.id,
       userProfile?.userId,
     );
 
+    setIsLoading(false);
     if (isErrorResponse(res)) {
       openAlert({
         title: "แลกรับสิทธิ์ไม่สำเร็จ",
@@ -173,7 +176,7 @@ export default function Page() {
       <img
         src={coupon?.image_url || clientConfig.logo_url}
         alt="coupon"
-        className="mt-4 h-45 w-full rounded-2xl object-cover"
+        className="mt-4 w-full aspect-square rounded-2xl object-cover"
         style={{
           backgroundColor: clientConfig.ui.background_white_color,
         }}
@@ -233,7 +236,7 @@ export default function Page() {
                   color: clientConfig.ui.text_color,
                 }}
               >
-                {formatDate(coupon?.end_time)}
+                {formatDate(coupon?.end_time, {}, true)}
               </p>
             </div>
           )}
@@ -256,7 +259,12 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 z-30 w-full p-4 shadow-lg">
+      <div
+        className="fixed bottom-0 left-0 z-30 w-full p-4 shadow-lg"
+        style={{
+          backgroundColor: clientConfig.ui.background_color,
+        }}
+      >
         {currentPoint < (coupon?.value || 0) ? (
           <Button
             text={`${coupon?.currency.name.toLocaleUpperCase()} ของคุณไม่พอ`}
@@ -264,7 +272,7 @@ export default function Page() {
           />
         ) : (
           <Button
-            text="แลกรับสิทธิ์"
+            text={isLoading ? "กำลังแลกรับสิทธิ์..." : "แลกรับสิทธิ์"}
             onClick={() => {
               openAlert({
                 title: "ยืนยันการแลกรับสิทธิ์",

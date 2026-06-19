@@ -35,6 +35,7 @@ function toDate(value: FormatDateInput): Date | null {
 export function formatDate(
   value: FormatDateInput,
   options: FormatDateOptions = {},
+  hasTime: boolean = false,
 ): string {
   const {
     locale = "th-TH",
@@ -43,8 +44,14 @@ export function formatDate(
       day: "2-digit",
       month: "short",
       year: "numeric",
+      timeZone: "UTC",
     },
   } = options;
+
+  if (hasTime) {
+    formatOptions.hour = "2-digit";
+    formatOptions.minute = "2-digit";
+  }
 
   const date = toDate(value);
   if (!date) return fallback;

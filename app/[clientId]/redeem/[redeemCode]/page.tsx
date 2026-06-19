@@ -10,6 +10,8 @@ import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft } from "tabler-icons-react";
 import { IconGift } from "@tabler/icons-react";
+import MenuCard from "@/components/menu-card";
+import { formatDate } from "@/util/format-date";
 
 export default function Page() {
   const params = useParams();
@@ -64,7 +66,11 @@ export default function Page() {
       >
         <Sk className="h-10 w-10 rounded-full" bg={surface} />
         <Sk className="mt-4 h-45 w-full rounded-2xl" bg={surface} />
-        <Sk className="mt-5 h-9 rounded-lg" bg={line} style={{ width: "72%" }} />
+        <Sk
+          className="mt-5 h-9 rounded-lg"
+          bg={line}
+          style={{ width: "72%" }}
+        />
         <Sk className="mt-1 h-3 w-28" bg={line} />
         <div
           className="mt-5 rounded-3xl border-[0.5px]"
@@ -101,6 +107,9 @@ export default function Page() {
       openAlert({
         title: "เกิดข้อผิดพลาด",
         message: response.message,
+        onConfirm: () => {
+          router.push(`/${clientConfig.slug}`);
+        },
       });
       return;
     }
@@ -108,16 +117,11 @@ export default function Page() {
     openAlert({
       title: "สำเร็จ",
       message: "สะสมคะแนนสำเร็จแล้ว!",
+      onConfirm: () => {
+        router.push(`/${clientConfig.slug}`);
+      },
     });
-    router.push(`/${clientConfig.slug}`);
   };
-
-  const typeLabel =
-    redeemDetail?.type === "burn"
-      ? "ใช้แต้ม"
-      : redeemDetail?.type === "tranfer"
-        ? "โอนแต้ม"
-        : "สะสมแต้ม";
 
   return (
     <div
@@ -136,88 +140,100 @@ export default function Page() {
         <ArrowLeft size={22} color={clientConfig.ui.text_color} />
       </button>
 
-      <div
-        className="mt-4 h-45 w-full rounded-2xl flex items-center justify-center overflow-hidden"
-        style={{ backgroundColor: clientConfig.ui.surface_color }}
-      >
-        {redeemDetail?.reward_coupon.image_url ? (
-          <img
-            src={redeemDetail.reward_coupon.image_url}
-            alt="redeem"
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <IconGift size={64} color={clientConfig.ui.text_gray_color} />
-        )}
-      </div>
-
-      <div className="mt-5">
+      <div className="mt-4">
         <div
           className="text-[32px] font-medium font-bodoni"
           style={{ color: clientConfig.ui.text_color }}
         >
           {redeemDetail?.name || "—"}
         </div>
+        {redeemDetail.expiration_date && (
+          <p
+            className="text-[10px] font-semibold font-mono"
+            style={{ color: clientConfig.ui.primary_color }}
+          >
+            แลกได้ถึง {formatDate(redeemDetail.expiration_date, {}, true)}
+          </p>
+        )}
 
-        <p
-          className="mt-1 text-[12px] font-mono"
-          style={{ color: clientConfig.ui.text_gray_color }}
-        >
-          {redeemDetail?.code}
-        </p>
-
-        {/* Details Card */}
-        <div
-          className="mt-5 rounded-3xl border-[0.5px]"
-          style={{
-            backgroundColor: clientConfig.ui.surface_color,
-            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
-          }}
-        >
-          {/* Type row */}
-          <div className="p-5 flex items-center justify-between text-[13px]">
-            <p style={{ color: clientConfig.ui.text_gray_color }}>คะแนน</p>
-            <p style={{ color: clientConfig.ui.text_color }}>
-              {redeemDetail?.value.toLocaleString()}{" "}
-              {redeemDetail?.currency.name}
-            </p>
-          </div>
-
-          {/* Points row */}
+        {redeemDetail.reward_coupon && (
           <div
-            className="p-5 flex items-center justify-between border-t-[0.5px] text-[13px]"
+            className="mt-4 p-3 flex gap-4 items-center rounded-[18px] overflow-hidden cursor-pointer shadow-md border-[0.5px]"
             style={{
+              backgroundColor: clientConfig.ui.surface_color,
+              color: clientConfig.ui.text_color,
               borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
             }}
           >
-            <p style={{ color: clientConfig.ui.text_gray_color }}>รางวัล</p>
-            <p style={{ color: clientConfig.ui.text_color }}>
-              {redeemDetail?.reward_coupon.name}
-            </p>
-          </div>
+            <img
+              src={redeemDetail.reward_coupon.image_url}
+              alt="ads"
+              className="w-14 h-14 object-cover rounded-[10px]"
+            />
 
-          {/* Reward coupon row */}
-          {redeemDetail?.reward_coupon?.name && (
-            <div
-              className="p-5 flex items-center justify-between border-t-[0.5px] text-[13px]"
-              style={{
-                borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
-              }}
-            >
-              <p style={{ color: clientConfig.ui.text_gray_color }}>
-                มูลค่ารางวัล
+            <div className="flex flex-col flex-1">
+              <p
+                className="line-clamp-1 font-bodoni font-medium"
+                style={{ color: clientConfig.ui.text_color }}
+              >
+                {redeemDetail.reward_coupon.name}
               </p>
-              <p style={{ color: clientConfig.ui.text_color }}>
-                {redeemDetail.reward_coupon.value}
+
+              <p className="">
+                <span
+                  className="text-[10px] mr-2 font-semibold leading-[1.3] line-through"
+                  style={{ color: clientConfig.ui.text_gray_color }}
+                >
+                  {redeemDetail.reward_coupon.value.toLocaleString()}{" "}
+                  {redeemDetail.currency.name.toLocaleUpperCase()}
+                </span>
               </p>
             </div>
-          )}
-        </div>
-      </div>
+            <p
+              style={{ color: clientConfig.ui.primary_color }}
+              className="text-sm mr-2 font-semibold leading-[1.3]"
+            >
+              FREE
+            </p>
+          </div>
+        )}
 
+        {redeemDetail.value > 0 && (
+          <div
+            className="mt-4 p-3 flex gap-4 items-center rounded-[18px] overflow-hidden cursor-pointer shadow-md border-[0.5px]"
+            style={{
+              backgroundColor: clientConfig.ui.surface_color,
+              color: clientConfig.ui.text_color,
+              borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+            }}
+          >
+            <img
+              src={clientConfig.logo_url}
+              alt="ads"
+              className="w-14 h-14 object-cover rounded-[10px]"
+            />
+
+            <div className="flex flex-col flex-1">
+              <p
+                className="line-clamp-1 font-bodoni font-medium"
+                style={{ color: clientConfig.ui.text_color }}
+              >
+                รับ {redeemDetail.value.toLocaleString()}{" "}
+                {redeemDetail.currency.name.toLocaleUpperCase()}
+              </p>
+            </div>
+            <p
+              style={{ color: clientConfig.ui.primary_color }}
+              className="text-sm mr-2 font-semibold leading-[1.3]"
+            >
+              FREE
+            </p>
+          </div>
+        )}
+      </div>
       {/* Bottom Button */}
       <div className="fixed bottom-0 left-0 z-30 w-full p-4">
-        <Button text="สะสมคะแนน" onClick={onReedeem} />
+        <Button text="กดรับคูปอง" onClick={onReedeem} />
       </div>
     </div>
   );
