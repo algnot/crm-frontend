@@ -69,6 +69,10 @@ input {
   border: none;
 }
 
+* {
+  touch-action: pan-x pan-y;
+}
+
 @media only screen and (max-width: 600px) {
   body {
     width: 100vw;
