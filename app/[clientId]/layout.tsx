@@ -6,6 +6,7 @@ import { isErrorResponse } from "@/types/request";
 import { getLiffUserProfile } from "@/util/line-liff";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import BOPP from "../../public/bopp_logo.png";
 
 export default function RootLayout({
   children,
@@ -122,6 +123,19 @@ export default function RootLayout({
       style={{ backgroundColor: clientConfig.ui.background_color }}
     >
       {children}
+
+      <div className="flex flex-col items-center gap-1 py-10">
+        <p
+          className="text-xs"
+          style={{
+            color: clientConfig.ui.text_gray_color,
+          }}
+        >
+          Powered by
+        </p>
+        <img src={BOPP.src} alt="logo" className="w-20" />
+      </div>
+
       <Navbar />
     </div>
   );

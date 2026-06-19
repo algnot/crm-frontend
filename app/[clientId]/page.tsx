@@ -79,14 +79,12 @@ export default function Home() {
   }, [showModal, goModalNext, goModalPrev]);
 
   return (
-    <div className="h-dvh pb-20">
+    <div className="pb-10">
       <HeaderSection />
       <PointCard />
       <TierCard />
       <NewsSection />
       <CouponSection />
-
-      <div className="p-15"></div>
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-8">
