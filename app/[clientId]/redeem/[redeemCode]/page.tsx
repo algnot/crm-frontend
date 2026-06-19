@@ -166,7 +166,9 @@ export default function Page() {
             }}
           >
             <img
-              src={redeemDetail.reward_coupon.image_url}
+              src={
+                redeemDetail.reward_coupon.image_url || clientConfig.logo_url
+              }
               alt="ads"
               className="w-14 h-14 object-cover rounded-[10px]"
             />

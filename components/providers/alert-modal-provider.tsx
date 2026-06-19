@@ -54,11 +54,10 @@ function AlertModal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm overflow-hidden rounded-[28px] shadow-2xl"
+        className="w-full max-w-sm overflow-hidden rounded-[28px] shadow-2xl pb-5"
         style={{
           background: clientConfig?.ui.surface_color,
           color: clientConfig?.ui.text_color,
-          paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
         }}
         onClick={(event) => event.stopPropagation()}
       >
