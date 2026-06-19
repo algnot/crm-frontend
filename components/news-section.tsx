@@ -135,9 +135,9 @@ export default function NewsSection() {
                     ].join(" • ")}
                   </p>
 
-                  <h3 className="text-2xl font-medium font-bodoni">
+                  <p className="text-lg font-medium font-bodoni">
                     {adsItem.title}
-                  </h3>
+                  </p>
                 </div>
               </div>
             );
@@ -180,7 +180,7 @@ export default function NewsSection() {
           onClick={() => setSelectedAdsItem(null)}
         >
           <div
-            className="w-full max-w-md rounded-t-3xl text-white overflow-hidden h-[80vh] flex flex-col"
+            className="w-full max-w-md rounded-t-3xl text-white overflow-hidden h-[90vh] flex flex-col"
             style={{
               background: clientConfig.ui.surface_color,
             }}

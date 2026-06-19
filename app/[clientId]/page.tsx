@@ -174,7 +174,9 @@ export default function Home() {
                     className="w-5/2!"
                     onClick={() => {
                       const action = adsItems[modalIndex].action;
-                      if (action) window.location.href = action;
+                      if (action) {
+                        window.open(action, "_blank");
+                      }
                     }}
                   />
                 )}
