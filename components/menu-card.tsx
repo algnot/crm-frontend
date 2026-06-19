@@ -20,17 +20,15 @@ export default function MenuCard({ pointHistory }: MenuCardProp) {
         <div
           className="w-9 h-9 rounded-full flex items-center justify-center"
           style={{
-            color:
-              pointHistory.type === "earn"
-                ? clientConfig.ui.text_success_color
-                : clientConfig.ui.text_error_color,
-            background:
-              pointHistory.type === "earn"
-                ? `${clientConfig.ui.text_success_color}33`
-                : `${clientConfig.ui.text_error_color}33`,
+            background: clientConfig.ui.surface_color,
+            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
           }}
         >
-          i
+          <img
+            src={clientConfig.logo_url}
+            alt="ads"
+            className="w-5 h-5 object-contain"
+          />
         </div>
         <div className="flex flex-col">
           <div

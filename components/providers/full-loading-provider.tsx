@@ -18,7 +18,7 @@ function FullLoading() {
 }
 
 export function FullLoadingProvider({ children }: { children: ReactNode }) {
-  const [, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onChangeLoading = useCallback((value: boolean) => {
     setLoading(value);
@@ -27,7 +27,7 @@ export function FullLoadingProvider({ children }: { children: ReactNode }) {
 
   return (
     <FullLoadingContext.Provider value={onChangeLoading}>
-      {/* {loading && <FullLoading />} */}
+      {loading && <FullLoading />}
       {children}
     </FullLoadingContext.Provider>
   );
