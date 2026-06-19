@@ -64,7 +64,7 @@ export default function Page() {
               {appUserProfile?.tier.name}
             </div>
             <div
-              className="text-xs font-mono"
+              className="text-xs font-mono w-[82px] truncate"
               style={{ color: clientConfig.ui.text_gray_color }}
             >
               {userProfile?.userId}

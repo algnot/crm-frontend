@@ -2,13 +2,10 @@
 
 /* eslint-disable @next/next/no-img-element */
 
-import React from "react";
 import { useApp } from "./providers/app-provider";
-import { IconCamera } from "@tabler/icons-react";
-import { isErrorResponse } from "@/types/request";
 
 export default function HeaderSection() {
-  const { userProfile, clientConfig, backendClient, openReceipt } = useApp();
+  const { userProfile, clientConfig } = useApp();
 
   return (
     <div>
@@ -64,7 +61,7 @@ export default function HeaderSection() {
           </div>
 
           <div
-            className="text-[10px] tracking-[0.02em] truncate font-mono"
+            className="text-[10px] tracking-[0.02em] truncate font-mono w-[74px] truncate"
             style={{
               color: clientConfig.ui.text_gray_color,
             }}

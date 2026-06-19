@@ -213,8 +213,8 @@ function ReceiptCameraModal({
       }
 
       await openAlert({
-        title: "สำเร็จ",
-        message: "ส่งใบเสร็จเรียบร้อย",
+        title: "ส่งใบเสร็จสำเร็จ",
+        message: "กรุณารอการตรวจสอบจากร้านค้า",
         icon: <IconRosetteDiscountCheck size={24} />,
       });
       onClose();
