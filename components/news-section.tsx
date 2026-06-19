@@ -186,30 +186,29 @@ export default function NewsSection() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
+            <div className="flex items-start justify-between gap-3 p-5">
+              <div className="space-y-1">
+                <h3 className="text-2xl font-medium font-bodoni leading-tight">
+                  {selectedAdsItem.title}
+                </h3>
+                <p
+                  className="text-[10px] font-semibold font-mono"
+                  style={{ color: clientConfig.ui.primary_color }}
+                >
+                  {[
+                    formatDate(selectedAdsItem.start_date),
+                    formatDate(selectedAdsItem.end_date),
+                  ].join(" • ")}
+                </p>
+              </div>
+            </div>
             <img
               src={selectedAdsItem.image_url}
               alt={selectedAdsItem.title}
-              className="w-full aspect-video object-cover"
+              className="w-full "
             />
 
             <div className="px-5 pt-4 pb-8 space-y-3 flex-1 flex flex-col overflow-y-auto">
-              <div className="flex items-start justify-between gap-3">
-                <div className="space-y-1">
-                  <p
-                    className="text-[10px] font-semibold font-mono"
-                    style={{ color: clientConfig.ui.primary_color }}
-                  >
-                    {[
-                      formatDate(selectedAdsItem.start_date),
-                      formatDate(selectedAdsItem.end_date),
-                    ].join(" • ")}
-                  </p>
-                  <h3 className="text-2xl font-medium font-bodoni leading-tight">
-                    {selectedAdsItem.title}
-                  </h3>
-                </div>
-              </div>
-
               {selectedAdsItem.message && (
                 <p className="text-sm text-white/70 leading-relaxed flex-1">
                   {selectedAdsItem.message}
@@ -234,7 +233,7 @@ export default function NewsSection() {
                     type="button"
                     aria-label="Close"
                     onClick={() => setSelectedAdsItem(null)}
-                    className="rounded-xl py-2.5 text-sm font-semibold border"
+                    className="mb-1 rounded-xl py-2.5 text-sm font-semibold border"
                     style={{
                       background: clientConfig.ui.surface_color,
                       color: clientConfig.ui.text_color,
