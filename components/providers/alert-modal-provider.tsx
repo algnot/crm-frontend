@@ -15,6 +15,7 @@ export type OpenAlertOptions = {
   title?: string;
   message: string;
   confirmText?: string;
+  hasCancel?: boolean;
   icon?: ReactNode;
   onConfirm?: () => void;
 };
@@ -41,14 +42,14 @@ function AlertModal({
     title = "แจ้งเตือน",
     message,
     confirmText = "ตกลง",
+    hasCancel = false,
     onConfirm = () => {},
   } = options;
 
   const clientConfig = providerClientConfig;
-
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-black/45 px-4 pb-4 pt-10"
+      className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 pb-4 pt-10"
       style={{ zIndex: 200 }}
       onClick={onClose}
     >
@@ -85,7 +86,19 @@ function AlertModal({
           </p>
         </div>
 
-        <div className="px-5 pt-1">
+        <div className="px-5 pt-1 flex gap-2 items-center justify-center">
+          {hasCancel && (
+            <button
+              type="button"
+              className="w-full rounded-2xl px-4 py-3 text-sm font-medium text-white active:scale-[0.99]"
+              style={{
+                background: `color-mix(in srgb, ${clientConfig?.ui.text_gray_color} 20%, ${clientConfig?.ui.surface_color})`,
+              }}
+              onClick={onClose}
+            >
+              ยกเลิก
+            </button>
+          )}
           <button
             type="button"
             className="w-full rounded-2xl px-4 py-3 text-sm font-medium text-white active:scale-[0.99]"

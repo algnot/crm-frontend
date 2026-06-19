@@ -85,7 +85,11 @@ export default function Page() {
       >
         <Sk className="h-10 w-10 rounded-full" bg={surface} />
         <Sk className="mt-4 h-45 w-full rounded-2xl" bg={surface} />
-        <Sk className="mt-5 h-9 rounded-lg" bg={line} style={{ width: "72%" }} />
+        <Sk
+          className="mt-5 h-9 rounded-lg"
+          bg={line}
+          style={{ width: "72%" }}
+        />
         <div
           className="mt-5 rounded-3xl border-[0.5px]"
           style={{ background: surface, borderColor: border }}
@@ -104,7 +108,12 @@ export default function Page() {
         </div>
         <Sk className="mt-8 mb-3 h-3 w-12" bg={line} />
         {[90, 75, 85, 55].map((w, i) => (
-          <Sk key={i} className="h-3 mb-2.5" bg={line} style={{ width: `${w}%` }} />
+          <Sk
+            key={i}
+            className="h-3 mb-2.5"
+            bg={line}
+            style={{ width: `${w}%` }}
+          />
         ))}
         <div className="fixed bottom-0 left-0 z-30 w-full p-4">
           <Sk className="h-14 rounded-2xl" bg={surface} />
@@ -254,7 +263,18 @@ export default function Page() {
             disabled
           />
         ) : (
-          <Button text="แลกรับสิทธิ์" onClick={redeemCoupon} />
+          <Button
+            text="แลกรับสิทธิ์"
+            onClick={() => {
+              openAlert({
+                title: "ยืนยันการแลกรับสิทธิ์",
+                message: `คุณต้องการแลกรับสิทธิ์ ${coupon?.name} ใช่หรือไม่?`,
+                confirmText: "ใช่",
+                hasCancel: true,
+                onConfirm: redeemCoupon,
+              });
+            }}
+          />
         )}
       </div>
     </div>
