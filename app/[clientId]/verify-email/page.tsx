@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { Mail } from "tabler-icons-react";
 
 export default function Page() {
-  const { clientConfig, userProfile, backendClient } = useApp();
+  const { clientConfig, userProfile, backendClient, setFullLoading } = useApp();
 
   const [email, setEmail] = useState("");
   const [ref, setRef] = useState("");
@@ -54,23 +54,23 @@ export default function Page() {
     setStep("otp");
   };
 
-  const verifyOtp = async () => {
-    const code = otp.join("");
-
-    if (code.length !== 6) {
-      alert("กรอก OTP ให้ครบ");
-      return;
-    }
+  const verifyOtp = async (codeOverride?: string) => {
+    setFullLoading(true);
+    const code = codeOverride ?? otp.join("");
 
     const response = await backendClient.verifyEmail(clientConfig.slug, {
       otp: code,
       ref: ref,
     });
+    setFullLoading(false);
     if (isErrorResponse(response)) {
+      alert(response.message);
+      setFullLoading(false);
       return;
     }
 
     window.location.href = `/${clientConfig.slug}`;
+    setFullLoading(false);
   };
 
   const handleOtpChange = (value: string, index: number) => {
@@ -83,6 +83,10 @@ export default function Page() {
 
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
+    }
+
+    if (index === 5 && newOtp.every((digit) => digit !== "")) {
+      verifyOtp(newOtp.join(""));
     }
   };
 
@@ -264,6 +268,7 @@ export default function Page() {
             text="ยืนยัน OTP"
             className="mt-6 rounded-2xl! h-14"
             onClick={verifyOtp}
+            disabled={otp.some((digit) => digit === "")}
           />
 
           {countdown > 0 ? (

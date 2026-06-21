@@ -27,7 +27,7 @@ export function FullLoadingProvider({ children }: { children: ReactNode }) {
 
   return (
     <FullLoadingContext.Provider value={onChangeLoading}>
-      {/* {loading && <FullLoading />} */}
+      {loading && <FullLoading />}
       {children}
     </FullLoadingContext.Provider>
   );
