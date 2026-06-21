@@ -4,7 +4,7 @@ import SkeletonHome from "@/components/skeleton-home";
 import { useApp } from "@/components/providers/app-provider";
 import { isErrorResponse } from "@/types/request";
 import { getLiffUserProfile } from "@/util/line-liff";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import BOPP from "../../public/bopp_logo.png";
 
@@ -14,6 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const params = useParams();
+  const pathname = usePathname();
   const [isWaiting, setIsWaiting] = useState<boolean>(true);
   const clientId = Array.isArray(params.clientId)
     ? params.clientId[0]
@@ -113,7 +114,7 @@ export default function RootLayout({
     return;
   }
 
-  if (isWaiting && window.location.pathname !== `/${clientId}/member`) {
+  if (isWaiting && pathname !== `/${clientId}/member`) {
     return <SkeletonHome />;
   }
 

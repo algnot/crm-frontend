@@ -17,6 +17,7 @@ import {
 } from "@/types/request";
 import { Profile } from "@liff/get-profile";
 import axios, { AxiosInstance } from "axios";
+import { getLiffUserToken } from "./line-liff";
 
 const handlerError = (error: unknown): ErrorResponse => {
   if (axios.isAxiosError(error)) {
@@ -52,7 +53,7 @@ export class BackendClient {
   private readonly client: AxiosInstance;
   private readonly setLoading: (value: boolean) => void;
 
-  constructor(setLoading: (value: boolean) => void) {
+  constructor(setLoading: (value: boolean) => void, liffId: string) {
     this.client = axios.create({
       baseURL: process.env.NEXT_PUBLIC_BACKEND_PATH,
       headers: {
@@ -60,6 +61,14 @@ export class BackendClient {
       },
     });
     this.setLoading = setLoading;
+
+    if (typeof window !== "undefined") {
+      void this.init(liffId);
+    }
+  }
+
+  async init(liffId: string) {
+    this.client.defaults.headers.Authorization = `Bearer ${await getLiffUserToken(liffId)}`;
   }
 
   async getPartnerAppConfig(
@@ -323,6 +332,16 @@ export class BackendClient {
           receipt_image: receiptImage,
         },
       );
+
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async updateUserInfo(clientId: string): Promise<ErrorResponse> {
+    try {
+      const response = await this.client.put(`/partner/${clientId}/user`);
 
       return response.data;
     } catch (e) {

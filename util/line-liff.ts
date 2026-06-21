@@ -1,5 +1,13 @@
 import type { Profile } from "@liff/get-profile";
-import liff from "@line/liff";
+
+async function getLiff() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const { default: liff } = await import("@line/liff");
+  return liff;
+}
 
 export async function getLiffUserProfile(
   liffId: string,
@@ -12,7 +20,12 @@ export async function getLiffUserProfile(
     };
   }
 
-  if (!liffId) {
+  if (!liffId || typeof window === "undefined") {
+    return;
+  }
+
+  const liff = await getLiff();
+  if (!liff) {
     return;
   }
 
@@ -27,4 +40,21 @@ export async function getLiffUserProfile(
   }
 
   return await liff.getProfile();
+}
+
+export async function getLiffUserToken(liffId: string): Promise<string> {
+  if (!liffId || typeof window === "undefined") {
+    return "";
+  }
+
+  const liff = await getLiff();
+  if (!liff) {
+    return "";
+  }
+
+  await liff.init({
+    liffId: liffId,
+  });
+
+  return liff.getAccessToken() ?? "";
 }

@@ -61,8 +61,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
   const setFullLoading = useFullLoadingContext();
   const backendClient = useMemo(
-    () => new BackendClient(setFullLoading),
-    [setFullLoading],
+    () => new BackendClient(setFullLoading, clientConfig.line.liff_id),
+    [setFullLoading, clientConfig.line.liff_id],
   );
   const [userPoint, setUserPoint] = useState<GetUserPointRespont[]>([]);
   const [isShowNavbar, setIsShowNavbar] = useState<boolean>(true);
