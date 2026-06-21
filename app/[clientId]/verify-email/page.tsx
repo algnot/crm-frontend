@@ -14,6 +14,7 @@ export default function Page() {
     backendClient,
     openAlert,
     setFullLoading,
+    setAppUserProfile,
   } = useApp();
 
   const router = useRouter();
@@ -94,7 +95,21 @@ export default function Page() {
         return;
       }
 
-      router.push(`/${clientConfig.slug}`);
+      const appProfile = await backendClient.getUserInfo(clientConfig.slug);
+      if (isErrorResponse(appProfile)) {
+        window.location.href = `/${clientConfig.slug}`;
+        return;
+      }
+
+      setAppUserProfile(appProfile);
+
+      if (appProfile.force_verify_phone) {
+        router.replace(`/${clientConfig.slug}/verify-phone`);
+      } else if (appProfile.force_verify_email) {
+        router.replace(`/${clientConfig.slug}/verify-email`);
+      } else {
+        router.replace(`/${clientConfig.slug}`);
+      }
     }
   };
 
