@@ -38,22 +38,21 @@ export default function Page() {
   }, [countdown]);
 
   const sendOtp = async () => {
-    setOtp(["", "", "", "", "", ""]);
-
     const cleanedPhone = phone.replace(/\D/g, "");
 
     if (!/^0\d{9}$/.test(cleanedPhone)) {
       openAlert({
         title: "เกิดข้อผิดพลาด",
         message: "กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง",
+        onConfirm: () => {
+          setOtp(["", "", "", "", "", ""]);
+        },
       });
       return;
     }
 
-    setStep("otp");
-    if (!userProfile?.userId) {
-      return;
-    }
+    if (!userProfile?.userId) return;
+
     setFullLoading(true);
     const response = await backendClient.submitPhone(clientConfig.slug, {
       phone: phone,
@@ -61,8 +60,17 @@ export default function Page() {
     });
     setFullLoading(false);
     if (isErrorResponse(response)) {
+      openAlert({
+        title: "เกิดข้อผิดพลาด",
+        message: response.message,
+        onConfirm: () => {
+          setOtp(["", "", "", "", "", ""]);
+        },
+      });
       return;
     }
+
+    setStep("otp");
     setRef(response.ref);
     setCountdown(30);
   };
@@ -99,7 +107,7 @@ export default function Page() {
 
       const appProfile = await backendClient.getUserInfo(clientConfig.slug);
       if (isErrorResponse(appProfile)) {
-        window.location.href = `/${clientConfig.slug}`;
+        router.push(`/${clientConfig.slug}`);
         return;
       }
 

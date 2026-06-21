@@ -53,6 +53,7 @@ export default function Page() {
   const expiredCoupon = userCoupons.filter((item) => {
     if (item.is_used) return false;
     if (item.state === "expired") return true;
+    if (!item.expiration_date) return false;
 
     const expiration = new Date(item.expiration_date.replace(" ", "T"));
 

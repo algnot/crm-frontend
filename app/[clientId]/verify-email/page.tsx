@@ -37,8 +37,6 @@ export default function Page() {
   }, [countdown]);
 
   const sendOtp = async () => {
-    setOtp(["", "", "", "", "", ""]);
-
     const cleanedEmail = email.trim().toLowerCase();
     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
@@ -46,6 +44,9 @@ export default function Page() {
       openAlert({
         title: "เกิดข้อผิดพลาด",
         message: "กรุณากรอกอีเมลให้ถูกต้อง",
+        onConfirm: () => {
+          setOtp(["", "", "", "", "", ""]);
+        },
       });
       return;
     }
@@ -59,6 +60,13 @@ export default function Page() {
     });
     setFullLoading(false);
     if (isErrorResponse(response)) {
+      openAlert({
+        title: "เกิดข้อผิดพลาด",
+        message: response.message,
+        onConfirm: () => {
+          setOtp(["", "", "", "", "", ""]);
+        },
+      });
       return;
     }
 
@@ -97,7 +105,7 @@ export default function Page() {
 
       const appProfile = await backendClient.getUserInfo(clientConfig.slug);
       if (isErrorResponse(appProfile)) {
-        window.location.href = `/${clientConfig.slug}`;
+        router.push(`/${clientConfig.slug}`);
         return;
       }
 
