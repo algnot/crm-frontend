@@ -21,7 +21,7 @@ import {
 } from "@tabler/icons-react";
 
 function parseUtcExpiration(dateStr: string): Date {
-  return new Date(dateStr.replace(" ", "T") + "Z");
+  return new Date(dateStr.replace(" ", "T"));
 }
 
 function formatCountdown(totalSeconds: number): string {
@@ -107,7 +107,9 @@ export default function Page() {
     }
 
     const updateRemaining = () => {
-      setRemainingSeconds(getRemainingSeconds(coupon.expiration_date as string));
+      setRemainingSeconds(
+        getRemainingSeconds(coupon.expiration_date as string),
+      );
     };
 
     updateRemaining();
@@ -397,8 +399,8 @@ export default function Page() {
               <Barcode
                 value={coupon.code}
                 format="CODE128"
-                width={2}
-                height={100}
+                width={1.5}
+                height={80}
                 displayValue={false}
               />
             )}

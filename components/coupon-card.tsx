@@ -1,6 +1,7 @@
 import React from "react";
 import { useApp } from "./providers/app-provider";
 import { CouponType } from "@/types/request";
+import { formatDate } from "@/util/format-date";
 
 interface CouponCardProps {
   coupon: CouponType;
@@ -53,7 +54,6 @@ export default function CouponCard({
             className="text-[10px] mr-2 font-semibold leading-[1.3]"
             style={{ color: clientConfig.ui.primary_color }}
           >
-            {/* แลกได้ถึง {coupon.end_time} */}
             {coupon.value.toLocaleString()}{" "}
             {coupon.currency.name.toLocaleUpperCase()}
           </span>
@@ -62,7 +62,7 @@ export default function CouponCard({
               className="text-[10px]"
               style={{ color: clientConfig.ui.text_gray_color }}
             >
-              หมดอายุ {coupon.end_time}
+              หมดอายุ {formatDate(coupon.end_time, {}, true)}
             </span>
           )}
         </p>

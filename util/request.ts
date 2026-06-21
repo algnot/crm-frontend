@@ -14,6 +14,7 @@ import {
   Redeem,
   UserCoupon,
   CouponType,
+  UserInfoPayload,
 } from "@/types/request";
 import axios, { AxiosInstance } from "axios";
 import { getLiffUserToken } from "./line-liff";
@@ -363,9 +364,15 @@ export class BackendClient {
     }
   }
 
-  async updateUserInfo(clientId: string): Promise<ErrorResponse> {
+  async updateUserInfo(
+    clientId: string,
+    userInfo: Partial<UserInfoPayload>,
+  ): Promise<ErrorResponse> {
     try {
-      const response = await this.client.put(`/partner/${clientId}/user`);
+      const response = await this.client.put(
+        `/partner/${clientId}/user`,
+        userInfo,
+      );
 
       return response.data;
     } catch (e) {

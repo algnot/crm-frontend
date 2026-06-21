@@ -151,6 +151,15 @@ export interface User {
   tier: Tier;
 }
 
+export interface UserInfoPayload {
+  display_name: string;
+  picture_url: string;
+  birth_date: string;
+  gender: string;
+  email: string;
+  phone: string;
+}
+
 export interface Tier {
   code: string;
   name: string;
@@ -254,7 +263,7 @@ export interface UserCoupon {
   acquired_date: string;
   activated_date: string | false;
   expiration_date: string | false;
-  state: "redeemed" | "activated" | "used";
+  state: "redeemed" | "activated" | "used" | "expired";
   is_used: boolean;
   used_date: string | false;
   currency: Currency;

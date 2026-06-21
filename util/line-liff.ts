@@ -43,6 +43,10 @@ export async function getLiffUserProfile(
 }
 
 export async function getLiffUserToken(liffId: string): Promise<string> {
+  if (process.env.NEXT_PUBLIC_FORCE_USER_TOKEN) {
+    return process.env.NEXT_PUBLIC_FORCE_USER_TOKEN;
+  }
+  
   if (!liffId || typeof window === "undefined") {
     return "";
   }

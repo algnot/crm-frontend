@@ -43,7 +43,7 @@ export default function Page() {
     if (item.state === "redeemed") return true;
     if (!item.expiration_date) return true;
 
-    const expiration = new Date(item.expiration_date.replace(" ", "T") + "Z");
+    const expiration = new Date(item.expiration_date.replace(" ", "T"));
 
     return expiration > new Date();
   });
@@ -52,9 +52,9 @@ export default function Page() {
 
   const expiredCoupon = userCoupons.filter((item) => {
     if (item.is_used) return false;
-    if (item.state !== "activated" || !item.expiration_date) return false;
+    if (item.state === "expired") return true;
 
-    const expiration = new Date(item.expiration_date.replace(" ", "T") + "Z");
+    const expiration = new Date(item.expiration_date.replace(" ", "T"));
 
     return expiration < new Date();
   });
@@ -157,8 +157,7 @@ export default function Page() {
             !coupon.is_used &&
             (coupon.state === "redeemed" ||
               !coupon.expiration_date ||
-              new Date(coupon.expiration_date.replace(" ", "T") + "Z") >
-                new Date());
+              new Date(coupon.expiration_date.replace(" ", "T")) > new Date());
           const cp: CouponType = {
             id: coupon.id,
             name: coupon.name,

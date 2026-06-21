@@ -123,7 +123,7 @@ export default function RootLayout({
     >
       {children}
 
-      <div className="flex flex-col items-center gap-1 py-10">
+      <div className="flex flex-col items-center gap-1 pt-10 pb-30">
         <p
           className="text-xs"
           style={{

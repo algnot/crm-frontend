@@ -82,7 +82,7 @@ export default function HistorySection() {
   const isExpired = (expirationDate?: string) => {
     if (!expirationDate) return false;
 
-    const date = new Date(expirationDate.replace(" ", "T") + "Z");
+    const date = new Date(expirationDate.replace(" ", "T"));
 
     return !Number.isNaN(date.getTime()) && date < now;
   };
@@ -103,7 +103,10 @@ export default function HistorySection() {
         <Sk className="h-9 w-56 mt-5 mb-6" bg={line} />
         <div
           className="rounded-[18px] border-[0.5px] p-4.5 mb-4.5 grid grid-cols-3"
-          style={{ background: surface, borderColor: clientConfig.ui.text_gray_color }}
+          style={{
+            background: surface,
+            borderColor: clientConfig.ui.text_gray_color,
+          }}
         >
           {[0, 1, 2].map((i) => (
             <div
@@ -118,7 +121,12 @@ export default function HistorySection() {
         </div>
         <div className="flex gap-2 mb-4.5">
           {[72, 52, 52, 40, 60].map((w, i) => (
-            <Sk key={i} className="h-8 rounded-full shrink-0" bg={line} style={{ width: w }} />
+            <Sk
+              key={i}
+              className="h-8 rounded-full shrink-0"
+              bg={line}
+              style={{ width: w }}
+            />
           ))}
         </div>
         {Array.from({ length: 7 }).map((_, i) => (
