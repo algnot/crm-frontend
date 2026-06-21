@@ -66,12 +66,10 @@ export class BackendClient {
     clientId: string,
   ): Promise<ErrorResponse | PartnerAppConfig> {
     try {
-      this.setLoading(true);
       const response = await this.client.get(`/partner/${clientId}`);
-      this.setLoading(false);
+
       return normalizePartnerAppConfig(response.data);
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -81,15 +79,13 @@ export class BackendClient {
     profile: Profile,
   ): Promise<ErrorResponse | User> {
     try {
-      this.setLoading(true);
       const response = await this.client.post(
         `/partner/${clientId}/user`,
         profile,
       );
-      this.setLoading(false);
+
       return response.data;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -99,15 +95,13 @@ export class BackendClient {
     payload: SubmitPhoneRequest,
   ): Promise<ErrorResponse | SubmitPhoneResponse> {
     try {
-      this.setLoading(true);
       const response = await this.client.post(
         `/partner/${clientId}/submit-phone`,
         payload,
       );
-      this.setLoading(false);
+
       return response.data;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -117,15 +111,13 @@ export class BackendClient {
     payload: VerifyPhoneRequest,
   ): Promise<ErrorResponse | void> {
     try {
-      this.setLoading(true);
       const response = await this.client.post(
         `/partner/${clientId}/verify-phone`,
         payload,
       );
-      this.setLoading(false);
+
       return response.data;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -135,15 +127,13 @@ export class BackendClient {
     payload: SubmitEmailRequest,
   ): Promise<ErrorResponse | SubmitEmailResponse> {
     try {
-      this.setLoading(true);
       const response = await this.client.post(
         `/partner/${clientId}/submit-email`,
         payload,
       );
-      this.setLoading(false);
+
       return response.data;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -153,15 +143,13 @@ export class BackendClient {
     payload: VerifyEmailRequest,
   ): Promise<ErrorResponse | void> {
     try {
-      this.setLoading(true);
       const response = await this.client.post(
         `/partner/${clientId}/verify-email`,
         payload,
       );
-      this.setLoading(false);
+
       return response.data;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -171,14 +159,12 @@ export class BackendClient {
     userId: string,
   ): Promise<ErrorResponse | GetUserPointRespont[]> {
     try {
-      this.setLoading(true);
       const response = await this.client.get(
         `/partner/${clientId}/user/${userId}/point`,
       );
-      this.setLoading(false);
+
       return response.data.points;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -188,14 +174,12 @@ export class BackendClient {
     userId: string,
   ): Promise<ErrorResponse | GetUserPointHistoryRespont[]> {
     try {
-      this.setLoading(true);
       const response = await this.client.get(
         `/partner/${clientId}/user/${userId}/point-history`,
       );
-      this.setLoading(false);
+
       return response.data.point_history;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -205,14 +189,12 @@ export class BackendClient {
     code: string,
   ): Promise<ErrorResponse | Redeem> {
     try {
-      this.setLoading(true);
       const response = await this.client.get(
         `/partner/${clientId}/redeem/${code}`,
       );
-      this.setLoading(false);
+
       return response.data.redeem;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -223,29 +205,25 @@ export class BackendClient {
     userId: string,
   ): Promise<ErrorResponse | GetUserPointHistoryRespont> {
     try {
-      this.setLoading(true);
       const response = await this.client.post(
         `/partner/${clientId}/redeem/${code}`,
         {
           line_user_id: userId,
         },
       );
-      this.setLoading(false);
+
       return response.data.point;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
 
   async listCoupon(clientId: string): Promise<ErrorResponse | CouponType[]> {
     try {
-      this.setLoading(true);
       const response = await this.client.get(`/partner/${clientId}/coupon`);
-      this.setLoading(false);
+
       return response.data.coupon;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -255,14 +233,12 @@ export class BackendClient {
     id: string,
   ): Promise<ErrorResponse | CouponType> {
     try {
-      this.setLoading(true);
       const response = await this.client.get(
         `/partner/${clientId}/coupon/${id}`,
       );
-      this.setLoading(false);
+
       return response.data.coupon;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -273,17 +249,15 @@ export class BackendClient {
     userId: string,
   ): Promise<ErrorResponse | UserCoupon> {
     try {
-      this.setLoading(true);
       const response = await this.client.post(
         `/partner/${clientId}/coupon/${couponId}/redeem`,
         {
           line_user_id: userId,
         },
       );
-      this.setLoading(false);
+
       return response.data.coupon;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -293,14 +267,12 @@ export class BackendClient {
     userId: string,
   ): Promise<ErrorResponse | UserCoupon[]> {
     try {
-      this.setLoading(true);
       const response = await this.client.get(
         `/partner/${clientId}/user/${userId}/coupon`,
       );
-      this.setLoading(false);
+
       return response.data.coupon;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -311,14 +283,12 @@ export class BackendClient {
     couponId: string,
   ): Promise<ErrorResponse | UserCoupon> {
     try {
-      this.setLoading(true);
       const response = await this.client.get(
         `/partner/${clientId}/user/${userId}/coupon/${couponId}`,
       );
-      this.setLoading(false);
+
       return response.data.coupon;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -329,14 +299,12 @@ export class BackendClient {
     couponCode: string,
   ): Promise<ErrorResponse | UserCoupon> {
     try {
-      this.setLoading(true);
       const response = await this.client.post(
         `/partner/${clientId}/user/${userId}/coupon/${couponCode}/use`,
       );
-      this.setLoading(false);
+
       return response.data.coupon;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
@@ -348,7 +316,6 @@ export class BackendClient {
     receiptImage: string,
   ): Promise<ErrorResponse | void> {
     try {
-      this.setLoading(true);
       const response = await this.client.post(
         `/partner/${clientId}/user/${userId}/receipt`,
         {
@@ -356,10 +323,9 @@ export class BackendClient {
           receipt_image: receiptImage,
         },
       );
-      this.setLoading(false);
+
       return response.data;
     } catch (e) {
-      this.setLoading(false);
       return handlerError(e);
     }
   }
