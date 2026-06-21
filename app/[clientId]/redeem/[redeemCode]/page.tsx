@@ -9,8 +9,6 @@ import { isErrorResponse, Redeem } from "@/types/request";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft } from "tabler-icons-react";
-import { IconGift } from "@tabler/icons-react";
-import MenuCard from "@/components/menu-card";
 import { formatDate } from "@/util/format-date";
 
 export default function Page() {
@@ -22,6 +20,7 @@ export default function Page() {
     userProfile,
     setIsShowNavbar,
     openAlert,
+    setFullLoading,
   } = useApp();
   const redeemCode = Array.isArray(params.redeemCode)
     ? params.redeemCode[0]
@@ -97,6 +96,8 @@ export default function Page() {
   const onReedeem = async () => {
     if (!redeemCode || !userProfile?.userId) return;
 
+    setFullLoading(true);
+
     const response = await backendClient.redeemCode(
       clientConfig.slug,
       redeemCode,
@@ -111,14 +112,16 @@ export default function Page() {
           router.push(`/${clientConfig.slug}`);
         },
       });
+      setFullLoading(false);
       return;
     }
 
+    setFullLoading(false);
     openAlert({
       title: "สำเร็จ",
       message: "สะสมคะแนนสำเร็จแล้ว!",
       onConfirm: () => {
-        router.push(`/${clientConfig.slug}`);
+        router.push(`/${clientConfig.slug}/coupon/my`);
       },
     });
   };
