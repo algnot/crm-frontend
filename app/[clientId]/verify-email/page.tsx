@@ -1,15 +1,16 @@
 "use client";
-import Button from "@/components/button";
 import Input from "@/components/input";
 import { useApp } from "@/components/providers/app-provider";
 import { isErrorResponse } from "@/types/request";
 import { IconArrowLeft } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Mail } from "tabler-icons-react";
 
 export default function Page() {
-  const { clientConfig, userProfile, backendClient } = useApp();
+  const { clientConfig, userProfile, backendClient, openAlert } = useApp();
 
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [ref, setRef] = useState("");
   const [step, setStep] = useState<"email" | "otp">("email");
@@ -29,11 +30,16 @@ export default function Page() {
   }, [countdown]);
 
   const sendOtp = async () => {
+    setOtp(["", "", "", "", "", ""]);
+
     const cleanedEmail = email.trim().toLowerCase();
     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
     if (!emailRegex.test(cleanedEmail)) {
-      alert("กรุณากรอกอีเมลให้ถูกต้อง");
+      openAlert({
+        title: "เกิดข้อผิดพลาด",
+        message: "กรุณากรอกอีเมลให้ถูกต้อง",
+      });
       return;
     }
 
@@ -54,26 +60,7 @@ export default function Page() {
     setStep("otp");
   };
 
-  const verifyOtp = async () => {
-    const code = otp.join("");
-
-    if (code.length !== 6) {
-      alert("กรอก OTP ให้ครบ");
-      return;
-    }
-
-    const response = await backendClient.verifyEmail(clientConfig.slug, {
-      otp: code,
-      ref: ref,
-    });
-    if (isErrorResponse(response)) {
-      return;
-    }
-
-    window.location.href = `/${clientConfig.slug}`;
-  };
-
-  const handleOtpChange = (value: string, index: number) => {
+  const handleOtpChange = async (value: string, index: number) => {
     if (!/^\d*$/.test(value)) return;
 
     const newOtp = [...otp];
@@ -83,6 +70,22 @@ export default function Page() {
 
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
+    }
+
+    if (newOtp.every((d) => d !== "")) {
+      const response = await backendClient.verifyEmail(clientConfig.slug, {
+        otp: newOtp.join(""),
+        ref: ref,
+      });
+      if (isErrorResponse(response)) {
+        openAlert({
+          title: "เกิดข้อผิดพลาด",
+          message: response.message,
+        });
+        return;
+      }
+
+      router.push(`/${clientConfig.slug}`);
     }
   };
 
@@ -215,7 +218,7 @@ export default function Page() {
             VERIFY OTP
           </p>
           <p
-            className="text-[32px] mb-2 text-center font-bodoni"
+            className="text-2xl mb-2 text-center font-bodoni"
             style={{
               color: clientConfig.ui.text_color,
             }}
@@ -259,12 +262,6 @@ export default function Page() {
               />
             ))}
           </div>
-
-          <Button
-            text="ยืนยัน OTP"
-            className="mt-6 rounded-2xl! h-14"
-            onClick={verifyOtp}
-          />
 
           {countdown > 0 ? (
             <div
