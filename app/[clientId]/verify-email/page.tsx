@@ -8,7 +8,13 @@ import { useEffect, useRef, useState } from "react";
 import { Mail } from "tabler-icons-react";
 
 export default function Page() {
-  const { clientConfig, userProfile, backendClient, openAlert } = useApp();
+  const {
+    clientConfig,
+    userProfile,
+    backendClient,
+    openAlert,
+    setFullLoading,
+  } = useApp();
 
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -45,11 +51,12 @@ export default function Page() {
 
     if (!userProfile?.userId) return;
 
+    setFullLoading(true);
     const response = await backendClient.submitEmail(clientConfig.slug, {
       email: cleanedEmail,
       userId: userProfile.userId,
     });
-
+    setFullLoading(false);
     if (isErrorResponse(response)) {
       return;
     }
@@ -73,10 +80,12 @@ export default function Page() {
     }
 
     if (newOtp.every((d) => d !== "")) {
+      setFullLoading(true);
       const response = await backendClient.verifyEmail(clientConfig.slug, {
         otp: newOtp.join(""),
         ref: ref,
       });
+      setFullLoading(false);
       if (isErrorResponse(response)) {
         openAlert({
           title: "เกิดข้อผิดพลาด",

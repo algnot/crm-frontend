@@ -9,7 +9,13 @@ import { useEffect, useRef, useState } from "react";
 import { Phone } from "tabler-icons-react";
 
 export default function Page() {
-  const { clientConfig, userProfile, backendClient, openAlert } = useApp();
+  const {
+    clientConfig,
+    userProfile,
+    backendClient,
+    openAlert,
+    setFullLoading,
+  } = useApp();
 
   const router = useRouter();
   const [phone, setPhone] = useState("");
@@ -47,10 +53,12 @@ export default function Page() {
     if (!userProfile?.userId) {
       return;
     }
+    setFullLoading(true);
     const response = await backendClient.submitPhone(clientConfig.slug, {
       phone: phone,
       userId: userProfile?.userId ?? "",
     });
+    setFullLoading(false);
     if (isErrorResponse(response)) {
       return;
     }
@@ -71,10 +79,12 @@ export default function Page() {
     }
 
     if (newOtp.every((d) => d !== "")) {
+      setFullLoading(true);
       const response = await backendClient.verifyPhone(clientConfig.slug, {
         otp: newOtp.join(""),
         ref: ref,
       });
+      setFullLoading(false);
       if (isErrorResponse(response)) {
         openAlert({
           title: "เกิดข้อผิดพลาด",

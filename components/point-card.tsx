@@ -109,14 +109,14 @@ export default function PointCard() {
           {appUserProfile?.tier.name}
         </div>
       </div>
-      <p className="text-white mt-1">
+      <div className="text-white mt-1">
         <p className="text-[54px] font-semibold font-bodoni">
           {mainPoint.balance.toLocaleString()}{" "}
         </p>
         <p className="text-[11px] font-semibold tracking-[0.16em] uppercase -mt-4">
           {mainPoint.currency.name}
         </p>
-      </p>
+      </div>
       {/* <div className="pt-3 flex justify-between border-t-[0.5px] border-[rgba(255,255,255,0.18)] text-white"> */}
       {/* <p className="text-[10.5px] font-mono">Lifetime · xxxx</p> */}
       {/* <button
