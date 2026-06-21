@@ -15,7 +15,6 @@ import {
   UserCoupon,
   CouponType,
 } from "@/types/request";
-import { Profile } from "@liff/get-profile";
 import axios, { AxiosInstance } from "axios";
 import { getLiffUserToken } from "./line-liff";
 
@@ -108,15 +107,9 @@ export class BackendClient {
     }
   }
 
-  async getOrCreateUser(
-    clientId: string,
-    profile: Profile,
-  ): Promise<ErrorResponse | User> {
+  async getUserInfo(clientId: string): Promise<ErrorResponse | User> {
     try {
-      const response = await this.client.post(
-        `/partner/${clientId}/user`,
-        profile,
-      );
+      const response = await this.client.get(`/partner/${clientId}/user`);
 
       return response.data;
     } catch (e) {
@@ -280,14 +273,10 @@ export class BackendClient {
   async redeemCoupon(
     clientId: string,
     couponId: number,
-    userId: string,
   ): Promise<ErrorResponse | UserCoupon> {
     try {
       const response = await this.client.post(
         `/partner/${clientId}/coupon/${couponId}/redeem`,
-        {
-          line_user_id: userId,
-        },
       );
 
       return response.data.coupon;
@@ -296,13 +285,10 @@ export class BackendClient {
     }
   }
 
-  async getUserCoupon(
-    clientId: string,
-    userId: string,
-  ): Promise<ErrorResponse | UserCoupon[]> {
+  async getUserCoupon(clientId: string): Promise<ErrorResponse | UserCoupon[]> {
     try {
       const response = await this.client.get(
-        `/partner/${clientId}/user/${userId}/coupon`,
+        `/partner/${clientId}/user/coupon`,
       );
 
       return response.data.coupon;
@@ -313,12 +299,11 @@ export class BackendClient {
 
   async getUserCouponById(
     clientId: string,
-    userId: string,
     couponId: string,
   ): Promise<ErrorResponse | UserCoupon> {
     try {
       const response = await this.client.get(
-        `/partner/${clientId}/user/${userId}/coupon/${couponId}`,
+        `/partner/${clientId}/user/coupon/${couponId}`,
       );
 
       return response.data.coupon;
@@ -329,12 +314,11 @@ export class BackendClient {
 
   async onUseCoupon(
     clientId: string,
-    userId: string,
     couponCode: string,
   ): Promise<ErrorResponse | UserCoupon> {
     try {
       const response = await this.client.post(
-        `/partner/${clientId}/user/${userId}/coupon/${couponCode}/use`,
+        `/partner/${clientId}/user/coupon/${couponCode}/use`,
       );
 
       return response.data.coupon;

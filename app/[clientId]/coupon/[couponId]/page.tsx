@@ -127,11 +127,7 @@ export default function Page() {
   const redeemCoupon = async () => {
     if (!coupon || !clientConfig || !userProfile) return;
     setIsLoading(true);
-    const res = await backendClient.redeemCoupon(
-      clientConfig.slug,
-      coupon.id,
-      userProfile?.userId,
-    );
+    const res = await backendClient.redeemCoupon(clientConfig.slug, coupon.id);
 
     setIsLoading(false);
     if (isErrorResponse(res)) {

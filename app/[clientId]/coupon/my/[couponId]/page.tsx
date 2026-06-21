@@ -68,7 +68,6 @@ export default function Page() {
 
     const coupon = await backendClient.getUserCouponById(
       clientConfig.slug,
-      userProfile.userId,
       couponId,
     );
 
@@ -161,7 +160,6 @@ export default function Page() {
 
     const response = await backendClient.onUseCoupon(
       clientConfig.slug,
-      userProfile.userId,
       coupon.code,
     );
 

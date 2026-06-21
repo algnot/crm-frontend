@@ -47,10 +47,7 @@ export default function RootLayout({
       setUserProfile(liffProfile);
 
       if (liffProfile) {
-        const appProfile = await backendClient.getOrCreateUser(
-          clientId,
-          liffProfile,
-        );
+        const appProfile = await backendClient.getUserInfo(clientId);
         if (isErrorResponse(appProfile)) {
           window.location.href = `/${clientConfig.slug}`;
           return;

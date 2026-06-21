@@ -24,10 +24,7 @@ export default function Page() {
         return;
       }
 
-      const response = await backendClient.getUserCoupon(
-        clientConfig.slug,
-        userProfile.userId,
-      );
+      const response = await backendClient.getUserCoupon(clientConfig.slug);
 
       if (isErrorResponse(response)) {
         window.location.href = `/${clientConfig.slug}`;
@@ -69,12 +66,21 @@ export default function Page() {
         <Sk className="h-9 w-44 mt-5 mb-5" bg={line} />
         <div className="flex gap-2 mb-5">
           {[80, 72, 80].map((w, i) => (
-            <Sk key={i} className="h-8 rounded-full" bg={line} style={{ width: w }} />
+            <Sk
+              key={i}
+              className="h-8 rounded-full"
+              bg={line}
+              style={{ width: w }}
+            />
           ))}
         </div>
         <div className="mt-5 flex flex-col gap-3">
           {[1, 2, 3].map((i) => (
-            <Sk key={i} className="h-24 rounded-[18px]" bg={clientConfig.ui.surface_color} />
+            <Sk
+              key={i}
+              className="h-24 rounded-[18px]"
+              bg={clientConfig.ui.surface_color}
+            />
           ))}
         </div>
       </div>
