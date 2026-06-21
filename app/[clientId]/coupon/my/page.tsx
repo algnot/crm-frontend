@@ -39,17 +39,24 @@ export default function Page() {
   }, [backendClient, clientConfig.slug, userProfile]);
 
   const canUseCoupon = userCoupons.filter((item) => {
+    if (item.is_used) return false;
+    if (item.state === "redeemed") return true;
+    if (!item.expiration_date) return true;
+
     const expiration = new Date(item.expiration_date.replace(" ", "T") + "Z");
 
-    return !item.is_used && expiration > new Date();
+    return expiration > new Date();
   });
 
   const usedCoupon = userCoupons.filter((item) => item.is_used);
 
   const expiredCoupon = userCoupons.filter((item) => {
+    if (item.is_used) return false;
+    if (item.state !== "activated" || !item.expiration_date) return false;
+
     const expiration = new Date(item.expiration_date.replace(" ", "T") + "Z");
 
-    return !item.is_used && expiration < new Date();
+    return expiration < new Date();
   });
 
   const displayCoupons =
@@ -146,18 +153,19 @@ export default function Page() {
 
       <div className="mt-5 flex flex-col gap-3">
         {displayCoupons.map((coupon, index) => {
-          const expiration = new Date(
-            coupon.expiration_date.replace(" ", "T") + "Z",
-          );
-
-          const canUse = !coupon.is_used && expiration > new Date();
+          const canUse =
+            !coupon.is_used &&
+            (coupon.state === "redeemed" ||
+              !coupon.expiration_date ||
+              new Date(coupon.expiration_date.replace(" ", "T") + "Z") >
+                new Date());
           const cp: CouponType = {
             id: coupon.id,
             name: coupon.name,
             image_url: coupon.coupon.image_url,
             value: Number(coupon.value),
             start_time: coupon.acquired_date,
-            end_time: coupon.expiration_date,
+            end_time: coupon.expiration_date || coupon.acquired_date,
             code_expiry_interval: 10,
             redeemed_count: 0,
             term_and_condition: coupon.coupon.term_and_condition,

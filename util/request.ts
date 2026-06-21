@@ -312,6 +312,21 @@ export class BackendClient {
     }
   }
 
+  async activateCoupon(
+    clientId: string,
+    couponCode: string,
+  ): Promise<ErrorResponse | UserCoupon> {
+    try {
+      const response = await this.client.post(
+        `/partner/${clientId}/user/coupon/${couponCode}/activate`,
+      );
+
+      return response.data.coupon;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
   async onUseCoupon(
     clientId: string,
     couponCode: string,

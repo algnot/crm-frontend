@@ -40,6 +40,14 @@ function getRemainingSeconds(expirationDate: string): number {
   return Math.floor((expiration.getTime() - Date.now()) / 1000);
 }
 
+function isCouponExpired(coupon: UserCoupon): boolean {
+  if (coupon.state !== "activated" || !coupon.expiration_date) {
+    return false;
+  }
+
+  return getRemainingSeconds(coupon.expiration_date) <= 0;
+}
+
 export default function Page() {
   const params = useParams();
   const router = useRouter();
@@ -59,7 +67,6 @@ export default function Page() {
   const [coupon, setCoupon] = useState<UserCoupon>();
   const [codeType, setCodeType] = useState<"qr" | "bar">("qr");
   const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
-  const [used, setUsed] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
     if (!userProfile || !couponId) {
@@ -90,20 +97,24 @@ export default function Page() {
   }, [fetchData, setIsShowNavbar]);
 
   useEffect(() => {
-    if (!coupon?.expiration_date || coupon.is_used) {
+    if (
+      coupon?.state !== "activated" ||
+      !coupon.expiration_date ||
+      coupon.is_used
+    ) {
       setRemainingSeconds(null);
       return;
     }
 
     const updateRemaining = () => {
-      setRemainingSeconds(getRemainingSeconds(coupon.expiration_date));
+      setRemainingSeconds(getRemainingSeconds(coupon.expiration_date as string));
     };
 
     updateRemaining();
     const interval = setInterval(updateRemaining, 1000);
 
     return () => clearInterval(interval);
-  }, [coupon?.expiration_date, coupon?.is_used]);
+  }, [coupon?.expiration_date, coupon?.is_used, coupon?.state]);
 
   if (!coupon) {
     const line = `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 22%, transparent)`;
@@ -153,6 +164,31 @@ export default function Page() {
     );
   }
 
+  const isActivated = coupon.state === "activated";
+  const expired = isCouponExpired(coupon);
+
+  const onActivateCoupon = async () => {
+    if (!coupon?.code) {
+      return;
+    }
+
+    const response = await backendClient.activateCoupon(
+      clientConfig.slug,
+      coupon.code,
+    );
+
+    if (isErrorResponse(response)) {
+      openAlert({
+        title: "เปิดใช้งานคูปองไม่สำเร็จ",
+        message: response.message,
+        icon: <IconMoodSadFilled />,
+      });
+      return;
+    }
+
+    setCoupon(response);
+  };
+
   const onUseCoupon = async () => {
     if (!userProfile || !couponId || !coupon) {
       return;
@@ -181,7 +217,7 @@ export default function Page() {
       },
     });
 
-    fetchData();
+    setCoupon(response);
   };
 
   const onCopyCode = async () => {
@@ -243,7 +279,7 @@ export default function Page() {
       >
         {coupon?.name}
       </div>
-      {coupon?.is_used && (
+      {coupon?.is_used && coupon.used_date && (
         <div
           className="mt-1 text-[13px]"
           style={{
@@ -254,7 +290,7 @@ export default function Page() {
         </div>
       )}
 
-      {!used && (
+      {coupon.state === "redeemed" && (
         <div
           className="mt-5 rounded-3xl border-[0.5px] text-[13px]"
           style={{
@@ -296,13 +332,13 @@ export default function Page() {
                 color: clientConfig.ui.text_color,
               }}
             >
-              {formatDate(coupon?.expiration_date, {}, true)}
+              เริ่มนับเมื่อกดใช้สิทธิ์
             </p>
           </div>
         </div>
       )}
 
-      {coupon?.code && !coupon.is_used && used && (
+      {coupon?.code && isActivated && !coupon.is_used && (
         <div className="flex flex-col items-center">
           {/* Toggle */}
           <div
@@ -409,7 +445,7 @@ export default function Page() {
       )}
 
       {/* Terms */}
-      {(!used || coupon?.is_used) && (
+      {(!isActivated || coupon?.is_used) && (
         <>
           <p
             className="mt-8 text-[10px] font-semibold"
@@ -437,9 +473,9 @@ export default function Page() {
       >
         {coupon?.is_used ? (
           <Button text="คุณใช้คูปองนี้เรียบร้อยแล้ว" disabled />
-        ) : remainingSeconds !== null && remainingSeconds <= 0 ? (
+        ) : expired ? (
           <Button text="หมดอายุ" disabled />
-        ) : used ? (
+        ) : coupon.state === "activated" ? (
           <Button text="ใช้สิทธิ์แล้ว" onClick={onUseCoupon} />
         ) : (
           <Button
@@ -447,11 +483,9 @@ export default function Page() {
             onClick={() => {
               openAlert({
                 title: "ยืนยันการใช้สิทธิ์",
-                message: "คุณต้องการใช้สิทธิ์นี้หรือไม่?",
+                message: "เมื่อยืนยันแล้ว เวลาใช้งานจะเริ่มนับถอยหลัง",
                 hasCancel: true,
-                onConfirm: () => {
-                  setUsed(true);
-                },
+                onConfirm: onActivateCoupon,
               });
             }}
           />

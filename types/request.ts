@@ -252,9 +252,11 @@ export interface UserCoupon {
   code: string;
   value: string;
   acquired_date: string;
-  expiration_date: string;
+  activated_date: string | false;
+  expiration_date: string | false;
+  state: "redeemed" | "activated" | "used";
   is_used: boolean;
-  used_date: string;
+  used_date: string | false;
   currency: Currency;
   coupon: {
     id: number;
