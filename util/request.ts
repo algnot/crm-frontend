@@ -52,6 +52,8 @@ const handlerError = (error: unknown): ErrorResponse => {
 export class BackendClient {
   private readonly client: AxiosInstance;
   private readonly setLoading: (value: boolean) => void;
+  private liffId: string;
+  private authPromise: Promise<string> | null = null;
 
   constructor(setLoading: (value: boolean) => void, liffId: string) {
     this.client = axios.create({
@@ -61,14 +63,37 @@ export class BackendClient {
       },
     });
     this.setLoading = setLoading;
+    this.liffId = liffId;
 
-    if (typeof window !== "undefined") {
-      void this.init(liffId);
+    this.client.interceptors.request.use(async (config) => {
+      const token = await this.getAccessToken();
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    });
+  }
+
+  setLiffId(liffId: string) {
+    if (this.liffId !== liffId) {
+      this.liffId = liffId;
+      this.authPromise = null;
     }
   }
 
-  async init(liffId: string) {
-    this.client.defaults.headers.Authorization = `Bearer ${await getLiffUserToken(liffId)}`;
+  private async getAccessToken(): Promise<string> {
+    if (typeof window === "undefined" || !this.liffId) {
+      return "";
+    }
+
+    if (!this.authPromise) {
+      this.authPromise = getLiffUserToken(this.liffId).catch((error) => {
+        this.authPromise = null;
+        throw error;
+      });
+    }
+
+    return this.authPromise;
   }
 
   async getPartnerAppConfig(

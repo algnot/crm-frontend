@@ -40,9 +40,10 @@ export default function RootLayout({
       setIsWaiting(true);
       setClientConfig(response);
 
-      const liffProfile = await getLiffUserProfile(
-        response?.line?.liff_id ?? "",
-      );
+      const liffId = response?.line?.liff_id ?? "";
+      backendClient.setLiffId(liffId);
+
+      const liffProfile = await getLiffUserProfile(liffId);
       setUserProfile(liffProfile);
 
       if (liffProfile) {

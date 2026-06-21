@@ -7,6 +7,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import {
@@ -60,10 +61,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
     initPartnerAppConfig(),
   );
   const setFullLoading = useFullLoadingContext();
-  const backendClient = useMemo(
-    () => new BackendClient(setFullLoading, clientConfig.line.liff_id),
-    [setFullLoading, clientConfig.line.liff_id],
-  );
+  const backendClientRef = useRef<BackendClient | null>(null);
+
+  if (!backendClientRef.current) {
+    backendClientRef.current = new BackendClient(
+      setFullLoading,
+      clientConfig.line.liff_id,
+    );
+  }
+
+  const backendClient = backendClientRef.current;
+
+  useEffect(() => {
+    backendClient.setLiffId(clientConfig.line.liff_id);
+  }, [backendClient, clientConfig.line.liff_id]);
   const [userPoint, setUserPoint] = useState<GetUserPointRespont[]>([]);
   const [isShowNavbar, setIsShowNavbar] = useState<boolean>(true);
   const {
