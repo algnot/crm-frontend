@@ -168,7 +168,10 @@ export default function MemberInfo() {
 
   const handleSubmit = async () => {
     if (!firstName.trim() || !lastName.trim()) {
-      openAlert({ title: "กรุณากรอกข้อมูล", message: "กรุณากรอกชื่อและนามสกุล" });
+      openAlert({
+        title: "กรุณากรอกข้อมูล",
+        message: "กรุณากรอกชื่อและนามสกุล",
+      });
       return;
     }
     if (!gender) {
@@ -178,20 +181,16 @@ export default function MemberInfo() {
     if (!userProfile?.userId) return;
 
     setFullLoading(true);
-    const response = await backendClient.updateMemberInfo(
-      clientConfig.slug,
-      userProfile.userId,
-      {
-        first_name: firstName.trim(),
-        last_name: lastName.trim(),
-        gender,
-        birth_date: birthDate,
-        province: provinceName,
-        district: districtName,
-        sub_district: subDistrictName,
-        postal_code: postalCode,
-      },
-    );
+    const response = await backendClient.updateUserInfo(clientConfig.slug, {
+      // first_name: firstName.trim(),
+      // last_name: lastName.trim(),
+      gender,
+      birth_date: birthDate,
+      // province: provinceName,
+      // district: districtName,
+      // sub_district: subDistrictName,
+      // postal_code: postalCode,
+    });
     setFullLoading(false);
 
     if (isErrorResponse(response)) {
