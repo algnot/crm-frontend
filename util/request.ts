@@ -231,7 +231,10 @@ export class BackendClient {
     clientId: string,
     code: string,
     userId: string,
-  ): Promise<ErrorResponse | GetUserPointHistoryRespont> {
+  ): Promise<
+    | ErrorResponse
+    | { point?: GetUserPointHistoryRespont; coupon?: UserCoupon }
+  > {
     try {
       const response = await this.client.post(
         `/partner/${clientId}/redeem/${code}`,
@@ -240,7 +243,7 @@ export class BackendClient {
         },
       );
 
-      return response.data.point;
+      return response.data;
     } catch (e) {
       return handlerError(e);
     }

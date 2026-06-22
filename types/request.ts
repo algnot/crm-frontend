@@ -3,9 +3,10 @@ export interface ErrorResponse {
   message: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const isErrorResponse = (data: any): data is ErrorResponse => {
-  return typeof data.error === "string" && typeof data.message === "string";
+export const isErrorResponse = (data: unknown): data is ErrorResponse => {
+  if (data == null || typeof data !== "object") return false;
+  const record = data as Record<string, unknown>;
+  return typeof record.error === "string" && typeof record.message === "string";
 };
 
 export interface PartnerAppConfig {

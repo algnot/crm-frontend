@@ -117,10 +117,19 @@ export default function Page() {
       return;
     }
 
+    const isCouponRedeem = Boolean(response.coupon);
     await openAlert({
       title: "สำเร็จ",
-      message: "สะสมคะแนนสำเร็จแล้ว!",
+      message: isCouponRedeem
+        ? "รับคูปองสำเร็จแล้ว!"
+        : "สะสมคะแนนสำเร็จแล้ว!",
       onConfirm: () => {
+        if (response.coupon) {
+          router.push(
+            `/${clientConfig.slug}/coupon/my/${response.coupon.id}`,
+          );
+          return;
+        }
         router.push(`/${clientConfig.slug}/coupon/my`);
       },
     });
