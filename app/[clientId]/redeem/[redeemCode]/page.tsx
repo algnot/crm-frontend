@@ -105,14 +105,15 @@ export default function Page() {
     );
 
     if (isErrorResponse(response)) {
-      openAlert({
+      setFullLoading(false);
+
+      await openAlert({
         title: "เกิดข้อผิดพลาด",
         message: response.message,
         onConfirm: () => {
           router.push(`/${clientConfig.slug}`);
         },
       });
-      setFullLoading(false);
       return;
     }
 
