@@ -110,7 +110,7 @@ export default function Home() {
               <img
                 src={adsItems[modalIndex].image_url}
                 alt={`ads-modal-${modalIndex + 1}`}
-                className="w-full h-[180px] object-cover"
+                className="w-full aspect-video object-cover"
               />
             </div>
 
