@@ -104,9 +104,9 @@ export default function Page() {
       userProfile?.userId,
     );
 
-    if (isErrorResponse(response)) {
-      setFullLoading(false);
+    setFullLoading(false);
 
+    if (isErrorResponse(response)) {
       await openAlert({
         title: "เกิดข้อผิดพลาด",
         message: response.message,
@@ -117,8 +117,7 @@ export default function Page() {
       return;
     }
 
-    setFullLoading(false);
-    openAlert({
+    await openAlert({
       title: "สำเร็จ",
       message: "สะสมคะแนนสำเร็จแล้ว!",
       onConfirm: () => {
