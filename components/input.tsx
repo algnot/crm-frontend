@@ -157,7 +157,7 @@ export default function Input({
     }
   };
 
-  const inputClassName = `w-full py-2 text-xl outline-none resize-none ${disabled ? "cursor-not-allowed" : ""}`;
+  const inputClassName = `w-full py-2 text-lg outline-none resize-none ${disabled ? "cursor-not-allowed" : ""}`;
   const showCharCount = maxLength != null && !isFile;
   const currentLength = showCharCount
     ? value == null || value === ""
@@ -166,7 +166,7 @@ export default function Input({
     : 0;
   const atLimit = showCharCount && currentLength >= maxLength;
   const showCounterInside = showCharCount && multiline;
-  const wrapperClassName = `h-14 rounded-[14px] shadow-md flex gap-3 px-3 ${showCounterInside ? "relative pb-6" : ""} ${multiline ? "items-start" : "justify-center items-center"} ${disabled ? "opacity-50 cursor-not-allowed bg-gray-50" : isFile ? "cursor-pointer" : "cursor-text"} ${className ?? ""}`;
+  const wrapperClassName = `h-14 rounded-[14px] shadow-md flex gap-3 px-3 ${showCounterInside ? "relative pb-6" : ""} ${multiline ? "items-start" : "justify-center items-center"} ${disabled ? "cursor-not-allowed bg-gray-50" : isFile ? "cursor-pointer" : "cursor-text"} ${className ?? ""}`;
 
   const fileAccept = type === "image" ? "image/*" : accept;
   const isImageUpload = isFile && type === "image";
@@ -283,7 +283,9 @@ export default function Input({
             className={inputClassName}
             placeholder={placeholder ?? ""}
             style={{
-              color: clientConfig.ui.text_gray_color,
+              color: disabled
+                ? clientConfig.ui.text_gray_color
+                : clientConfig.ui.text_white_color,
             }}
           />
         )}

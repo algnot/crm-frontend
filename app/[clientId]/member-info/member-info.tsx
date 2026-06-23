@@ -13,13 +13,12 @@ import {
 } from "@/util/thai-address";
 import { IconChevronDown } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   IconUser,
   IconPhone,
   IconMail,
   IconCalendar,
-  IconMapPin,
 } from "@tabler/icons-react";
 
 interface ThemedSelectProps {
@@ -58,18 +57,23 @@ function ThemedSelect({
         style={{
           background: clientConfig.ui.surface_color,
           border: `0.5px solid rgba(255,255,255,0.08)`,
-          color: clientConfig.ui.text_gray_color,
+          color: clientConfig.ui.text_white_color,
         }}
         onClick={() => !disabled && setIsOpen(true)}
       >
-        <div className="flex-1 text-xl truncate">
+        <IconUser size={20} className="shrink-0" color="rgb(106, 114, 130)" />
+        <div className="flex-1 text-lg truncate">
           {selected ? (
             selected.name
           ) : (
             <span className="opacity-50">{placeholder}</span>
           )}
         </div>
-        <IconChevronDown size={20} className="shrink-0" />
+        <IconChevronDown
+          size={20}
+          className="shrink-0"
+          color="rgb(106, 114, 130)"
+        />
       </div>
 
       {isOpen && (
@@ -78,14 +82,23 @@ function ThemedSelect({
             className="fixed inset-0 bg-black/50 z-40"
             onClick={() => setIsOpen(false)}
           />
-          <div className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl shadow-2xl max-h-[70vh] overflow-hidden w-screen md:w-[500px] mx-auto">
+          <div
+            className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl shadow-2xl max-h-[70vh] overflow-hidden w-screen md:w-[500px] mx-auto"
+            style={{ background: clientConfig.ui.surface_color }}
+          >
             <div className="overflow-y-auto max-h-[calc(70vh-8px)]">
               {options.map((opt) => (
                 <div
                   key={opt.id}
-                  className={`px-5 py-4 cursor-pointer text-[15px] hover:bg-gray-100 transition-colors border-b border-gray-100 ${
-                    value === opt.id ? "bg-gray-50 font-medium" : ""
-                  }`}
+                  className={`px-5 py-4 cursor-pointer text-[15px] hover:bg-gray-100 transition-colors border-b`}
+                  style={{
+                    color: clientConfig.ui.text_white_color,
+                    borderColor: clientConfig.ui.text_gray_color + "20",
+                    backgroundColor:
+                      value === opt.id
+                        ? clientConfig.ui.primary_color + "20"
+                        : "transparent",
+                  }}
                   onClick={() => {
                     onChange(opt.id, opt.name);
                     setIsOpen(false);
@@ -103,9 +116,9 @@ function ThemedSelect({
 }
 
 const GENDER_OPTIONS = [
-  { id: "male", name: "ชาย" },
-  { id: "female", name: "หญิง" },
-  { id: "other", name: "ไม่ระบุ" },
+  { id: "M", name: "ชาย" },
+  { id: "F", name: "หญิง" },
+  { id: "O", name: "ไม่ระบุ" },
 ];
 
 export default function MemberInfo() {
@@ -116,15 +129,16 @@ export default function MemberInfo() {
     backendClient,
     openAlert,
     setFullLoading,
+    setIsShowNavbar,
   } = useApp();
   const router = useRouter();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [gender, setGender] = useState("");
-  const [email, setEmail] = useState(appUserProfile?.email ?? "");
-  const [phone, setPhone] = useState(appUserProfile?.phone ?? "");
-  const [birthDate, setBirthDate] = useState(appUserProfile?.birth_date ?? "");
+  const [gender, setGender] = useState<"M" | "F" | "O" | "">("");
+  const [email, setEmail] = useState(appUserProfile?.email || "");
+  const [phone, setPhone] = useState(appUserProfile?.phone || "");
+  const [birthDate, setBirthDate] = useState(appUserProfile?.birth_date || "");
 
   const [provinceId, setProvinceId] = useState("");
   const [provinceName, setProvinceName] = useState("");
@@ -167,24 +181,14 @@ export default function MemberInfo() {
   };
 
   const handleSubmit = async () => {
-    if (!firstName.trim() || !lastName.trim()) {
-      openAlert({
-        title: "กรุณากรอกข้อมูล",
-        message: "กรุณากรอกชื่อและนามสกุล",
-      });
-      return;
-    }
-    if (!gender) {
-      openAlert({ title: "กรุณากรอกข้อมูล", message: "กรุณาเลือกเพศ" });
-      return;
-    }
     if (!userProfile?.userId) return;
 
     setFullLoading(true);
     const response = await backendClient.updateUserInfo(clientConfig.slug, {
       // first_name: firstName.trim(),
       // last_name: lastName.trim(),
-      gender,
+      gender: gender as "M" | "F" | "O",
+      phone: phone.trim(),
       birth_date: birthDate,
       // province: provinceName,
       // district: districtName,
@@ -200,6 +204,14 @@ export default function MemberInfo() {
 
     router.push(`/${clientConfig.slug}`);
   };
+
+  useEffect(() => {
+    setIsShowNavbar(false);
+
+    return () => {
+      setIsShowNavbar(true);
+    };
+  }, [setIsShowNavbar]);
 
   if (!userProfile) return null;
 
@@ -229,7 +241,7 @@ export default function MemberInfo() {
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="flex gap-3">
+        {/* <div className="flex gap-3">
           <Input
             value={firstName}
             onChange={setFirstName}
@@ -241,14 +253,7 @@ export default function MemberInfo() {
             onChange={setLastName}
             placeholder="นามสกุล"
           />
-        </div>
-
-        <ThemedSelect
-          placeholder="เพศ"
-          options={GENDER_OPTIONS}
-          value={gender}
-          onChange={(id) => setGender(id)}
-        />
+        </div> */}
 
         <Input
           type="email"
@@ -257,6 +262,13 @@ export default function MemberInfo() {
           placeholder="อีเมล"
           icon={<IconMail size={20} />}
           disabled={!!appUserProfile?.email}
+        />
+
+        <ThemedSelect
+          placeholder="เพศ"
+          options={GENDER_OPTIONS}
+          value={gender}
+          onChange={(id) => setGender(id as "M" | "F" | "O")}
         />
 
         <Input
@@ -277,7 +289,7 @@ export default function MemberInfo() {
           icon={<IconCalendar size={20} />}
         />
 
-        <div
+        {/* <div
           className="pt-1 pb-0.5 px-1 text-xs"
           style={{ color: clientConfig.ui.text_gray_color }}
         >
@@ -314,7 +326,7 @@ export default function MemberInfo() {
           icon={<IconMapPin size={20} />}
           inputMode="numeric"
           maxLength={5}
-        />
+        /> */}
       </div>
 
       <button

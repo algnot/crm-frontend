@@ -148,6 +148,7 @@ export interface User {
   phone: string;
   force_verify_phone: boolean;
   force_verify_email: boolean;
+  is_updated_user_info: boolean;
   tier: Tier;
 }
 
@@ -155,7 +156,7 @@ export interface UserInfoPayload {
   display_name: string;
   picture_url: string;
   birth_date: string;
-  gender: string;
+  gender: "M" | "F" | "O";
   email: string;
   phone: string;
 }

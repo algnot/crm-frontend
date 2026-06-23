@@ -117,6 +117,8 @@ export default function Page() {
         router.replace(`/${clientConfig.slug}/verify-phone`);
       } else if (appProfile.force_verify_email) {
         router.replace(`/${clientConfig.slug}/verify-email`);
+      } else if (appProfile.is_updated_user_info === false) {
+        router.replace(`/${clientConfig.slug}/member-info`);
       } else {
         router.replace(`/${clientConfig.slug}`);
       }
@@ -132,7 +134,7 @@ export default function Page() {
   if (!userProfile) return null;
 
   return (
-    <div className="min-h-screen flex flex-col items-center px-10">
+    <div className="min-h-screen flex flex-col items-center px-5">
       <div className="w-full pt-4">
         {step === "otp" && (
           <button

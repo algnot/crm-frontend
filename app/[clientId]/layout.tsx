@@ -70,6 +70,14 @@ export default function RootLayout({
           return;
         }
 
+        if (
+          appProfile.is_updated_user_info === false &&
+          window.location.pathname !== `/${clientId}/member-info`
+        ) {
+          window.location.href = `/${clientId}/member-info`;
+          return;
+        }
+
         setAppUserProfile(appProfile);
         setIsWaiting(false);
       }

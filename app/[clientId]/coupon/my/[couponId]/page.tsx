@@ -41,7 +41,7 @@ function getRemainingSeconds(expirationDate: string): number {
 }
 
 function isCouponExpired(coupon: UserCoupon): boolean {
-  if (coupon.state !== "activated" || !coupon.expiration_date) {
+  if (coupon.state !== "expired" || !coupon.expiration_date) {
     return false;
   }
 

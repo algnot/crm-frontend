@@ -139,7 +139,7 @@ export default function HistorySection() {
   return (
     <div>
       <div
-        className="text-3xl font-medium mt-5 mb-2 font-bodoni pb-4.5"
+        className="text-2xl font-medium mt-5 mb-2 font-bodoni pb-4.5"
         style={{ color: clientConfig.ui.text_color }}
       >
         ประวัติการได้รับคะแนน
@@ -168,12 +168,12 @@ export default function HistorySection() {
             รับ
           </p>
           <p
-            className="text-[22px] font-medium font-bodoni"
+            className="text-xl font-medium font-bodoni"
             style={{
               color: clientConfig.ui.text_success_color,
             }}
           >
-            +{mainPoint.earn.toLocaleString()}
+            {mainPoint.earn.toLocaleString()}
           </p>
         </div>
         <div
@@ -191,12 +191,12 @@ export default function HistorySection() {
             ใช้
           </p>
           <p
-            className="text-[22px] font-medium font-bodoni"
+            className="text-xl font-medium font-bodoni"
             style={{
               color: clientConfig.ui.text_error_color,
             }}
           >
-            -{mainPoint.burn.toLocaleString()}
+            {mainPoint.burn.toLocaleString()}
           </p>
         </div>
         <div className="flex flex-col items-center justify-between">
@@ -209,7 +209,7 @@ export default function HistorySection() {
             คงเหลือ
           </p>
           <div
-            className="text-[22px] font-medium font-bodoni"
+            className="text-xl font-medium font-bodoni"
             style={{
               color: clientConfig.ui.text_color,
             }}
@@ -235,16 +235,16 @@ export default function HistorySection() {
           selected={selectedTab === "burn"}
           onSelect={() => setSelectedTab("burn")}
         />
-        <ChipButton
+        {/* <ChipButton
           label="โอน"
           selected={selectedTab === "tranfer"}
           onSelect={() => setSelectedTab("tranfer")}
-        />
-        <ChipButton
+        /> */}
+        {/* <ChipButton
           label="หมดอายุ"
           selected={selectedTab === "expire"}
           onSelect={() => setSelectedTab("expire")}
-        />
+        /> */}
       </div>
 
       {displayHistories.length > 0 &&

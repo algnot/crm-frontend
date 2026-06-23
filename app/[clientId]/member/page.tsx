@@ -15,7 +15,7 @@ export default function Page() {
   return (
     <div className="p-5">
       <div
-        className="text-3xl font-medium mt-5 mb-2 font-bodoni pb-4.5"
+        className="text-2xl font-medium mt-5 mb-2 font-bodoni pb-4.5"
         style={{ color: clientConfig.ui.text_color }}
       >
         ตั้งค่าโปรไฟล์
