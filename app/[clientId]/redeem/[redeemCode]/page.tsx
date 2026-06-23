@@ -104,23 +104,32 @@ export default function Page() {
       userProfile?.userId,
     );
 
+    setFullLoading(false);
+
     if (isErrorResponse(response)) {
-      openAlert({
+      await openAlert({
         title: "เกิดข้อผิดพลาด",
         message: response.message,
         onConfirm: () => {
           router.push(`/${clientConfig.slug}`);
         },
       });
-      setFullLoading(false);
       return;
     }
 
-    setFullLoading(false);
-    openAlert({
+    const isCouponRedeem = Boolean(response.coupon);
+    await openAlert({
       title: "สำเร็จ",
-      message: "สะสมคะแนนสำเร็จแล้ว!",
+      message: isCouponRedeem
+        ? "รับคูปองสำเร็จแล้ว!"
+        : "สะสมคะแนนสำเร็จแล้ว!",
       onConfirm: () => {
+        if (response.coupon) {
+          router.push(
+            `/${clientConfig.slug}/coupon/my/${response.coupon.id}`,
+          );
+          return;
+        }
         router.push(`/${clientConfig.slug}/coupon/my`);
       },
     });
