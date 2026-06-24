@@ -57,7 +57,7 @@ export class BackendClient {
 
   constructor(setLoading: (value: boolean) => void, liffId: string) {
     this.client = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_BACKEND_PATH,
+      baseURL: "/api",
       headers: {
         "Content-Type": "application/json",
       },
@@ -232,8 +232,7 @@ export class BackendClient {
     code: string,
     userId: string,
   ): Promise<
-    | ErrorResponse
-    | { point?: GetUserPointHistoryRespont; coupon?: UserCoupon }
+    ErrorResponse | { point?: GetUserPointHistoryRespont; coupon?: UserCoupon }
   > {
     try {
       const response = await this.client.post(

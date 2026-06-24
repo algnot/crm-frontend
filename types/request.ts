@@ -160,6 +160,7 @@ export interface UserInfoPayload {
   gender: "M" | "F" | "O";
   email: string;
   phone: string;
+  address?: string;
 }
 
 export interface Tier {

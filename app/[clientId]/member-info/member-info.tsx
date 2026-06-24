@@ -11,15 +11,10 @@ import {
   type Province,
   type SubDistrict,
 } from "@/util/thai-address";
-import { IconChevronDown } from "@tabler/icons-react";
+import { IconChevronDown, IconMapPin } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import {
-  IconUser,
-  IconPhone,
-  IconMail,
-  IconCalendar,
-} from "@tabler/icons-react";
+import { IconUser, IconMail, IconCalendar } from "@tabler/icons-react";
 
 interface ThemedSelectProps {
   placeholder: string;
@@ -147,6 +142,15 @@ export default function MemberInfo() {
   const [subDistrictId, setSubDistrictId] = useState("");
   const [subDistrictName, setSubDistrictName] = useState("");
   const [postalCode, setPostalCode] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+
+  const termAndCondition =
+    "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+  const shortTerm =
+    termAndCondition.length > 80
+      ? termAndCondition.slice(0, 80) + "..."
+      : termAndCondition;
 
   const provinces: Province[] = getProvinces();
   const districts: District[] = provinceId
@@ -184,16 +188,18 @@ export default function MemberInfo() {
     if (!userProfile?.userId) return;
 
     setFullLoading(true);
+    const address = {
+      province: provinceName,
+      district: districtName,
+      sub_district: subDistrictName,
+      postal_code: postalCode,
+    };
     const response = await backendClient.updateUserInfo(clientConfig.slug, {
       // first_name: firstName.trim(),
       // last_name: lastName.trim(),
       gender: gender as "M" | "F" | "O",
-      phone: phone.trim(),
       birth_date: birthDate,
-      // province: provinceName,
-      // district: districtName,
-      // sub_district: subDistrictName,
-      // postal_code: postalCode,
+      address: JSON.stringify(address),
     });
     setFullLoading(false);
 
@@ -218,26 +224,21 @@ export default function MemberInfo() {
   return (
     <div className="min-h-screen flex flex-col px-5 pb-10">
       <div className="flex flex-col items-center pt-8 pb-6">
-        <img
-          src={clientConfig.logo_url}
-          alt="logo"
-          className="h-[56px] w-auto rounded-[14px] bg-white mb-4"
-          style={{
-            boxShadow: `0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 18px -4px color-mix(in oklch, ${clientConfig.ui.primary_color} 60%, transparent)`,
-          }}
-        />
-        <div
-          className="text-xs font-bold font-mono mb-1"
-          style={{ color: clientConfig.ui.primary_color }}
-        >
-          {clientConfig.name} MEMBER
-        </div>
         <p
-          className="font-bodoni text-2xl font-medium"
+          className="font-bodoni text-xl font-medium"
           style={{ color: clientConfig.ui.text_color }}
         >
           กรอกข้อมูลสมาชิก
         </p>
+
+        <img
+          src={userProfile.pictureUrl}
+          alt="logo"
+          className="h-16 w-auto rounded-full bg-white mt-6"
+          style={{
+            boxShadow: `0 0 0 0.5px rgba(255,255,255,0.06), 0 4px 18px -4px color-mix(in oklch, ${clientConfig.ui.primary_color} 60%, transparent)`,
+          }}
+        />
       </div>
 
       <div className="flex flex-col gap-4">
@@ -255,45 +256,81 @@ export default function MemberInfo() {
           />
         </div> */}
 
-        <Input
-          type="email"
-          value={email}
-          onChange={setEmail}
-          placeholder="อีเมล"
-          icon={<IconMail size={20} />}
-          disabled={!!appUserProfile?.email}
-        />
+        {appUserProfile?.email && (
+          <div>
+            <div
+              className="pb-0.5 px-1 text-xs mb-1"
+              style={{ color: clientConfig.ui.primary_color }}
+            >
+              อีเมล
+            </div>
+            <Input
+              type="email"
+              value={email}
+              onChange={setEmail}
+              placeholder="อีเมล"
+              icon={<IconMail size={20} />}
+              disabled={!!appUserProfile?.email}
+            />
+          </div>
+        )}
 
-        <ThemedSelect
-          placeholder="เพศ"
-          options={GENDER_OPTIONS}
-          value={gender}
-          onChange={(id) => setGender(id as "M" | "F" | "O")}
-        />
+        {appUserProfile?.phone && (
+          <div>
+            <div
+              className="pb-0.5 px-1 text-xs mb-1"
+              style={{ color: clientConfig.ui.primary_color }}
+            >
+              เบอร์โทรศัพท์
+            </div>
+            <Input
+              type="tel"
+              value={phone}
+              onChange={setPhone}
+              placeholder="เบอร์โทรศัพท์"
+              icon={<IconMapPin size={20} />}
+              inputMode="numeric"
+              maxLength={10}
+            />
+          </div>
+        )}
 
-        <Input
-          type="tel"
-          inputMode="tel"
-          value={phone}
-          onChange={setPhone}
-          placeholder="เบอร์โทรศัพท์"
-          icon={<IconPhone size={20} />}
-          disabled={!!appUserProfile?.phone}
-        />
+        <div>
+          <div
+            className="pb-0.5 px-1 text-xs mb-1"
+            style={{ color: clientConfig.ui.primary_color }}
+          >
+            เพศ*
+          </div>
+          <ThemedSelect
+            placeholder="เลือกเพศ"
+            options={GENDER_OPTIONS}
+            value={gender}
+            onChange={(id) => setGender(id as "M" | "F" | "O")}
+          />
+        </div>
 
-        <Input
-          type="date"
-          value={birthDate}
-          onChange={setBirthDate}
-          placeholder="วันเกิด"
-          icon={<IconCalendar size={20} />}
-        />
+        <div>
+          <div
+            className="pb-0.5 px-1 text-xs mb-1"
+            style={{ color: clientConfig.ui.primary_color }}
+          >
+            วันเกิด*
+          </div>
+          <Input
+            type="date"
+            value={birthDate}
+            onChange={setBirthDate}
+            placeholder="วันเกิด"
+            icon={<IconCalendar size={20} />}
+          />
+        </div>
 
-        {/* <div
+        <div
           className="pt-1 pb-0.5 px-1 text-xs"
-          style={{ color: clientConfig.ui.text_gray_color }}
+          style={{ color: clientConfig.ui.primary_color }}
         >
-          ที่อยู่
+          ที่อยู่ (ไม่บังคับ)
         </div>
 
         <ThemedSelect
@@ -325,17 +362,118 @@ export default function MemberInfo() {
           placeholder="รหัสไปรษณีย์"
           icon={<IconMapPin size={20} />}
           inputMode="numeric"
-          maxLength={5}
-        /> */}
+        />
       </div>
 
+      {termAndCondition && (
+        <>
+          <div
+            className="flex items-start gap-3 mt-6 cursor-pointer select-none"
+            onClick={() => setAcceptedTerms((v) => !v)}
+          >
+            <div
+              className="mt-0.5 w-5 h-5 shrink-0 rounded flex items-center justify-center border"
+              style={{
+                background: acceptedTerms
+                  ? clientConfig.ui.primary_color
+                  : "transparent",
+                borderColor: acceptedTerms
+                  ? clientConfig.ui.primary_color
+                  : clientConfig.ui.text_gray_color,
+              }}
+            >
+              {acceptedTerms && (
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path
+                    d="M2 6l3 3 5-5"
+                    stroke={clientConfig.ui.button_text_color}
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+            </div>
+            <div>
+              <p
+                style={{
+                  color: clientConfig.ui.text_white_color,
+                }}
+              >
+                เงื่อนไขและข้อตกลง*
+              </p>
+              <span
+                className="text-sm leading-snug"
+                style={{ color: clientConfig.ui.text_gray_color }}
+              >
+                {shortTerm}{" "}
+                <span
+                  className="cursor-pointer"
+                  style={{ color: clientConfig.ui.primary_color }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowTermsModal(true);
+                  }}
+                >
+                  อ่านเพิ่มเติม
+                </span>
+              </span>
+            </div>
+          </div>
+
+          {showTermsModal && (
+            <>
+              <div
+                className="fixed inset-0 bg-black/50 z-40"
+                onClick={() => setShowTermsModal(false)}
+              />
+              <div
+                className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl shadow-2xl max-h-[75vh] overflow-hidden w-screen md:w-[500px] mx-auto flex flex-col"
+                style={{ background: clientConfig.ui.surface_color }}
+              >
+                <div
+                  className="px-5 py-4 text-base font-medium border-b shrink-0"
+                  style={{
+                    color: clientConfig.ui.text_color,
+                    borderColor: clientConfig.ui.text_gray_color + "20",
+                  }}
+                >
+                  เงื่อนไขและข้อตกลง
+                </div>
+                <div className="overflow-y-auto px-5 py-4">
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: clientConfig.ui.text_gray_color }}
+                  >
+                    {termAndCondition}
+                  </p>
+                </div>
+                <div className="px-5 py-4 shrink-0">
+                  <button
+                    className="w-full h-12 rounded-[12px] text-[15px]"
+                    style={{
+                      background: `linear-gradient(135deg, ${clientConfig.ui.primary_color}, ${clientConfig.ui.secondary_color})`,
+                      color: clientConfig.ui.button_text_color,
+                    }}
+                    onClick={() => setShowTermsModal(false)}
+                  >
+                    ปิด
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </>
+      )}
+
       <button
-        className="mt-6 h-14 w-full text-center text-[15px] rounded-[14px] cursor-pointer"
+        className="mt-6 h-14 w-full text-center text-[15px] rounded-[14px] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
           background: `linear-gradient(135deg, ${clientConfig.ui.primary_color}, ${clientConfig.ui.secondary_color})`,
           boxShadow: `0 8px 24px -6px color-mix(in oklch, ${clientConfig.ui.primary_color} 60%, transparent)`,
           color: clientConfig.ui.button_text_color,
         }}
+        disabled={!acceptedTerms || !gender || !birthDate}
         onClick={handleSubmit}
       >
         บันทึกข้อมูล
