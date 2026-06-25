@@ -3,10 +3,9 @@
 import Input from "@/components/input";
 import { useApp } from "@/components/providers/app-provider";
 import { isErrorResponse } from "@/types/request";
-import { IconArrowLeft } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Phone } from "tabler-icons-react";
+import { ChevronLeft, Phone } from "tabler-icons-react";
 
 export default function Page() {
   const {
@@ -138,7 +137,7 @@ export default function Page() {
       <div className="w-full pt-4">
         {step === "otp" && (
           <button
-            className="rounded-xl p-2 w-fit"
+            className="rounded-full border border-white/12 bg-black/45 p-2 text-white shadow-lg backdrop-blur-sm shrink-0"
             style={{
               background: clientConfig.ui.surface_color,
               border: `0.5px solid rgba(255,255,255,0.08)`,
@@ -148,7 +147,7 @@ export default function Page() {
               setStep("phone");
             }}
           >
-            <IconArrowLeft size={20} />
+            <ChevronLeft size={24} />
           </button>
         )}
       </div>

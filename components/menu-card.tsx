@@ -17,19 +17,11 @@ export default function MenuCard({ pointHistory }: MenuCardProp) {
       }}
     >
       <div className="flex gap-3 items-center">
-        <div
-          className="w-9 h-9 rounded-full flex items-center justify-center"
-          style={{
-            background: clientConfig.ui.surface_color,
-            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
-          }}
-        >
-          <img
-            src={clientConfig.logo_url}
-            alt="ads"
-            className="w-5 h-5 object-contain"
-          />
-        </div>
+        <img
+          src={clientConfig.logo_url}
+          alt="ads"
+          className="w-9 h-9 rounded-full object-cover"
+        />
         <div className="flex flex-col">
           <div
             className="text-[13px] font-medium"

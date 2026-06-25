@@ -7,7 +7,7 @@
 import { useApp } from "@/components/providers/app-provider";
 import { Sk } from "@/components/skeleton";
 import { CouponType, isErrorResponse } from "@/types/request";
-import { ArrowLeft } from "tabler-icons-react";
+import { ChevronLeft } from "tabler-icons-react";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Button from "@/components/button";
@@ -160,12 +160,12 @@ export default function Page() {
       {/* Back Button */}
       <button
         onClick={() => router.push(`/${clientConfig.slug}`)}
-        className="rounded-full p-2 shadow-md cursor-pointer"
+        className="rounded-full border border-white/12 bg-black/45 p-2 text-white shadow-lg backdrop-blur-sm shrink-0"
         style={{
           backgroundColor: clientConfig.ui.surface_color,
         }}
       >
-        <ArrowLeft size={22} color={clientConfig.ui.text_color} />
+        <ChevronLeft size={24} color={clientConfig.ui.text_color} />
       </button>
 
       {/* Image */}

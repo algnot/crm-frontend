@@ -10,7 +10,7 @@ import { Sk } from "@/components/skeleton";
 import { isErrorResponse, UserCoupon } from "@/types/request";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { ArrowLeft } from "tabler-icons-react";
+import { ChevronLeft } from "tabler-icons-react";
 import QRCode from "react-qr-code";
 import Barcode from "react-barcode";
 import { formatDate } from "@/util/format-date";
@@ -255,12 +255,12 @@ export default function Page() {
       {/* Back */}
       <button
         onClick={() => router.push(`/${clientConfig.slug}/coupon/my`)}
-        className="rounded-full p-2 shadow-md"
+        className="rounded-full border border-white/12 bg-black/45 p-2 text-white shadow-lg backdrop-blur-sm shrink-0"
         style={{
           backgroundColor: clientConfig.ui.surface_color,
         }}
       >
-        <ArrowLeft size={22} color={clientConfig.ui.text_color} />
+        <ChevronLeft size={24} color={clientConfig.ui.text_color} />
       </button>
 
       {/* Image */}

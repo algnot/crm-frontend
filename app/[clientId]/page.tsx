@@ -53,32 +53,6 @@ export default function Home() {
 
   const closeModal = () => setShowModal(false);
 
-  const goModalNext = useCallback(() => {
-    if (adsItems.length <= 1) return;
-    setModalIndex((i) => (i === adsItems.length - 1 ? 0 : i + 1));
-  }, [adsItems.length]);
-
-  const goModalPrev = useCallback(() => {
-    if (adsItems.length <= 1) return;
-    setModalIndex((i) => (i === 0 ? adsItems.length - 1 : i - 1));
-  }, [adsItems.length]);
-
-  useEffect(() => {
-    if (!showModal) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeModal();
-      if (e.key === "ArrowRight") goModalNext();
-      if (e.key === "ArrowLeft") goModalPrev();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [showModal, goModalNext, goModalPrev]);
-
   return (
     <div className="pb-10">
       <HeaderSection />
