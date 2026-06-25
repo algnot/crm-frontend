@@ -261,8 +261,10 @@ export default function MemberInfo() {
   return (
     <div className="min-h-screen flex flex-col px-5 pb-10">
       <div className="flex flex-col items-center pt-8 pb-6">
-        {appUserProfile?.is_updated_user_info && (
-          <div className="w-full">
+        <div
+          className={`w-full flex ${appUserProfile?.is_updated_user_info ? "justify-start" : "justify-center"} items-center gap-4`}
+        >
+          {appUserProfile?.is_updated_user_info && (
             <button
               type="button"
               aria-label="Previous advertisement"
@@ -271,16 +273,16 @@ export default function MemberInfo() {
             >
               <IconChevronLeft size={24} />
             </button>
-          </div>
-        )}
-        <p
-          className="font-bodoni text-xl font-medium"
-          style={{ color: clientConfig.ui.text_color }}
-        >
-          {appUserProfile?.is_updated_user_info
-            ? "แก้ไขข้อมูลสมาชิก"
-            : "กรอกข้อมูลสมาชิก"}
-        </p>
+          )}
+          <p
+            className="font-bodoni text-xl font-medium"
+            style={{ color: clientConfig.ui.text_color }}
+          >
+            {appUserProfile?.is_updated_user_info
+              ? "แก้ไขข้อมูลสมาชิก"
+              : "กรอกข้อมูลสมาชิก"}
+          </p>
+        </div>
 
         <img
           src={userProfile.pictureUrl}
@@ -341,7 +343,6 @@ export default function MemberInfo() {
               placeholder="เบอร์โทรศัพท์"
               icon={<IconMapPin size={20} />}
               inputMode="numeric"
-              maxLength={10}
             />
           </div>
         )}
