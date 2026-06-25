@@ -151,6 +151,7 @@ export interface User {
   force_verify_email: boolean;
   is_updated_user_info: boolean;
   tier: Tier;
+  address?: string;
 }
 
 export interface UserInfoPayload {
@@ -280,5 +281,29 @@ export interface UserCoupon {
     id: number;
     value: string;
     type: "earn" | "burn" | "tranfer";
+  };
+}
+
+export interface UserReceipt {
+  id: number;
+  receipt_number: string;
+  receipt_image_url: string;
+  amount: number;
+  state: "pending" | "approved" | "rejected";
+  submitted_date: string;
+  reward_point?: RewardPoint;
+}
+
+export interface RewardPoint {
+  id: number;
+  name: string;
+  value: number;
+  type: "earn" | "burn" | "tranfer";
+  given_date: string;
+  currency: {
+    id: number;
+    name: string;
+    is_default: boolean;
+    is_total_spending: boolean;
   };
 }

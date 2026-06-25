@@ -115,11 +115,9 @@ export default function Page() {
         router.replace(`/${clientConfig.slug}/verify-phone`);
       } else if (appProfile.force_verify_email) {
         router.replace(`/${clientConfig.slug}/verify-email`);
-      }
-      //  else if (appProfile.is_updated_user_info === false) {
-      //   router.replace(`/${clientConfig.slug}/member-info`);
-      // }
-      else {
+      } else if (appProfile.is_updated_user_info === false) {
+        router.replace(`/${clientConfig.slug}/member-info`);
+      } else {
         router.replace(`/${clientConfig.slug}`);
       }
     }

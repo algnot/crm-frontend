@@ -2,7 +2,7 @@
 import { useApp } from "@/components/providers/app-provider";
 import SkeletonMember from "@/components/skeleton-member";
 import liff from "@line/liff";
-import { IconLogout } from "@tabler/icons-react";
+import { IconEdit, IconLogout } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
@@ -12,6 +12,9 @@ export default function Page() {
 
   if (!appUserProfile) return <SkeletonMember />;
 
+  const addressJson = appUserProfile?.address
+    ? JSON.parse(appUserProfile.address)
+    : {};
   return (
     <div className="p-5">
       <div
@@ -47,7 +50,13 @@ export default function Page() {
           <div className="text-[22px] font-medium font-bodoni my-1.5">
             {userProfile?.displayName}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col items-center gap-2">
+            <div
+              className="text-xs font-mono w-[82px] truncate"
+              style={{ color: clientConfig.ui.text_gray_color }}
+            >
+              {userProfile?.userId}
+            </div>
             <div
               className="w-fit px-2 py-0.5 rounded-full flex items-center gap-[5px] text-[10px] font-bold"
               style={{
@@ -62,12 +71,6 @@ export default function Page() {
                 }}
               ></div>
               {appUserProfile?.tier.name}
-            </div>
-            <div
-              className="text-xs font-mono w-[82px] truncate"
-              style={{ color: clientConfig.ui.text_gray_color }}
-            >
-              {userProfile?.userId}
             </div>
           </div>
         </div>
@@ -94,33 +97,40 @@ export default function Page() {
             borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
           }}
         >
-          <div className="font-medium text-sm">ชื่อ-นามสกุล</div>
+          <div className="font-medium text-sm">ชื่อผู้ใช้</div>
           <div className="text-gray-500 text-xs font-mono">
             {appUserProfile?.display_name || "-"}
           </div>
         </div>
-        <div
-          className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
-          style={{
-            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
-          }}
-        >
-          <div className="font-medium text-sm">อีเมล</div>
-          <div className="text-gray-500 text-xs font-mono">
-            {appUserProfile?.email || "-"}
+
+        {appUserProfile?.email && (
+          <div
+            className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
+            style={{
+              borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+            }}
+          >
+            <div className="font-medium text-sm">อีเมล</div>
+            <div className="text-gray-500 text-xs font-mono">
+              {appUserProfile?.email || "-"}
+            </div>
           </div>
-        </div>
-        <div
-          className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
-          style={{
-            borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
-          }}
-        >
-          <div className="font-medium text-sm">เบอร์โทร</div>
-          <div className="text-gray-500 text-xs font-mono">
-            {appUserProfile?.phone || "-"}
+        )}
+
+        {appUserProfile?.phone && (
+          <div
+            className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
+            style={{
+              borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+            }}
+          >
+            <div className="font-medium text-sm">เบอร์โทร</div>
+            <div className="text-gray-500 text-xs font-mono">
+              {appUserProfile?.phone || "-"}
+            </div>
           </div>
-        </div>
+        )}
+
         <div
           className="text-md flex justify-between py-3 px-4 border-b-[0.5px]"
           style={{
@@ -140,7 +150,11 @@ export default function Page() {
         >
           <div className="font-medium text-sm">เพศ</div>
           <div className="text-gray-500 text-xs font-mono">
-            {appUserProfile?.gender || "-"}
+            {appUserProfile?.gender === "F"
+              ? "หญิง"
+              : appUserProfile?.gender === "M"
+                ? "ชาย"
+                : "-"}
           </div>
         </div>
         <div
@@ -149,13 +163,30 @@ export default function Page() {
             borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
           }}
         >
-          <div className="font-medium text-sm">ที่อยู่จัดส่ง</div>
-          <div className="text-gray-500 text-xs font-mono">{"-"}</div>
+          <div className="font-medium text-sm">ที่อยู่</div>
+          <div className="text-gray-500 text-xs font-mono">
+            {addressJson
+              ? `${addressJson.province || ""} ${addressJson.district || ""} ${addressJson.sub_district || ""} ${addressJson.postal_code || ""}`
+              : "-"}
+          </div>
         </div>
+      </div>
+      <div
+        className="h-12 rounded-[18px] border-[0.5px] flex items-center justify-center mt-6 cursor-pointer gap-2 text-[13px]"
+        style={{
+          background: clientConfig.ui.surface_color,
+          color: clientConfig.ui.text_gray_color,
+          borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+        }}
+        onClick={async () => {
+          router.push(`/${clientConfig.slug}/member-info`);
+        }}
+      >
+        <IconEdit size={18} /> แก้ไขข้อมูล
       </div>
       {!liff.isInClient() && (
         <div
-          className="h-12 rounded-[18px] border-[0.5px] flex items-center justify-center mt-6 cursor-pointer gap-2 text-[13px]"
+          className="h-12 rounded-[18px] border-[0.5px] flex items-center justify-center mt-4 cursor-pointer gap-2 text-[13px]"
           style={{
             background: clientConfig.ui.surface_color,
             color: clientConfig.ui.text_gray_color,

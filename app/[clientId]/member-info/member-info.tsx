@@ -11,7 +11,11 @@ import {
   type Province,
   type SubDistrict,
 } from "@/util/thai-address";
-import { IconChevronDown, IconMapPin } from "@tabler/icons-react";
+import {
+  IconChevronDown,
+  IconChevronLeft,
+  IconMapPin,
+} from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IconUser, IconMail, IconCalendar } from "@tabler/icons-react";
@@ -130,10 +134,16 @@ export default function MemberInfo() {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [gender, setGender] = useState<"M" | "F" | "O" | "">("");
+  const [gender, setGender] = useState<"M" | "F" | "O" | "">(
+    (appUserProfile?.gender as "M" | "F" | "O") || "",
+  );
   const [email, setEmail] = useState(appUserProfile?.email || "");
   const [phone, setPhone] = useState(appUserProfile?.phone || "");
   const [birthDate, setBirthDate] = useState(appUserProfile?.birth_date || "");
+
+  const addressJson = appUserProfile?.address
+    ? JSON.parse(appUserProfile.address)
+    : {};
 
   const [provinceId, setProvinceId] = useState("");
   const [provinceName, setProvinceName] = useState("");
@@ -208,8 +218,35 @@ export default function MemberInfo() {
       return;
     }
 
-    router.push(`/${clientConfig.slug}`);
+    router.push(`/${clientConfig.slug}/member`);
   };
+
+  useEffect(() => {
+    if (!addressJson.province) return;
+    const allProvinces = getProvinces();
+    const province = allProvinces.find((p) => p.name === addressJson.province);
+    if (!province) return;
+    setProvinceId(province.id);
+    setProvinceName(province.name);
+
+    if (!addressJson.district) return;
+    const allDistricts = getDistrictsByProvince(province.id);
+    const district = allDistricts.find((d) => d.name === addressJson.district);
+    if (!district) return;
+    setDistrictId(district.id);
+    setDistrictName(district.name);
+
+    if (!addressJson.sub_district) return;
+    const allSubDistricts = getSubDistrictsByDistrict(district.id);
+    const subDistrict = allSubDistricts.find(
+      (s) => s.name === addressJson.sub_district,
+    );
+    if (!subDistrict) return;
+    setSubDistrictId(subDistrict.id);
+    setSubDistrictName(subDistrict.name);
+    setPostalCode(addressJson.postal_code || getZipCode(subDistrict.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     setIsShowNavbar(false);
@@ -224,11 +261,25 @@ export default function MemberInfo() {
   return (
     <div className="min-h-screen flex flex-col px-5 pb-10">
       <div className="flex flex-col items-center pt-8 pb-6">
+        {appUserProfile?.is_updated_user_info && (
+          <div className="w-full">
+            <button
+              type="button"
+              aria-label="Previous advertisement"
+              onClick={() => router.push(`/${clientConfig.slug}/member`)}
+              className="rounded-full border border-white/12 bg-black/45 p-2 text-white shadow-lg backdrop-blur-sm"
+            >
+              <IconChevronLeft size={24} />
+            </button>
+          </div>
+        )}
         <p
           className="font-bodoni text-xl font-medium"
           style={{ color: clientConfig.ui.text_color }}
         >
-          กรอกข้อมูลสมาชิก
+          {appUserProfile?.is_updated_user_info
+            ? "แก้ไขข้อมูลสมาชิก"
+            : "กรอกข้อมูลสมาชิก"}
         </p>
 
         <img
@@ -322,7 +373,7 @@ export default function MemberInfo() {
             value={birthDate}
             onChange={setBirthDate}
             placeholder="วันเกิด"
-            icon={<IconCalendar size={20} />}
+            icon={<IconCalendar size={20} color="rgb(106, 114, 130)" />}
           />
         </div>
 
@@ -365,7 +416,7 @@ export default function MemberInfo() {
         />
       </div>
 
-      {termAndCondition && (
+      {termAndCondition && !appUserProfile?.is_updated_user_info && (
         <>
           <div
             className="flex items-start gap-3 mt-6 cursor-pointer select-none"
@@ -400,7 +451,7 @@ export default function MemberInfo() {
                   color: clientConfig.ui.text_white_color,
                 }}
               >
-                เงื่อนไขและข้อตกลง*
+                ยอมรับเงื่อนไขและข้อตกลง*
               </p>
               <span
                 className="text-sm leading-snug"
@@ -450,12 +501,15 @@ export default function MemberInfo() {
                 </div>
                 <div className="px-5 py-4 shrink-0">
                   <button
-                    className="w-full h-12 rounded-[12px] text-[15px]"
-                    style={{
-                      background: `linear-gradient(135deg, ${clientConfig.ui.primary_color}, ${clientConfig.ui.secondary_color})`,
-                      color: clientConfig.ui.button_text_color,
-                    }}
+                    type="button"
+                    aria-label="Close"
                     onClick={() => setShowTermsModal(false)}
+                    className="mb-1 rounded-xl py-2.5 text-sm font-semibold border w-full"
+                    style={{
+                      background: clientConfig.ui.surface_color,
+                      color: clientConfig.ui.text_color,
+                      borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
+                    }}
                   >
                     ปิด
                   </button>
@@ -473,7 +527,11 @@ export default function MemberInfo() {
           boxShadow: `0 8px 24px -6px color-mix(in oklch, ${clientConfig.ui.primary_color} 60%, transparent)`,
           color: clientConfig.ui.button_text_color,
         }}
-        disabled={!acceptedTerms || !gender || !birthDate}
+        disabled={
+          (!acceptedTerms && !appUserProfile?.is_updated_user_info) ||
+          !gender ||
+          !birthDate
+        }
         onClick={handleSubmit}
       >
         บันทึกข้อมูล

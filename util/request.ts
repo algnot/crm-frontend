@@ -15,6 +15,7 @@ import {
   UserCoupon,
   CouponType,
   UserInfoPayload,
+  UserReceipt,
 } from "@/types/request";
 import axios, { AxiosInstance } from "axios";
 import { getLiffUserToken } from "./line-liff";
@@ -361,6 +362,21 @@ export class BackendClient {
       );
 
       return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async getUserReceipt(
+    clientId: string,
+    userId: string,
+  ): Promise<ErrorResponse | UserReceipt[]> {
+    try {
+      const response = await this.client.get(
+        `/partner/${clientId}/user/${userId}/receipt`,
+      );
+
+      return response.data.receipts;
     } catch (e) {
       return handlerError(e);
     }

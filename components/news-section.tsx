@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useApp } from "./providers/app-provider";
 import { formatDate } from "@/util/format-date";

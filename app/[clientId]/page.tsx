@@ -12,6 +12,7 @@ import Button from "@/components/button";
 import { formatDate } from "@/util/format-date";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import MenuSection from "@/components/menu-section";
 
 export default function Home() {
   const { clientConfig } = useApp();
@@ -83,6 +84,7 @@ export default function Home() {
       <HeaderSection />
       <PointCard />
       <TierCard />
+      <MenuSection />
       <NewsSection />
       <CouponSection />
 

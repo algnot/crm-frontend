@@ -52,7 +52,7 @@ export default function HeaderSection() {
         )}
         <div className="flex-1 min-w-0">
           <div
-            className="text-lg mb-1 font-semibold tracking-[-0.17px]"
+            className="text-md font-semibold tracking-[-0.17px]"
             style={{
               color: clientConfig.ui.text_color,
             }}
@@ -61,12 +61,12 @@ export default function HeaderSection() {
           </div>
 
           <div
-            className="text-[10px] tracking-[0.02em] truncate font-mono w-[74px] truncate"
+            className="tracking-[0.02em] font-medium"
             style={{
               color: clientConfig.ui.text_gray_color,
             }}
           >
-            {userProfile?.userId}
+            {userProfile?.displayName}
           </div>
         </div>
         <div>
