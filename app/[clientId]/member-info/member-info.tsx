@@ -129,6 +129,7 @@ export default function MemberInfo() {
     openAlert,
     setFullLoading,
     setIsShowNavbar,
+    setAppUserProfile,
   } = useApp();
   const router = useRouter();
 
@@ -217,6 +218,14 @@ export default function MemberInfo() {
       openAlert({ title: "เกิดข้อผิดพลาด", message: response.message });
       return;
     }
+
+    const appProfile = await backendClient.getUserInfo(clientConfig.slug);
+    if (isErrorResponse(appProfile)) {
+      openAlert({ title: "เกิดข้อผิดพลาด", message: appProfile.message });
+      return;
+    }
+
+    setAppUserProfile(appProfile);
 
     router.push(`/${clientConfig.slug}/member`);
   };
