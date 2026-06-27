@@ -206,6 +206,7 @@ export default function PointCard() {
                   size={220}
                   bgColor={clientConfig.ui.surface_color}
                   fgColor={clientConfig.ui.text_color}
+                  level="Q"
                 />
               </div>
               <p

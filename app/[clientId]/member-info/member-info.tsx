@@ -156,8 +156,16 @@ export default function MemberInfo() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
 
-  const termAndCondition =
-    "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+  const termAndCondition = `ข้าพเจ้ายินยอมให้บริษัทเก็บ รวบรวม ใช้ และจัดเก็บข้อมูลส่วนบุคคลของข้าพเจ้า ได้แก่ หมายเลขโทรศัพท์ อีเมล เพศ วันเดือนปีเกิด และที่อยู่ เพื่อบันทึกในระบบบริหารจัดการลูกค้าสัมพันธ์ (CRM) โดยมีวัตถุประสงค์ดังต่อไปนี้
+จัดเก็บและบริหารข้อมูลลูกค้า
+ติดต่อสื่อสารเกี่ยวกับการให้บริการ การตอบข้อซักถาม และการแจ้งข้อมูลที่เกี่ยวข้อง
+ให้บริการหลังการขายและดูแลความสัมพันธ์กับลูกค้า
+นำเสนอข่าวสาร สิทธิประโยชน์ โปรโมชั่น หรือกิจกรรมต่าง ๆ (หากผู้ใช้ให้ความยินยอม)
+วิเคราะห์และพัฒนาคุณภาพการให้บริการ
+
+บริษัทจะดำเนินการเก็บรักษาและใช้ข้อมูลส่วนบุคคลตามกฎหมายคุ้มครองข้อมูลส่วนบุคคล (PDPA) และจะไม่เปิดเผยข้อมูลแก่บุคคลภายนอก เว้นแต่ได้รับความยินยอมจากเจ้าของข้อมูล หรือมีเหตุอันชอบด้วยกฎหมาย
+
+เจ้าของข้อมูลสามารถถอนความยินยอม ขอเข้าถึง แก้ไข หรือลบข้อมูลส่วนบุคคลได้ ตามสิทธิที่กฎหมายกำหนด โดยติดต่อบริษัทผ่านช่องทางที่บริษัทกำหนด`;
   const shortTerm =
     termAndCondition.length > 80
       ? termAndCondition.slice(0, 80) + "..."
