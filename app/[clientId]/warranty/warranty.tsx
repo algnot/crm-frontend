@@ -13,7 +13,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@/components/button";
 
 type Product = {
@@ -57,6 +57,7 @@ export default function Warranty() {
   const [warrantyOptions, setWarrantyOptions] = useState<
     WarrantyOptionResponse | undefined
   >(undefined);
+  const [snImageOpen, setSnImageOpen] = useState(false);
 
   useEffect(() => {
     setIsShowNavbar(false);
@@ -217,7 +218,12 @@ export default function Warranty() {
                   />
                 </div>
                 <div className="bg-white w-fit mt-2">
-                  <img src="/sn.png" alt="sn" className="w-[200px]" />
+                  <img
+                    src="/sn.png"
+                    alt="sn"
+                    className="w-[200px] cursor-zoom-in"
+                    onClick={() => setSnImageOpen(true)}
+                  />
                 </div>
                 <div>
                   <div
@@ -380,6 +386,28 @@ export default function Warranty() {
       >
         <Button text="ยืนยันการลงทะเบียน" onClick={handleSubmit} />
       </div>
+
+      {snImageOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          onClick={() => setSnImageOpen(false)}
+        >
+          <div className="bg-white">
+            <img
+              src="/sn.png"
+              alt="sn"
+              className="max-w-full max-h-full rounded-lg"
+            />
+          </div>
+          <button
+            type="button"
+            className="absolute top-4 right-4 rounded-full bg-black/60 p-2 text-white"
+            onClick={() => setSnImageOpen(false)}
+          >
+            <IconX size={20} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
