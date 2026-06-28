@@ -1,6 +1,8 @@
 "use client";
 import Input from "@/components/input";
+import ThemedSelect from "@/components/themed-select";
 import { useApp } from "@/components/providers/app-provider";
+import { isErrorResponse, WarrantyOptionResponse } from "@/types/request";
 import {
   IconChevronDown,
   IconChevronLeft,
@@ -11,14 +13,17 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { use, useEffect, useState } from "react";
+import Button from "@/components/button";
 
 type Product = {
   id: number;
+  productId: number;
   productName: string;
+  contributorId: number;
+  purchaseChannel: string;
   serialNumber: string;
   receiptNumber: string;
-  purchaseChannel: string;
   purchaseDate: string;
   receiptImage: string;
   expanded: boolean;
@@ -27,10 +32,12 @@ type Product = {
 function createProduct(id: number): Product {
   return {
     id,
+    productId: 0,
     productName: "",
+    contributorId: 0,
+    purchaseChannel: "",
     serialNumber: "",
     receiptNumber: "",
-    purchaseChannel: "",
     purchaseDate: "",
     receiptImage: "",
     expanded: true,
@@ -38,17 +45,46 @@ function createProduct(id: number): Product {
 }
 
 export default function Warranty() {
-  const { clientConfig } = useApp();
+  const {
+    clientConfig,
+    backendClient,
+    setIsShowNavbar,
+    openAlert,
+    setFullLoading,
+  } = useApp();
   const router = useRouter();
   const [products, setProducts] = React.useState<Product[]>([createProduct(1)]);
+  const [warrantyOptions, setWarrantyOptions] = useState<
+    WarrantyOptionResponse | undefined
+  >(undefined);
+
+  useEffect(() => {
+    setIsShowNavbar(false);
+    return () => setIsShowNavbar(true);
+  }, [setIsShowNavbar]);
+
+  useEffect(() => {
+    setFullLoading(true);
+    backendClient.getWarrantyOptions(clientConfig.slug).then((res) => {
+      if (isErrorResponse(res)) {
+        openAlert({
+          title: "เกิดข้อผิดพลาด",
+          message: res.message,
+        });
+        setFullLoading(false);
+        return;
+      }
+      setWarrantyOptions(res);
+      setFullLoading(false);
+    });
+  }, [backendClient, clientConfig.slug]);
 
   const updateProduct = (
     id: number,
-    field: keyof Omit<Product, "id" | "expanded">,
-    value: string,
+    fields: Partial<Omit<Product, "id" | "expanded">>,
   ) => {
     setProducts((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, [field]: value } : p)),
+      prev.map((p) => (p.id === id ? { ...p, ...fields } : p)),
     );
   };
 
@@ -84,6 +120,30 @@ export default function Warranty() {
     reader.readAsDataURL(file);
   };
 
+  const handleSubmit = async () => {
+    setFullLoading(true);
+    const response = await backendClient.submitWarranty(clientConfig.slug, {
+      warranties: products.map((p) => ({
+        product_id: p.productId,
+        contributor_id: p.contributorId,
+        serial_number: p.serialNumber,
+        receipt_number: p.receiptNumber,
+        purchase_date: p.purchaseDate,
+        receipt_image: p.receiptImage,
+      })),
+    });
+    if (isErrorResponse(response)) {
+      openAlert({
+        title: "เกิดข้อผิดพลาด",
+        message: response.message,
+      });
+      setFullLoading(false);
+      return;
+    }
+    setFullLoading(false);
+    router.push(`/${clientConfig.slug}/warranty/history`);
+  };
+
   return (
     <div className="min-h-screen flex flex-col px-5 pb-10">
       <div className="flex items-center pt-8 pb-6 gap-4">
@@ -102,14 +162,6 @@ export default function Warranty() {
           ลงทะเบียนรับประกันสินค้า
         </p>
       </div>
-
-      <button
-        type="button"
-        aria-label="Add product"
-        className="mb-4 rounded-xl py-3 text-sm font-semibold w-full flex items-center justify-center gap-2 text-red-600 bg-red-950"
-      >
-        *** Not supported yet ***
-      </button>
 
       <div className="flex flex-col gap-3">
         {products.map((product, index) => (
@@ -149,14 +201,23 @@ export default function Warranty() {
                   >
                     สินค้า
                   </div>
-                  <Input
-                    type="text"
-                    value={product.productName}
-                    onChange={(v) =>
-                      updateProduct(product.id, "productName", v)
+                  <ThemedSelect
+                    placeholder="เลือกสินค้า"
+                    options={(warrantyOptions?.products ?? []).map((p) => ({
+                      id: String(p.id),
+                      name: p.name,
+                    }))}
+                    value={String(product.productId || "")}
+                    onChange={(id, name) =>
+                      updateProduct(product.id, {
+                        productId: Number(id),
+                        productName: name,
+                      })
                     }
-                    placeholder="ระบุรายละเอียดสินค้า"
                   />
+                </div>
+                <div className="bg-white w-fit mt-2">
+                  <img src="/sn.png" alt="sn" className="w-[200px]" />
                 </div>
                 <div>
                   <div
@@ -169,9 +230,9 @@ export default function Warranty() {
                     type="text"
                     value={product.serialNumber}
                     onChange={(v) =>
-                      updateProduct(product.id, "serialNumber", v)
+                      updateProduct(product.id, { serialNumber: v })
                     }
-                    placeholder="1U-2509K-0001"
+                    placeholder="SN7F8K2L9P0Q4R1S"
                   />
                 </div>
                 <div>
@@ -185,7 +246,7 @@ export default function Warranty() {
                     type="text"
                     value={product.receiptNumber}
                     onChange={(v) =>
-                      updateProduct(product.id, "receiptNumber", v)
+                      updateProduct(product.id, { receiptNumber: v })
                     }
                     placeholder="หมายเลขใบเสร็จรับเงิน"
                   />
@@ -197,13 +258,19 @@ export default function Warranty() {
                   >
                     ช่องทางการซื้อสินค้า
                   </div>
-                  <Input
-                    type="text"
-                    value={product.purchaseChannel}
-                    onChange={(v) =>
-                      updateProduct(product.id, "purchaseChannel", v)
+                  <ThemedSelect
+                    placeholder="เลือกช่องทางการซื้อสินค้า"
+                    options={(warrantyOptions?.contributors ?? []).map((c) => ({
+                      id: String(c.id),
+                      name: c.name,
+                    }))}
+                    value={String(product.contributorId || "")}
+                    onChange={(id, name) =>
+                      updateProduct(product.id, {
+                        contributorId: Number(id),
+                        purchaseChannel: name,
+                      })
                     }
-                    placeholder="ออนไลน์ / ร้านค้า / ตัวแทนจำหน่าย"
                   />
                 </div>
                 <div>
@@ -217,7 +284,7 @@ export default function Warranty() {
                     type="date"
                     value={product.purchaseDate}
                     onChange={(v) =>
-                      updateProduct(product.id, "purchaseDate", v)
+                      updateProduct(product.id, { purchaseDate: v })
                     }
                     placeholder="ระบุวันที่ซื้อสินค้า"
                   />
@@ -293,7 +360,7 @@ export default function Warranty() {
       <button
         type="button"
         aria-label="Add product"
-        className="mb-1 rounded-xl py-3 text-sm font-semibold border w-full flex items-center justify-center gap-2 mt-4"
+        className="mb-1 rounded-xl py-3 text-sm font-semibold border w-full flex items-center justify-center gap-2 mt-4 cursor-pointer"
         onClick={addProduct}
         style={{
           background: clientConfig.ui.surface_color,
@@ -304,6 +371,15 @@ export default function Warranty() {
         <IconPlus size={20} />
         <p>เพิ่มสินค้า</p>
       </button>
+
+      <div
+        className="fixed bottom-0 left-0 z-30 w-full p-4 shadow-lg"
+        style={{
+          backgroundColor: clientConfig.ui.background_color,
+        }}
+      >
+        <Button text="ยืนยันการลงทะเบียน" onClick={handleSubmit} />
+      </div>
     </div>
   );
 }

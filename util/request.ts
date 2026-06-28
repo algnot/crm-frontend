@@ -16,6 +16,9 @@ import {
   CouponType,
   UserInfoPayload,
   UserReceipt,
+  WarrantyOptionResponse,
+  WarrantySubmissionRequest,
+  Warranty as WarrantyItem,
 } from "@/types/request";
 import axios, { AxiosInstance } from "axios";
 import { getLiffUserToken } from "./line-liff";
@@ -393,6 +396,65 @@ export class BackendClient {
       );
 
       return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async getWarrantyOptions(
+    clientId: string,
+  ): Promise<ErrorResponse | WarrantyOptionResponse> {
+    try {
+      const response = await this.client.get(
+        `/partner/${clientId}/warranty/options`,
+      );
+
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async submitWarranty(
+    clientId: string,
+    request: WarrantySubmissionRequest,
+  ): Promise<ErrorResponse | void> {
+    try {
+      const response = await this.client.post(
+        `/partner/${clientId}/user/warranty`,
+        request,
+      );
+
+      return response.data;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async listUserWarranties(
+    clientId: string,
+  ): Promise<ErrorResponse | WarrantyItem[]> {
+    try {
+      const response = await this.client.get(
+        `/partner/${clientId}/user/warranty`,
+      );
+
+      return response.data.warranties;
+    } catch (e) {
+      return handlerError(e);
+    }
+  }
+
+  async getUserWarrantyById(
+    clientId: string,
+    warrantyId: string,
+  ): Promise<ErrorResponse | WarrantyItem> {
+    try {
+      const response = await this.client.get(
+        `/partner/${clientId}/user/warranty/${warrantyId}`,
+      );
+
+      return response.data.warranty;
     } catch (e) {
       return handlerError(e);
     }

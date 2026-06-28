@@ -307,3 +307,62 @@ export interface RewardPoint {
     is_total_spending: boolean;
   };
 }
+
+export interface WarrantyOptionResponse {
+  enabled: boolean;
+  products: WarrantyProduct[];
+  contributors: WarrantyContributor[];
+}
+
+export interface WarrantyProduct {
+  id: number;
+  name: string;
+  description?: string;
+  image_url?: string;
+}
+
+export interface WarrantyContributor {
+  id: number;
+  name: string;
+}
+
+export interface WarrantySubmissionRequest {
+  warranties: WarrantyRequest[];
+}
+
+export interface WarrantyRequest {
+  product_id: number;
+  contributor_id: number;
+  serial_number: string;
+  receipt_number: string;
+  purchase_date: string;
+  receipt_image: string;
+}
+
+export interface WarrantyResponse {
+  warranty: Warranty;
+}
+
+export interface ListWarrantyResponse {
+  warranties: Warranty[];
+}
+
+export interface Warranty {
+  id: number;
+  serial_number: string;
+  receipt_number: string;
+  purchase_date: string;
+  receipt_image_url: string;
+  submitted_date: string;
+  product: WarrantyProduct;
+  contributor: WarrantyContributor;
+  status: WarrantyStatus;
+}
+
+export interface WarrantyStatus {
+  id: number;
+  code: string;
+  label: string;
+  color: string;
+  is_default: boolean;
+}

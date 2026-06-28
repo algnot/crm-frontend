@@ -1,9 +1,9 @@
 import {
   IconCamera,
   IconCurrencyDollar,
-  IconQrcode,
+  IconHistoryToggle,
   IconReceipt,
-  IconRosetteDiscountCheck,
+  IconShieldCheck,
   IconTicket,
 } from "@tabler/icons-react";
 import { useApp } from "./providers/app-provider";
@@ -31,10 +31,26 @@ export default function MenuSection() {
             router.push(`/${clientConfig.slug}/warranty`);
           }}
         >
-          <IconRosetteDiscountCheck size={30} />
+          <IconShieldCheck size={30} />
         </button>
         <p className="w-15 text-xs mt-1.5 text-center line-clamp-2">
-          รับประกันสินค้า
+          ลงทะเบียนรับประกัน
+        </p>
+      </div>
+      <div>
+        <button
+          className="rounded-2xl w-15 h-15 flex justify-center items-center"
+          style={{
+            background: clientConfig.ui.secondary_color,
+          }}
+          onClick={() => {
+            router.push(`/${clientConfig.slug}/warranty/history`);
+          }}
+        >
+          <IconHistoryToggle size={30} />
+        </button>
+        <p className="w-15 text-xs mt-1.5 text-center line-clamp-2">
+          ประวัติการรับประกัน
         </p>
       </div>
       <div>
