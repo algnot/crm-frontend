@@ -217,13 +217,15 @@ export default function Warranty() {
                     }
                   />
                 </div>
-                <div className="bg-white w-fit mt-2">
-                  <img
-                    src="/sn.png"
-                    alt="sn"
-                    className="w-[200px] cursor-zoom-in"
-                    onClick={() => setSnImageOpen(true)}
-                  />
+                <div className="w-full flex justify-center">
+                  <div className="bg-white w-fit mt-2">
+                    <img
+                      src="/sn.png"
+                      alt="sn"
+                      className="w-[200px] cursor-zoom-in"
+                      onClick={() => setSnImageOpen(true)}
+                    />
+                  </div>
                 </div>
                 <div>
                   <div

@@ -21,38 +21,43 @@ export default function MenuSection() {
         color: clientConfig.ui.text_white_color,
       }}
     >
-      <div>
-        <button
-          className="rounded-2xl w-15 h-15 flex justify-center items-center"
-          style={{
-            background: clientConfig.ui.secondary_color,
-          }}
-          onClick={() => {
-            router.push(`/${clientConfig.slug}/warranty`);
-          }}
-        >
-          <IconShieldCheck size={30} />
-        </button>
-        <p className="w-15 text-xs mt-1.5 text-center line-clamp-2">
-          ลงทะเบียนรับประกัน
-        </p>
-      </div>
-      <div>
-        <button
-          className="rounded-2xl w-15 h-15 flex justify-center items-center"
-          style={{
-            background: clientConfig.ui.secondary_color,
-          }}
-          onClick={() => {
-            router.push(`/${clientConfig.slug}/warranty/history`);
-          }}
-        >
-          <IconHistoryToggle size={30} />
-        </button>
-        <p className="w-15 text-xs mt-1.5 text-center line-clamp-2">
-          ประวัติการรับประกัน
-        </p>
-      </div>
+      {clientConfig.warranty.enabled && (
+        <>
+          <div>
+            <button
+              className="rounded-2xl w-15 h-15 flex justify-center items-center"
+              style={{
+                background: clientConfig.ui.secondary_color,
+              }}
+              onClick={() => {
+                router.push(`/${clientConfig.slug}/warranty`);
+              }}
+            >
+              <IconShieldCheck size={30} />
+            </button>
+            <p className="w-15 text-xs mt-1.5 text-center line-clamp-2">
+              ลงทะเบียนรับประกัน
+            </p>
+          </div>
+          <div>
+            <button
+              className="rounded-2xl w-15 h-15 flex justify-center items-center"
+              style={{
+                background: clientConfig.ui.secondary_color,
+              }}
+              onClick={() => {
+                router.push(`/${clientConfig.slug}/warranty/history`);
+              }}
+            >
+              <IconHistoryToggle size={30} />
+            </button>
+            <p className="w-15 text-xs mt-1.5 text-center line-clamp-2">
+              ประวัติการรับประกัน
+            </p>
+          </div>
+        </>
+      )}
+
       <div>
         <button
           className="rounded-2xl w-15 h-15 flex justify-center items-center"

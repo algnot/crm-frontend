@@ -16,15 +16,15 @@ export default function MenuCard({ pointHistory }: MenuCardProp) {
         borderColor: `color-mix(in srgb, ${clientConfig.ui.text_gray_color} 80%, transparent)`,
       }}
     >
-      <div className="flex gap-3 items-center">
+      <div className="flex-1 flex gap-3 items-center min-w-0">
         <img
           src={clientConfig.logo_url}
           alt="ads"
           className="w-9 h-9 rounded-full object-cover"
         />
-        <div className="flex flex-col">
+        <div className="flex flex-col flex-1 min-w-0">
           <div
-            className="text-[13px] font-medium"
+            className="text-[13px] font-medium truncate"
             style={{ color: clientConfig.ui.text_color }}
           >
             {pointHistory.name}
@@ -34,7 +34,7 @@ export default function MenuCard({ pointHistory }: MenuCardProp) {
           </div>
         </div>
       </div>
-      <div className="ml-auto text-[19px] font-medium font-bodoni">
+      <div className="text-[19px] font-medium font-bodoni">
         {pointHistory.type === "earn" && (
           <div style={{ color: clientConfig.ui.text_success_color }}>
             + {pointHistory.value.toLocaleString()}

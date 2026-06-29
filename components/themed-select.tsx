@@ -67,7 +67,7 @@ export default function ThemedSelect({
             onClick={() => setIsOpen(false)}
           />
           <div
-            className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl shadow-2xl max-h-[70vh] overflow-hidden w-screen md:w-[500px] mx-auto"
+            className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl shadow-2xl min-h-[40vh] max-h-[70vh] overflow-hidden w-screen md:w-[500px] mx-auto"
             style={{ background: clientConfig.ui.surface_color }}
           >
             <div className="overflow-y-auto max-h-[calc(70vh-8px)]">

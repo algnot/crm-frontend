@@ -48,6 +48,7 @@ export interface PartnerAppConfig {
 
   ads: AdsItem[];
   tier: Tier[];
+  warranty: WarrantyOptionResponse;
 }
 
 export interface AdsItem {
@@ -136,6 +137,11 @@ export const initPartnerAppConfig = (): PartnerAppConfig => ({
 
   ads: [],
   tier: [],
+  warranty: {
+    enabled: false,
+    products: [],
+    contributors: [],
+  },
 });
 
 export interface User {
