@@ -128,7 +128,7 @@ export default function Page() {
         style={{ backgroundColor: clientConfig.ui.background_color }}
       >
         <Sk className="h-10 w-10 rounded-full" bg={surface} />
-        <Sk className="mt-4 h-45 w-full rounded-2xl" bg={surface} />
+        <Sk className="mt-4 h-116 w-full rounded-2xl" bg={surface} />
         <Sk
           className="mt-8 h-9 rounded-lg"
           bg={line}
@@ -215,7 +215,7 @@ export default function Page() {
       message: `คุณได้ใช้คูปอง ${coupon.name} เรียบร้อยแล้ว`,
       icon: <IconMoodSmileDizzy />,
       onConfirm: () => {
-        router.push(`/${clientConfig.slug}/history`);
+        fetchData();
       },
     });
 
@@ -272,6 +272,28 @@ export default function Page() {
           backgroundColor: clientConfig.ui.background_white_color,
         }}
       />
+
+      {coupon?.is_used ? (
+        <div
+          className="mt-8 text-md font-medium font-bodoni rounded-full w-fit px-4 py-2"
+          style={{
+            color: clientConfig.ui.primary_color,
+            backgroundColor: clientConfig.ui.primary_color + "33",
+          }}
+        >
+          ใช้คูปองแล้ว
+        </div>
+      ) : expired ? (
+        <div
+          className="mt-8 text-md font-medium font-bodoni rounded-full w-fit px-4 py-2"
+          style={{
+            color: clientConfig.ui.primary_color,
+            backgroundColor: clientConfig.ui.primary_color + "33",
+          }}
+        >
+          คูปองหมดอายุ
+        </div>
+      ) : null}
 
       <div
         className="mt-8 text-[32px] font-medium font-bodoni"

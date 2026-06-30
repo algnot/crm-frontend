@@ -20,6 +20,9 @@ export default function Page() {
 
   useEffect(() => {
     setIsShowNavbar(false);
+    return () => {
+      setIsShowNavbar(true);
+    };
   }, [setIsShowNavbar]);
 
   useEffect(() => {

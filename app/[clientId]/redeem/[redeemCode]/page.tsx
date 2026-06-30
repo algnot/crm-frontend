@@ -64,7 +64,7 @@ export default function Page() {
         style={{ backgroundColor: clientConfig.ui.background_color }}
       >
         <Sk className="h-10 w-10 rounded-full" bg={surface} />
-        <Sk className="mt-4 h-45 w-full rounded-2xl" bg={surface} />
+        <Sk className="mt-4 h-116 w-full rounded-2xl" bg={surface} />
         <Sk
           className="mt-5 h-9 rounded-lg"
           bg={line}
